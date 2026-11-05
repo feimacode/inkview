@@ -27,25 +27,30 @@ The server is stateless: it stores nothing and never logs tool arguments.
 | HTTP (`/mcp`) and stdio entry point | `src/main.ts` |
 | React view (MCP Apps bridge, host theming) | `src/ui/` |
 
-## Run it
+## Run it locally
 
-```bash
-npm install
-npm run dev          # builds, then serves http://localhost:3001/mcp
+Inkview is a stdio MCP server you start with `npx`:
+
+```json
+{ "mcpServers": { "inkview": { "command": "npx", "args": ["-y", "@feimacode/inkview"] } } }
 ```
 
-Stdio, for Claude Code, Codex, Cursor or VS Code:
+Claude Desktop renders the card; Claude Code and Codex print its markdown
+version. Setup for each app: **[docs/local-quickstart.md](docs/local-quickstart.md)**.
+
+From source:
 
 ```bash
-npm run build
-node dist/main.js --stdio
+npm install          # also builds
+node dist/main.js    # stdio
+npm run dev          # HTTP on http://localhost:3001/mcp
 ```
 
-## Try it in Claude web and ChatGPT web
+## Claude web and ChatGPT web
 
-Web clients can't reach `localhost`, so open a tunnel (`npm run tunnel`) and
-add the public URL as a connector. Step by step:
-**[docs/testing-in-claude-and-chatgpt.md](docs/testing-in-claude-and-chatgpt.md)**.
+These connect from the cloud, so run `npm run dev` plus a tunnel
+(`npm run tunnel`) and add the public URL as a connector:
+[docs/testing-in-claude-and-chatgpt.md](docs/testing-in-claude-and-chatgpt.md).
 
 ## Test
 

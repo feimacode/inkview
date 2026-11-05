@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Inkview entry point.
- *   node dist/main.js           streamable HTTP on PORT (default 3001), path /mcp
- *   node dist/main.js --stdio   stdio, for Claude Code, Codex, Cursor, VS Code
+ *   npx @feimacode/inkview          stdio (default), for Claude Desktop, Claude Code, Codex, Cursor, VS Code
+ *   npx @feimacode/inkview --http   streamable HTTP on PORT (default 3001), path /mcp
  */
 import { createMcpExpressApp } from "@modelcontextprotocol/express";
 import { NodeStreamableHTTPServerTransport } from "@modelcontextprotocol/node";
@@ -53,10 +53,20 @@ async function startHttp(): Promise<void> {
 }
 
 async function main() {
-  if (process.argv.includes("--stdio")) {
-    await createServer().connect(new StdioServerTransport());
-  } else {
+  const args = process.argv.slice(2);
+  if (args.includes("--version") || args.includes("-v")) {
+    console.log(VERSION);
+  } else if (args.includes("--help") || args.includes("-h")) {
+    console.log(`Inkview ${VERSION}: UI components for MCP Apps.
+
+Usage:
+  inkview            run over stdio (what MCP clients spawn)
+  inkview --http     run over streamable HTTP on PORT (default 3001), path /mcp`);
+  } else if (args.includes("--http")) {
     await startHttp();
+  } else {
+    // stdout carries the protocol, so nothing else may print to it.
+    await createServer().connect(new StdioServerTransport());
   }
 }
 

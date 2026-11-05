@@ -96,12 +96,4 @@ location, highlights, skill chips, links, and three buttons:
 
 ## Local hosts (no tunnel needed)
 
-- **Claude Code:** `claude mcp add inkview -- node /path/to/inkview/dist/main.js --stdio` (text fallback only; Claude Code doesn't render MCP Apps).
-- **Codex CLI:** add to `~/.codex/config.toml`:
-  ```toml
-  [mcp_servers.inkview]
-  command = "node"
-  args = ["/path/to/inkview/dist/main.js", "--stdio"]
-  ```
-- **Claude Desktop:** add to `claude_desktop_config.json` under `mcpServers`:
-  `"inkview": { "command": "node", "args": ["/path/to/inkview/dist/main.js", "--stdio"] }`. Desktop renders the card.
+See [local-quickstart.md](local-quickstart.md) for Claude Desktop, Claude Code and Codex over stdio with `npx`.

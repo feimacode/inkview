@@ -4,7 +4,7 @@ import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/cli
 import assert from "node:assert/strict";
 
 const PORT = process.env.PORT ?? "3999";
-const srv = spawn(process.execPath, ["dist/main.js"], { env: { ...process.env, PORT }, stdio: ["ignore", "pipe", "inherit"] });
+const srv = spawn(process.execPath, ["dist/main.js", "--http"], { env: { ...process.env, PORT }, stdio: ["ignore", "pipe", "inherit"] });
 await new Promise((resolve) => srv.stdout.on("data", (d) => String(d).includes("listening") && resolve()));
 
 try {
