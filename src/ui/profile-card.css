@@ -1,0 +1,49 @@
+.card {
+  background: var(--ink-bg);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--ink-radius);
+  box-shadow: var(--ink-shadow);
+  padding: 18px;
+  max-width: 640px;
+}
+.head { display: flex; gap: 14px; align-items: center; }
+.avatar {
+  flex: none; width: 64px; height: 64px; border-radius: 50%;
+  object-fit: cover; background: var(--ink-bg-subtle);
+  display: grid; place-items: center;
+  font-weight: 600; font-size: 22px; color: var(--ink-text-muted);
+  border: 1px solid var(--ink-border);
+}
+.who { min-width: 0; }
+.name { margin: 0; font-size: 18px; font-weight: 650; line-height: 1.25; }
+.headline { margin: 2px 0 0; color: var(--ink-text-muted); }
+.meta { margin: 4px 0 0; color: var(--ink-text-faint); font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.about { margin: 14px 0 0; }
+.highlights { margin: 12px 0 0; padding-left: 18px; }
+.highlights li { margin: 3px 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.tag {
+  background: var(--ink-bg-subtle); color: var(--ink-text-muted);
+  border-radius: 999px; padding: 2px 10px; font-size: 12px;
+}
+.links { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; }
+.link {
+  background: none; border: 0; padding: 0; font: inherit; cursor: pointer;
+  color: var(--ink-accent); text-decoration: underline; text-underline-offset: 2px;
+}
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.btn {
+  font: inherit; font-size: 13px; font-weight: 550; cursor: pointer;
+  border-radius: var(--ink-radius-sm); padding: 7px 12px;
+  border: 1px solid var(--ink-border); background: var(--ink-bg); color: var(--ink-text);
+}
+.btn.primary { background: var(--ink-accent); color: var(--ink-accent-text); border-color: transparent; }
+.btn:focus-visible, .link:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; }
+.btn:disabled { opacity: 0.6; cursor: default; }
+.source { margin-top: 12px; font-size: 12px; color: var(--ink-text-faint); }
+.state { color: var(--ink-text-faint); padding: 12px 2px; }
+.skeleton { background: var(--ink-bg-subtle); border-radius: 6px; height: 12px; margin: 6px 0; }
+@media (max-width: 420px) {
+  .card { padding: 14px; }
+  .avatar { width: 52px; height: 52px; font-size: 18px; }
+}
