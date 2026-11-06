@@ -6,6 +6,48 @@ right in the chat, in Claude, ChatGPT and any other host that renders MCP Apps.
 
 ![Profile card](docs/img/profile-card-light.png)
 
+## Install
+
+### Claude Code and Claude Desktop: plugin
+
+Installs the server and a short Skill that tells Claude when to use each component:
+
+```text
+/plugin marketplace add feimacode/inkview
+/plugin install inkview@inkview
+```
+
+### Any local MCP client: npx
+
+Claude Desktop, Claude Code, Codex, Cursor and VS Code start Inkview over stdio:
+
+```json
+{ "mcpServers": { "inkview": { "command": "npx", "args": ["-y", "@feimacode/inkview"] } } }
+```
+
+Hosts that support MCP Apps (Claude Desktop) draw the component; text-only
+clients (Claude Code, Codex) print its markdown version. Each release also has a
+`.mcpb` desktop extension for one-click install in Claude Desktop. Setup for
+each app: **[docs/local-quickstart.md](docs/local-quickstart.md)**.
+
+### Claude web and ChatGPT web: remote URL
+
+These connect from the cloud, so they need an HTTPS URL ending in `/mcp`: the
+hosted server (coming with the public launch), your own deployment
+([self-hosting](docs/self-hosting.md), Docker included), or for a quick test
+`npm run dev` plus a tunnel ([guide](docs/testing-in-claude-and-chatgpt.md)).
+ChatGPT app setup: [docs/chatgpt-app.md](docs/chatgpt-app.md). What the hosted
+server does with your data: [docs/privacy.md](docs/privacy.md).
+
+### From source
+
+```bash
+npm install            # also builds
+node dist/inkview.js   # stdio
+npm run dev            # HTTP on http://localhost:3001/mcp
+npm run preview        # gallery of every component, light and dark, at http://localhost:5174
+```
+
 ## Components
 
 | Tool | Draws | Try asking |
@@ -66,45 +108,6 @@ The server is stateless: it stores nothing and never logs tool arguments.
 The server ships as one dependency-free file (`dist/inkview.js`, view HTML
 inlined), so a cold `npx` start takes about a second.
 
-## Run it locally
-
-Inkview is a stdio MCP server you start with `npx`:
-
-```json
-{ "mcpServers": { "inkview": { "command": "npx", "args": ["-y", "@feimacode/inkview"] } } }
-```
-
-Claude Desktop renders the card; Claude Code and Codex print its markdown
-version. Each release also has a `.mcpb` desktop extension for one-click
-install in Claude Desktop. Setup for each app: **[docs/local-quickstart.md](docs/local-quickstart.md)**.
-
-From source:
-
-```bash
-npm install            # also builds
-node dist/inkview.js   # stdio
-npm run dev            # HTTP on http://localhost:3001/mcp
-npm run preview        # gallery of every component, light and dark, at http://localhost:5174
-```
-
-### Claude Code and Claude Desktop plugin
-
-The plugin installs the server plus a short Skill that tells Claude when to use each component:
-
-```text
-/plugin marketplace add feimacode/inkview
-/plugin install inkview@inkview
-```
-
-## Claude web and ChatGPT web
-
-These connect from the cloud, so they need an HTTPS URL: a hosted server
-([self-hosting](docs/self-hosting.md), Docker included), or for a quick test
-`npm run dev` plus a tunnel (`npm run tunnel`):
-[docs/testing-in-claude-and-chatgpt.md](docs/testing-in-claude-and-chatgpt.md).
-ChatGPT app setup: [docs/chatgpt-app.md](docs/chatgpt-app.md). What the hosted
-server does with your data: [docs/privacy.md](docs/privacy.md).
-
 ## Test
 
 ```bash
@@ -131,6 +134,11 @@ see [docs/self-hosting.md](docs/self-hosting.md) for those settings.
 Avatars only load from origins declared in the CSP (GitHub, LinkedIn media,
 Gravatar, unavatar.io, Wikimedia, Unsplash, X/Twitter images by default).
 Anything else falls back to initials.
+
+## Evals
+
+`npm run evals` measures whether models pick the right component and avoid
+inventing values (needs an Anthropic API key). See [evals/README.md](evals/README.md).
 
 ## Roadmap
 

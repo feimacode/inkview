@@ -1,0 +1,1022 @@
+[
+ {
+  "id": "profile-ada",
+  "expect": "show_profile_card",
+  "prompt": "Who is Ada Lovelace? Show me her profile.",
+  "source": {
+   "name": "Ada Lovelace",
+   "title": "Mathematician and writer",
+   "location": "London, UK",
+   "known_for": [
+    "Analytical Engine notes",
+    "first published algorithm"
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Ada_Lovelace"
+  }
+ },
+ {
+  "id": "profile-candidate",
+  "expect": "show_profile_card",
+  "prompt": "I'm interviewing Priya Raman tomorrow, give me a quick look at her.",
+  "source": {
+   "full_name": "Priya Raman",
+   "headline": "Staff Backend Engineer at Ledgerly",
+   "location": "Toronto, Canada",
+   "skills": [
+    "Go",
+    "PostgreSQL",
+    "Kafka"
+   ],
+   "linkedin": "https://www.linkedin.com/in/priya-raman-example",
+   "years_experience": 11
+  }
+ },
+ {
+  "id": "profile-speaker",
+  "expect": "show_profile_card",
+  "prompt": "Tell me about the keynote speaker, Tomás Ortega.",
+  "source": {
+   "name": "Tomás Ortega",
+   "role": "CTO, Brightpath Robotics",
+   "bio": "Leads perception and planning teams; previously at a self-driving startup.",
+   "talk": "Robots that ask for help",
+   "website": "https://brightpath.example.com/team/tomas"
+  }
+ },
+ {
+  "id": "profile-founder",
+  "expect": "show_profile_card",
+  "prompt": "Look up the founder of Mossgreen Coffee for me.",
+  "source": {
+   "name": "Hana Kobayashi",
+   "headline": "Founder & CEO, Mossgreen Coffee",
+   "location": "Portland, OR",
+   "founded": 2019,
+   "twitter": "https://x.com/hana_mossgreen_example"
+  },
+  "heldOut": true
+ },
+ {
+  "id": "profile-contact",
+  "expect": "show_profile_card",
+  "prompt": "Pull up my contact card for Marcus Bell from the CRM.",
+  "source": {
+   "contact": {
+    "name": "Marcus Bell",
+    "company": "Northwind Freight",
+    "title": "Head of Procurement",
+    "email": "marcus.bell@northwind.example.com",
+    "last_contacted": "2026-10-14",
+    "tags": [
+     "warm lead",
+     "Q1 renewal"
+    ]
+   }
+  }
+ },
+ {
+  "id": "profile-researcher",
+  "expect": "show_profile_card",
+  "prompt": "Who is Dr. Lena Fischer? I keep seeing her name in these papers.",
+  "source": {
+   "name": "Dr. Lena Fischer",
+   "affiliation": "Max Planck Institute for Informatics",
+   "position": "Research Group Leader",
+   "research": [
+    "retrieval",
+    "evaluation"
+   ],
+   "homepage": "https://example.mpi.de/~lfischer"
+  }
+ },
+ {
+  "id": "table-cities",
+  "expect": "show_table",
+  "prompt": "What are the five largest cities in the EU by population?",
+  "source": [
+   {
+    "city": "Berlin",
+    "country": "Germany",
+    "population": 3878100
+   },
+   {
+    "city": "Madrid",
+    "country": "Spain",
+    "population": 3460491
+   },
+   {
+    "city": "Rome",
+    "country": "Italy",
+    "population": 2746984
+   },
+   {
+    "city": "Paris",
+    "country": "France",
+    "population": 2102650
+   },
+   {
+    "city": "Vienna",
+    "country": "Austria",
+    "population": 2005760
+   }
+  ]
+ },
+ {
+  "id": "table-laptops",
+  "expect": "show_table",
+  "prompt": "List the laptops from the spreadsheet with their specs and prices.",
+  "source": [
+   {
+    "model": "Aero 14",
+    "cpu": "Ryzen 7 8840U",
+    "ram_gb": 16,
+    "weight_kg": 1.3,
+    "price_usd": 1099
+   },
+   {
+    "model": "Slate Pro 16",
+    "cpu": "Core Ultra 7 155H",
+    "ram_gb": 32,
+    "weight_kg": 1.9,
+    "price_usd": 1799
+   },
+   {
+    "model": "Nimbus 13",
+    "cpu": "Snapdragon X Plus",
+    "ram_gb": 16,
+    "weight_kg": 1.2,
+    "price_usd": 999
+   },
+   {
+    "model": "Forge 15",
+    "cpu": "Core i5-13420H",
+    "ram_gb": 8,
+    "weight_kg": 1.7,
+    "price_usd": 749
+   }
+  ]
+ },
+ {
+  "id": "table-orders",
+  "expect": "show_table",
+  "prompt": "Show me last week's orders that are still unpaid.",
+  "source": [
+   {
+    "order": "A-1043",
+    "customer": "Lumen Studio",
+    "amount_eur": 1250.0,
+    "due": "2026-10-30",
+    "status": "overdue"
+   },
+   {
+    "order": "A-1047",
+    "customer": "Harbor & Pine",
+    "amount_eur": 480.5,
+    "due": "2026-11-08",
+    "status": "open"
+   },
+   {
+    "order": "A-1051",
+    "customer": "Quill Labs",
+    "amount_eur": 3200.0,
+    "due": "2026-11-10",
+    "status": "open"
+   }
+  ]
+ },
+ {
+  "id": "table-repos",
+  "expect": "show_table",
+  "prompt": "Which of our repos have the most open issues?",
+  "source": [
+   {
+    "repo": "inkview",
+    "open_issues": 42,
+    "stars": 1830,
+    "language": "TypeScript"
+   },
+   {
+    "repo": "ledger-sync",
+    "open_issues": 31,
+    "stars": 412,
+    "language": "Go"
+   },
+   {
+    "repo": "docs-site",
+    "open_issues": 17,
+    "stars": 96,
+    "language": "MDX"
+   },
+   {
+    "repo": "cli",
+    "open_issues": 9,
+    "stars": 640,
+    "language": "Rust"
+   }
+  ]
+ },
+ {
+  "id": "table-countries",
+  "expect": "show_table",
+  "prompt": "Compare GDP per capita and life expectancy for the Nordic countries.",
+  "source": [
+   {
+    "country": "Norway",
+    "gdp_per_capita_usd": 87925,
+    "life_expectancy": 83.2
+   },
+   {
+    "country": "Denmark",
+    "gdp_per_capita_usd": 68827,
+    "life_expectancy": 81.4
+   },
+   {
+    "country": "Sweden",
+    "gdp_per_capita_usd": 55689,
+    "life_expectancy": 83.0
+   },
+   {
+    "country": "Finland",
+    "gdp_per_capita_usd": 52925,
+    "life_expectancy": 81.9
+   },
+   {
+    "country": "Iceland",
+    "gdp_per_capita_usd": 78837,
+    "life_expectancy": 82.7
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "table-employees",
+  "expect": "show_table",
+  "prompt": "List the people on the platform team with their start dates.",
+  "source": [
+   {
+    "name": "Alex Kim",
+    "role": "Engineer",
+    "start": "2022-03-01"
+   },
+   {
+    "name": "Sam Ortiz",
+    "role": "Engineering Manager",
+    "start": "2020-07-15"
+   },
+   {
+    "name": "Jo Park",
+    "role": "SRE",
+    "start": "2023-11-06"
+   },
+   {
+    "name": "Riley Chen",
+    "role": "Engineer",
+    "start": "2024-02-19"
+   }
+  ]
+ },
+ {
+  "id": "results-mcp",
+  "expect": "show_results",
+  "prompt": "Search for documentation on building MCP Apps.",
+  "source": {
+   "query": "MCP Apps documentation",
+   "results": [
+    {
+     "title": "MCP Apps overview",
+     "url": "https://modelcontextprotocol.io/docs/extensions/apps",
+     "snippet": "MCP Apps let servers return interactive UI that hosts render in a sandboxed iframe."
+    },
+    {
+     "title": "ext-apps on GitHub",
+     "url": "https://github.com/modelcontextprotocol/ext-apps",
+     "snippet": "SDK and examples for building MCP Apps."
+    },
+    {
+     "title": "Build an app for ChatGPT",
+     "url": "https://developers.openai.com/apps-sdk",
+     "snippet": "Use MCP to bring your app into ChatGPT."
+    }
+   ]
+  }
+ },
+ {
+  "id": "results-news",
+  "expect": "show_results",
+  "prompt": "What's the latest news about the Rhine river water levels?",
+  "source": [
+   {
+    "title": "Rhine levels drop near Kaub as dry spell continues",
+    "url": "https://news.example.com/rhine-kaub-levels",
+    "source": "Example News",
+    "date": "2026-11-04",
+    "snippet": "Barges are running at reduced loads."
+   },
+   {
+    "title": "Shipping firms add surcharges on the Rhine",
+    "url": "https://logistics.example.org/rhine-surcharge",
+    "source": "Logistics Weekly",
+    "date": "2026-11-03",
+    "snippet": "Low-water surcharges return for the second year."
+   },
+   {
+    "title": "Rain forecast could ease Rhine shipping",
+    "url": "https://weather.example.net/rhine-rain",
+    "source": "Weather Desk",
+    "date": "2026-11-05",
+    "snippet": "Forecasters expect rain in the Alps next week."
+   }
+  ]
+ },
+ {
+  "id": "results-papers",
+  "expect": "show_results",
+  "prompt": "Find papers on retrieval-augmented generation evaluation.",
+  "source": [
+   {
+    "title": "Evaluating RAG systems: a survey",
+    "url": "https://arxiv.org/abs/2405.00001",
+    "authors": "L. Chen et al.",
+    "year": 2024,
+    "abstract": "We survey metrics and benchmarks for retrieval-augmented generation."
+   },
+   {
+    "title": "Faithfulness metrics for grounded generation",
+    "url": "https://arxiv.org/abs/2311.00002",
+    "authors": "M. Rossi, K. Ito",
+    "year": 2023,
+    "abstract": "We compare faithfulness metrics against human judgments."
+   },
+   {
+    "title": "Benchmarking retrieval quality in long-context QA",
+    "url": "https://arxiv.org/abs/2502.00003",
+    "authors": "A. Okafor",
+    "year": 2025,
+    "abstract": "A benchmark for retrieval quality."
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "results-docs",
+  "expect": "show_results",
+  "prompt": "Search our internal wiki for the on-call runbook.",
+  "source": {
+   "hits": [
+    {
+     "title": "On-call runbook",
+     "url": "https://wiki.example.com/eng/oncall-runbook",
+     "excerpt": "Paging policy, escalation and handover."
+    },
+    {
+     "title": "Incident severity levels",
+     "url": "https://wiki.example.com/eng/severity",
+     "excerpt": "How to classify SEV1 to SEV4."
+    },
+    {
+     "title": "PagerDuty setup",
+     "url": "https://wiki.example.com/eng/pagerduty",
+     "excerpt": "Rotations and overrides."
+    }
+   ]
+  }
+ },
+ {
+  "id": "results-recipes",
+  "expect": "show_results",
+  "prompt": "Find me some recipes for vegan ramen.",
+  "source": [
+   {
+    "title": "Creamy miso vegan ramen",
+    "url": "https://recipes.example.com/vegan-miso-ramen",
+    "snippet": "Ready in 40 minutes with shiitake broth."
+   },
+   {
+    "title": "Spicy sesame tantanmen (vegan)",
+    "url": "https://cook.example.org/vegan-tantanmen",
+    "snippet": "Soy milk and sesame make it rich."
+   },
+   {
+    "title": "Shoyu ramen with kombu dashi",
+    "url": "https://kitchen.example.net/shoyu-kombu",
+    "snippet": "A clear, light broth."
+   }
+  ]
+ },
+ {
+  "id": "entity-stripe",
+  "expect": "show_entity_card",
+  "prompt": "What is Stripe?",
+  "source": {
+   "name": "Stripe",
+   "type": "company",
+   "industry": "Payments",
+   "founded": 2010,
+   "headquarters": "South San Francisco, CA and Dublin, Ireland",
+   "website": "https://stripe.com",
+   "description": "Financial infrastructure for the internet."
+  }
+ },
+ {
+  "id": "results-jobs",
+  "expect": "show_results",
+  "prompt": "Search job boards for remote Rust developer roles.",
+  "source": [
+   {
+    "title": "Senior Rust Engineer (Remote, EU)",
+    "url": "https://jobs.example.com/rust-senior-eu",
+    "company": "Ferrolabs",
+    "snippet": "Build battery telemetry pipelines in Rust."
+   },
+   {
+    "title": "Rust Developer, Payments",
+    "url": "https://careers.example.org/rust-payments",
+    "company": "Ledgerly",
+    "snippet": "Remote within US/Canada time zones."
+   },
+   {
+    "title": "Systems Engineer (Rust/Wasm)",
+    "url": "https://jobs.example.net/rust-wasm",
+    "company": "Edgeworks",
+    "snippet": "Work on the Wasm runtime."
+   }
+  ]
+ },
+ {
+  "id": "entity-university",
+  "expect": "show_entity_card",
+  "prompt": "Tell me about ETH Zurich.",
+  "source": {
+   "name": "ETH Zurich",
+   "kind": "university",
+   "founded": 1855,
+   "location": "Zurich, Switzerland",
+   "students": "about 25,000",
+   "website": "https://ethz.ch"
+  }
+ },
+ {
+  "id": "entity-venue",
+  "expect": "show_entity_card",
+  "prompt": "Give me the details of the venue, Tempodrom.",
+  "source": {
+   "name": "Tempodrom",
+   "type": "event venue",
+   "address": "Möckernstraße 10, 10963 Berlin",
+   "capacity": 3700,
+   "opened": 2001,
+   "website": "https://www.tempodrom.de"
+  }
+ },
+ {
+  "id": "entity-startup",
+  "expect": "show_entity_card",
+  "prompt": "Look up the startup Ferrolabs.",
+  "source": {
+   "company": "Ferrolabs",
+   "industry": "Battery recycling",
+   "founded": 2021,
+   "employees": 85,
+   "hq": "Gothenburg, Sweden",
+   "funding": "Series A, $24M",
+   "website": "https://ferrolabs.example.com"
+  },
+  "heldOut": true
+ },
+ {
+  "id": "entity-park",
+  "expect": "show_entity_card",
+  "prompt": "What can you tell me about Tempelhofer Feld?",
+  "source": {
+   "name": "Tempelhofer Feld",
+   "type": "park",
+   "address": "Tempelhofer Damm, Berlin",
+   "area": "355 hectares",
+   "opened_as_park": 2010,
+   "former_use": "Tempelhof Airport"
+  }
+ },
+ {
+  "id": "cmp-notes",
+  "expect": "show_comparison",
+  "prompt": "Help me choose between Notion, Obsidian and Apple Notes for a small team.",
+  "source": [
+   {
+    "name": "Notion",
+    "price_per_user": "$10",
+    "realtime_collab": true,
+    "offline": false,
+    "platforms": "Web, desktop, mobile"
+   },
+   {
+    "name": "Obsidian",
+    "price_per_user": "Free ($4 sync)",
+    "realtime_collab": false,
+    "offline": true,
+    "platforms": "Desktop, mobile"
+   },
+   {
+    "name": "Apple Notes",
+    "price_per_user": "Free",
+    "realtime_collab": true,
+    "offline": true,
+    "platforms": "Apple only"
+   }
+  ]
+ },
+ {
+  "id": "cmp-plans",
+  "expect": "show_comparison",
+  "prompt": "Which of these hosting plans should I pick for a side project?",
+  "source": {
+   "plans": [
+    {
+     "name": "Hobby",
+     "price": "$0",
+     "bandwidth": "100 GB",
+     "custom_domain": true,
+     "support": "Community"
+    },
+    {
+     "name": "Pro",
+     "price": "$20/mo",
+     "bandwidth": "1 TB",
+     "custom_domain": true,
+     "support": "Email"
+    },
+    {
+     "name": "Team",
+     "price": "$50/mo",
+     "bandwidth": "5 TB",
+     "custom_domain": true,
+     "support": "Priority"
+    }
+   ]
+  }
+ },
+ {
+  "id": "cmp-cars",
+  "expect": "show_comparison",
+  "prompt": "Compare the Kia EV6, Hyundai Ioniq 5 and Tesla Model Y for me.",
+  "source": [
+   {
+    "model": "Kia EV6",
+    "range_km": 528,
+    "price_eur": 46990,
+    "fast_charge_10_80_min": 18
+   },
+   {
+    "model": "Hyundai Ioniq 5",
+    "range_km": 507,
+    "price_eur": 45900,
+    "fast_charge_10_80_min": 18
+   },
+   {
+    "model": "Tesla Model Y",
+    "range_km": 533,
+    "price_eur": 44990,
+    "fast_charge_10_80_min": 27
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "cmp-candidates",
+  "expect": "show_comparison",
+  "prompt": "Here are the two finalists, help me decide.",
+  "source": [
+   {
+    "name": "Jordan Lee",
+    "experience_years": 6,
+    "salary_ask": "$145k",
+    "start": "2 weeks",
+    "strengths": "Distributed systems"
+   },
+   {
+    "name": "Avery Singh",
+    "experience_years": 9,
+    "salary_ask": "$165k",
+    "start": "6 weeks",
+    "strengths": "Team leadership"
+   }
+  ]
+ },
+ {
+  "id": "cmp-dbs",
+  "expect": "show_comparison",
+  "prompt": "Postgres vs MySQL vs SQLite for an embedded analytics feature?",
+  "source": [
+   {
+    "name": "PostgreSQL",
+    "embedded": false,
+    "json_support": "Excellent",
+    "window_functions": true,
+    "ops_burden": "Medium"
+   },
+   {
+    "name": "MySQL",
+    "embedded": false,
+    "json_support": "Good",
+    "window_functions": true,
+    "ops_burden": "Medium"
+   },
+   {
+    "name": "SQLite",
+    "embedded": true,
+    "json_support": "Good",
+    "window_functions": true,
+    "ops_burden": "None"
+   }
+  ]
+ },
+ {
+  "id": "chart-signups",
+  "expect": "show_chart",
+  "prompt": "Chart our monthly signups this year.",
+  "source": [
+   {
+    "month": "2026-01",
+    "signups": 1200
+   },
+   {
+    "month": "2026-02",
+    "signups": 1350
+   },
+   {
+    "month": "2026-03",
+    "signups": 1610
+   },
+   {
+    "month": "2026-04",
+    "signups": 1580
+   },
+   {
+    "month": "2026-05",
+    "signups": 1920
+   },
+   {
+    "month": "2026-06",
+    "signups": 2240
+   }
+  ]
+ },
+ {
+  "id": "chart-revenue",
+  "expect": "show_chart",
+  "prompt": "How did revenue and costs move by quarter?",
+  "source": [
+   {
+    "quarter": "Q1 2025",
+    "revenue": 1.8,
+    "costs": 1.5
+   },
+   {
+    "quarter": "Q2 2025",
+    "revenue": 2.1,
+    "costs": 1.6
+   },
+   {
+    "quarter": "Q3 2025",
+    "revenue": 2.4,
+    "costs": 1.7
+   },
+   {
+    "quarter": "Q4 2025",
+    "revenue": 2.9,
+    "costs": 1.9
+   }
+  ]
+ },
+ {
+  "id": "chart-latency",
+  "expect": "show_chart",
+  "prompt": "Plot p95 latency for the API over the last week.",
+  "source": {
+   "unit": "ms",
+   "points": {
+    "Mon": 182,
+    "Tue": 175,
+    "Wed": 240,
+    "Thu": 198,
+    "Fri": 171,
+    "Sat": 160,
+    "Sun": 158
+   }
+  }
+ },
+ {
+  "id": "chart-languages",
+  "expect": "show_chart",
+  "prompt": "Visualize which languages our repos use most.",
+  "source": {
+   "TypeScript": 14,
+   "Go": 6,
+   "Python": 9,
+   "Rust": 3
+  },
+  "heldOut": true
+ },
+ {
+  "id": "chart-temps",
+  "expect": "show_chart",
+  "prompt": "Show the average temperatures in Oslo and Madrid by month.",
+  "source": {
+   "months": [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun"
+   ],
+   "Oslo": [
+    -3,
+    -3,
+    1,
+    6,
+    11,
+    15
+   ],
+   "Madrid": [
+    6,
+    8,
+    11,
+    13,
+    17,
+    23
+   ]
+  }
+ },
+ {
+  "id": "prod-headphones",
+  "expect": "show_products",
+  "prompt": "Find noise-cancelling headphones under $400.",
+  "source": [
+   {
+    "title": "Sony WH-1000XM5",
+    "price": "$399.99",
+    "rating": 4.6,
+    "reviews": 12840,
+    "merchant": "Example Electronics",
+    "url": "https://shop.example.com/p/sony-wh1000xm5",
+    "image": "https://shop.example.com/img/xm5.jpg"
+   },
+   {
+    "title": "Bose QuietComfort Ultra",
+    "price": "$379.00",
+    "rating": 4.5,
+    "reviews": 5210,
+    "merchant": "Example Electronics",
+    "url": "https://shop.example.com/p/bose-qc-ultra",
+    "image": "https://shop.example.com/img/qcu.jpg"
+   },
+   {
+    "title": "Anker Soundcore Space One",
+    "price": "$79.99",
+    "rating": 4.3,
+    "reviews": 8800,
+    "merchant": "Gadget Mart",
+    "url": "https://gadgets.example.net/anker-space-one"
+   }
+  ]
+ },
+ {
+  "id": "prod-shoes",
+  "expect": "show_products",
+  "prompt": "Show me trail running shoes in size 42.",
+  "source": {
+   "products": [
+    {
+     "name": "Speedgoat 6",
+     "price": 155,
+     "currency": "USD",
+     "url": "https://run.example.com/speedgoat-6",
+     "in_stock": true
+    },
+    {
+     "name": "Peregrine 14",
+     "price": 140,
+     "currency": "USD",
+     "url": "https://run.example.com/peregrine-14",
+     "in_stock": true
+    },
+    {
+     "name": "Cascadia 18",
+     "price": 140,
+     "currency": "USD",
+     "url": "https://run.example.com/cascadia-18",
+     "in_stock": false
+    }
+   ]
+  }
+ },
+ {
+  "id": "prod-desk",
+  "expect": "show_products",
+  "prompt": "I need a standing desk, what are the options?",
+  "source": [
+   {
+    "title": "Flexi Pro 140",
+    "price": "€449",
+    "merchant": "Office Example",
+    "url": "https://office.example.eu/flexi-pro-140",
+    "rating": 4.4
+   },
+   {
+    "title": "LiftDesk Basic",
+    "price": "€299",
+    "merchant": "Office Example",
+    "url": "https://office.example.eu/liftdesk-basic",
+    "rating": 4.0
+   },
+   {
+    "title": "Oak Rise Duo",
+    "price": "€799",
+    "merchant": "Nordic Home",
+    "url": "https://nordichome.example.eu/oak-rise-duo",
+    "rating": 4.8
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "prod-kettle",
+  "expect": "show_products",
+  "prompt": "Find a gooseneck electric kettle for pour-over coffee.",
+  "source": [
+   {
+    "title": "Stagg EKG",
+    "price": "$165",
+    "url": "https://coffee.example.com/stagg-ekg",
+    "rating": 4.7
+   },
+   {
+    "title": "Bonavita 1L Gooseneck",
+    "price": "$69.99",
+    "url": "https://coffee.example.com/bonavita-1l",
+    "rating": 4.4
+   },
+   {
+    "title": "Cosori Gooseneck",
+    "price": "$59.99",
+    "url": "https://kitchen.example.com/cosori-gooseneck",
+    "rating": 4.5
+   }
+  ]
+ },
+ {
+  "id": "prod-books",
+  "expect": "show_products",
+  "prompt": "Shop for beginner books on woodworking.",
+  "source": [
+   {
+    "title": "The Woodworker's Bible",
+    "price": "$24.95",
+    "url": "https://books.example.com/woodworkers-bible",
+    "rating": 4.6
+   },
+   {
+    "title": "Woodworking Basics",
+    "price": "$19.99",
+    "url": "https://books.example.com/woodworking-basics",
+    "rating": 4.5
+   },
+   {
+    "title": "Hand Tool Essentials",
+    "price": "$29.99",
+    "url": "https://books.example.com/hand-tool-essentials",
+    "rating": 4.7
+   }
+  ]
+ },
+ {
+  "id": "none-fact",
+  "expect": null,
+  "prompt": "What year was ETH Zurich founded?",
+  "source": {
+   "name": "ETH Zurich",
+   "founded": 1855
+  }
+ },
+ {
+  "id": "none-explain",
+  "expect": null,
+  "prompt": "Explain in two sentences what a rate limiter does.",
+  "source": null
+ },
+ {
+  "id": "prod-plants",
+  "expect": "show_products",
+  "prompt": "Find low-light indoor plants I can order online.",
+  "source": [
+   {
+    "title": "Snake Plant (Sansevieria), 30 cm",
+    "price": "£18.00",
+    "url": "https://plants.example.co.uk/snake-plant",
+    "rating": 4.8
+   },
+   {
+    "title": "ZZ Plant, 40 cm",
+    "price": "£24.00",
+    "url": "https://plants.example.co.uk/zz-plant",
+    "rating": 4.7
+   },
+   {
+    "title": "Pothos 'Marble Queen'",
+    "price": "£12.50",
+    "url": "https://plants.example.co.uk/pothos-marble",
+    "rating": 4.6
+   }
+  ]
+ },
+ {
+  "id": "none-code",
+  "expect": null,
+  "prompt": "Write a TypeScript function that debounces another function.",
+  "source": null
+ },
+ {
+  "id": "none-single-number",
+  "expect": null,
+  "prompt": "How many open issues does the inkview repo have?",
+  "source": {
+   "repo": "inkview",
+   "open_issues": 42
+  }
+ },
+ {
+  "id": "none-yesno",
+  "expect": null,
+  "prompt": "Is the Kia EV6 range over 500 km?",
+  "source": {
+   "model": "Kia EV6",
+   "range_km": 528
+  },
+  "heldOut": true
+ },
+ {
+  "id": "none-email",
+  "expect": null,
+  "prompt": "Draft a short thank-you email to Priya after her interview.",
+  "source": {
+   "name": "Priya Raman",
+   "role": "Staff Backend Engineer candidate"
+  }
+ },
+ {
+  "id": "none-translate",
+  "expect": null,
+  "prompt": "Translate 'see you tomorrow' into Spanish.",
+  "source": null
+ },
+ {
+  "id": "none-summary",
+  "expect": null,
+  "prompt": "Summarize this article in one paragraph.",
+  "source": "Barges on the Rhine are running at reduced loads as a dry spell keeps water levels low near Kaub. Shipping firms have added low-water surcharges, and forecasters expect rain in the Alps next week that could ease conditions."
+ },
+ {
+  "id": "none-opinion",
+  "expect": null,
+  "prompt": "Do you think I should learn Go or Rust first? Just give me your take.",
+  "source": null,
+  "heldOut": true
+ },
+ {
+  "id": "auto-mixed-records",
+  "expect": "show_table",
+  "prompt": "Here's the export from our tool, show it to me.",
+  "source": {
+   "export": [
+    {
+     "sku": "KB-01",
+     "stock": 14,
+     "warehouse": "Leeds"
+    },
+    {
+     "sku": "KB-02",
+     "stock": 0,
+     "warehouse": "Leeds"
+    },
+    {
+     "sku": "MS-11",
+     "stock": 122,
+     "warehouse": "Gdańsk"
+    }
+   ]
+  }
+ },
+ {
+  "id": "auto-steps",
+  "expect": "show_chart",
+  "prompt": "Visualize the daily step counts from my watch.",
+  "source": {
+   "2026-11-01": 8432,
+   "2026-11-02": 10211,
+   "2026-11-03": 6120,
+   "2026-11-04": 12045,
+   "2026-11-05": 9050
+  },
+  "heldOut": true
+ }
+]

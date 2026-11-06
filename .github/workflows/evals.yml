@@ -1,0 +1,45 @@
+name: Evals
+
+# Tool-selection evals call the Anthropic API, so they run on demand only.
+# Needs the ANTHROPIC_API_KEY repository secret.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "tools, skill or both"
+        default: both
+      repeat:
+        description: "Runs per prompt"
+        default: "3"
+      model:
+        description: "Model id"
+        default: claude-opus-5-5
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run evals
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          EVAL_MODEL: ${{ inputs.model }}
+        run: |
+          set +e
+          npm run evals -- --mode "${{ inputs.mode }}" --repeat "${{ inputs.repeat }}"
+          status=$?
+          cat evals/reports/*.md >> "$GITHUB_STEP_SUMMARY"
+          exit $status
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: evals/reports/
