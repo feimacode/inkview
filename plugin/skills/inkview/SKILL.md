@@ -1,6 +1,6 @@
 ---
 name: inkview
-description: Show people, timelines, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.
+description: Show people, timelines, task lists, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.
 ---
 
 # Inkview components
@@ -14,6 +14,7 @@ call the matching Inkview tool instead of writing a markdown list or table.
 | One person (candidate, speaker, founder, contact) | `show_profile_card` |
 | Several people (candidates, speakers, attendees, contacts) | `show_profiles` |
 | Dated events in a history, project milestones, a career or unfolding story | `show_timeline` |
+| To-dos, action items or issues with a status | `show_tasks` |
 | 3 or more records with the same fields | `show_table` |
 | Web, news, paper or document search results | `show_results` |
 | One company, organization, product or place | `show_entity_card` |

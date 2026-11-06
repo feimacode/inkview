@@ -137,6 +137,44 @@ test("timeline markdown: full and minimal payloads", () => {
   assert.equal(c.toMarkdown(c.schema.parse({ events: [{ date: "2024", title: "Founded" }] })), "- 2024: Founded");
 });
 
+test("task list markdown: grouped checklist with full and minimal payloads", () => {
+  const c = get("task_list");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Launch",
+        items: [
+          { title: "Send invites", status: "In progress", owner: "Sam" },
+          { title: "Book venue", status: "To do", due: "2026-11-03", url: "https://example.com/venue" },
+          { title: "Draft agenda", status: "Done" },
+        ],
+        source: { name: "Tracker", url: "https://example.com/tracker" },
+      }),
+    ),
+    "### Launch\n\n#### To do\n- [ ] [Book venue](https://example.com/venue) — due 2026-11-03\n\n#### In progress\n- [ ] Send invites — Sam\n\n#### Done\n- [x] Draft agenda\n\n_Source: [Tracker](https://example.com/tracker)_",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ items: [{ title: "Book venue", status: "To do" }] })), "#### To do\n- [ ] Book venue");
+});
+
+test("task list markdown checks off the last custom status and skips empty groups", () => {
+  const c = get("task_list");
+  const md = c.toMarkdown(
+    c.schema.parse({ statuses: ["Backlog", "Shipped"], items: [{ title: "Offline drafts", status: "Shipped" }] }),
+  );
+  assert.equal(md, "#### Shipped\n- [x] Offline drafts");
+});
+
+test("task list rejects an unknown status, a bad due date and 51 items", () => {
+  const c = get("task_list");
+  const unknown = c.schema.safeParse({ items: [{ title: "Book venue", status: "Blocked" }] });
+  assert.equal(unknown.success, false);
+  assert.match(JSON.stringify(unknown.error!.issues), /not one of: To do, In progress, Done/);
+  assert.equal(c.schema.safeParse({ items: [{ title: "Book venue", status: "To do", due: "next friday" }] }).success, false);
+  const tooMany = c.schema.safeParse({ items: Array.from({ length: 51 }, (_, i) => ({ title: `Task ${i}`, status: "To do" })) });
+  assert.equal(tooMany.success, false);
+  assert.match(JSON.stringify(tooMany.error!.issues), /50 most relevant items/);
+});
+
 test("timeline markdown orders mixed date precision and validates input limits", () => {
   const c = get("timeline");
   const data = c.schema.parse({

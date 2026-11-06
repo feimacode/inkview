@@ -1246,5 +1246,74 @@
    "2026-11-05": 9050
   },
   "heldOut": true
+ },
+ {
+  "id": "tasks-launch",
+  "expect": "show_tasks",
+  "prompt": "Turn the relaunch checklist into something I can tick off.",
+  "source": {
+   "title": "Website relaunch",
+   "items": [
+    { "title": "Write the new homepage copy", "status": "Done", "owner": "Priya" },
+    { "title": "Ship the responsive layout", "status": "In progress", "owner": "Marco", "due": "2026-11-20", "priority": "high" },
+    { "title": "Map the old URLs to new pages", "status": "In progress", "owner": "Priya", "due": "2026-11-03", "priority": "high" },
+    { "title": "Set up the launch dashboard", "status": "To do", "owner": "Sam", "due": "2026-12-01", "priority": "low" }
+   ]
+  }
+ },
+ {
+  "id": "tasks-sprint",
+  "expect": "show_tasks",
+  "prompt": "Show the sprint backlog as a board so I can see what's in progress.",
+  "source": {
+   "title": "Sprint 42",
+   "statuses": ["Backlog", "Doing", "Review", "Shipped"],
+   "items": [
+    { "title": "Offline drafts", "status": "Shipped", "owner": "Ana" },
+    { "title": "Search filters", "status": "Review", "owner": "Kai" },
+    { "title": "Bulk import", "status": "Doing", "owner": "Ana" },
+    { "title": "Keyboard shortcuts", "status": "Doing", "owner": "Kai", "priority": "high" },
+    { "title": "Usage report", "status": "Backlog" }
+   ]
+  }
+ },
+ {
+  "id": "tasks-issues",
+  "expect": "show_tasks",
+  "prompt": "Lay out these open issues by status for the stand-up.",
+  "source": [
+   { "title": "Login fails on Safari 18", "status": "To do", "priority": "high", "owner": "Ravi" },
+   { "title": "Export omits empty columns", "status": "In progress", "owner": "Lena" },
+   { "title": "Slow dashboard load", "status": "In progress", "owner": "Ravi", "due": "2026-11-10" },
+   { "title": "Typo in welcome email", "status": "Done" }
+  ]
+ },
+ {
+  "id": "tasks-week",
+  "expect": "show_tasks",
+  "prompt": "What's left on my list this week? Show it as tasks.",
+  "source": {
+   "items": [
+    { "title": "Review the Q4 budget", "status": "To do", "due": "2026-11-09", "priority": "high" },
+    { "title": "Book flights for the offsite", "status": "To do", "due": "2026-11-06", "priority": "medium" },
+    { "title": "Finish the hiring scorecard", "status": "In progress" },
+    { "title": "Send the analytics recap", "status": "Done" }
+   ]
+  }
+ },
+ {
+  "id": "tasks-onboarding",
+  "expect": "show_tasks",
+  "prompt": "I need a checklist for onboarding a new engineer — show me the steps.",
+  "source": {
+   "title": "Engineer onboarding",
+   "items": [
+    { "title": "Create accounts and grant repo access", "status": "To do", "owner": "IT" },
+    { "title": "Pair on the first ticket", "status": "To do", "owner": "Manager" },
+    { "title": "Read the architecture guide", "status": "In progress", "owner": "New hire" },
+    { "title": "Introduce the team in the weekly sync", "status": "Done", "owner": "Manager" }
+   ]
+  },
+  "heldOut": true
  }
 ]
