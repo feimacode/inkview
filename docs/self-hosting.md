@@ -17,8 +17,8 @@ Put it behind HTTPS (any reverse proxy or platform TLS) and add
 
 ## Prebuilt image
 
-Each release tag (`v*`) publishes `ghcr.io/feimacode/inkview:<version>` (and
-`latest`), built by the **Image** workflow:
+The **Image** workflow publishes `ghcr.io/feimacode/inkview:latest` (and
+`:sha-<commit>`) on every push to `main`, and `:<version>` for each release tag (`v*`):
 
 ```bash
 docker run -p 8080:8080 ghcr.io/feimacode/inkview:0.1.0
