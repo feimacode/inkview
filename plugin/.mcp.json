@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "inkview": {
+      "command": "npx",
+      "args": ["-y", "@feimacode/inkview"]
+    }
+  }
+}

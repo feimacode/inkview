@@ -1,16 +1,20 @@
 // End-to-end smoke test: start the HTTP server, then act as an MCP client.
+// MCP_URL=http://host:port/mcp tests a running server instead (e.g. the Docker image).
 import { spawn } from "node:child_process";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 
 const PORT = process.env.PORT ?? "3999";
-const srv = spawn(process.execPath, ["dist/inkview.js", "--http"], { env: { ...process.env, PORT }, stdio: ["ignore", "pipe", "inherit"] });
-await new Promise((resolve) => srv.stdout.on("data", (d) => String(d).includes("listening") && resolve()));
+const MCP_URL = process.env.MCP_URL ?? `http://localhost:${PORT}/mcp`;
+const srv = process.env.MCP_URL
+  ? null
+  : spawn(process.execPath, ["dist/inkview.js", "--http"], { env: { ...process.env, PORT, INKVIEW_LOG: "off" }, stdio: ["ignore", "pipe", "inherit"] });
+if (srv) await new Promise((resolve) => srv.stdout.on("data", (d) => String(d).includes("listening") && resolve()));
 
 try {
   const client = new Client({ name: "smoke", version: "0" });
-  await client.connect(new StreamableHTTPClientTransport(new URL(`http://localhost:${PORT}/mcp`)));
+  await client.connect(new StreamableHTTPClientTransport(new URL(MCP_URL)));
 
   const { tools } = await client.listTools();
   const tool = tools.find((t) => t.name === "show_profile_card");
@@ -88,5 +92,5 @@ try {
   await client.close();
   console.log("All smoke tests passed.");
 } finally {
-  srv.kill();
+  srv?.kill();
 }

@@ -87,16 +87,28 @@ npm run dev            # HTTP on http://localhost:3001/mcp
 npm run preview        # gallery of every component, light and dark, at http://localhost:5174
 ```
 
+### Claude Code and Claude Desktop plugin
+
+The plugin installs the server plus a short Skill that tells Claude when to use each component:
+
+```text
+/plugin marketplace add feimacode/inkview
+/plugin install inkview@inkview
+```
+
 ## Claude web and ChatGPT web
 
-These connect from the cloud, so run `npm run dev` plus a tunnel
-(`npm run tunnel`) and add the public URL as a connector:
+These connect from the cloud, so they need an HTTPS URL: a hosted server
+([self-hosting](docs/self-hosting.md), Docker included), or for a quick test
+`npm run dev` plus a tunnel (`npm run tunnel`):
 [docs/testing-in-claude-and-chatgpt.md](docs/testing-in-claude-and-chatgpt.md).
+ChatGPT app setup: [docs/chatgpt-app.md](docs/chatgpt-app.md). What the hosted
+server does with your data: [docs/privacy.md](docs/privacy.md).
 
 ## Test
 
 ```bash
-npm test     # build, bundle size budget, MCP smoke tests (HTTP and stdio), unit tests, render checks
+npm test     # build, bundle size budget, MCP smoke tests (HTTP and stdio), hosting limits, unit tests, render checks
 ```
 
 Render checks draw every example in light, dark and 320 px, and check contrast,
@@ -112,6 +124,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 | `HOST` | `127.0.0.1` | Bind address (use `0.0.0.0` in a container) |
 | `INKVIEW_IMAGE_DOMAINS` | | Extra avatar image origins for the component CSP, comma separated |
 | `INKVIEW_UI_DOMAIN` | | Dedicated sandbox origin, if a host asks for one |
+
+HTTP mode also has a body limit, per-IP rate limit and a metadata-only access log;
+see [docs/self-hosting.md](docs/self-hosting.md) for those settings.
 
 Avatars only load from origins declared in the CSP (GitHub, LinkedIn media,
 Gravatar, unavatar.io, Wikimedia, Unsplash, X/Twitter images by default).

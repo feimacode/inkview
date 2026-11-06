@@ -6,6 +6,7 @@
  */
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
 import { createServer, VERSION } from "./server.js";
+import { describeRpc, httpConfig, logLine, RateLimiter } from "./http/limits.js";
 
 async function startHttp(): Promise<void> {
   // Loaded lazily so stdio start-up never parses the HTTP stack.
@@ -13,11 +14,36 @@ async function startHttp(): Promise<void> {
   const { NodeStreamableHTTPServerTransport } = await import("@modelcontextprotocol/node");
   type Request = import("express").Request;
   type Response = import("express").Response;
+  type NextFunction = import("express").NextFunction;
+  const cfg = httpConfig();
   const port = parseInt(process.env.PORT ?? "3001", 10);
   const host = process.env.HOST ?? "127.0.0.1";
   // Tunnels (cloudflared, ngrok) forward a public Host header, so allow any
   // host here; the server binds to localhost by default and holds no state.
-  const app = createMcpExpressApp({ host: "0.0.0.0" });
+  const app = createMcpExpressApp({ host: "0.0.0.0", jsonLimit: cfg.bodyLimit, ...(cfg.allowedHosts ? { allowedHosts: cfg.allowedHosts } : {}) });
+  if (cfg.trustProxy) app.set("trust proxy", true);
+
+  // Metadata-only access log: method, path, status, timing, JSON-RPC method and
+  // tool name. Never arguments, results, headers or query strings.
+  if (cfg.log) {
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      const start = process.hrtime.bigint();
+      if (req.path === "/healthz") return next();
+      res.on("finish", () => {
+        const ms = Math.round(Number(process.hrtime.bigint() - start) / 1e6);
+        console.error(logLine({ method: req.method, path: req.path, status: res.statusCode, ms, ...describeRpc(req.body) }));
+      });
+      next();
+    });
+  }
+
+  const limiter = new RateLimiter(cfg.rateLimit, cfg.rateWindowMs);
+  app.use("/mcp", (req: Request, res: Response, next: NextFunction) => {
+    const retry = limiter.take(req.ip ?? "unknown");
+    if (!retry) return next();
+    res.set("Retry-After", String(retry));
+    res.status(429).json({ jsonrpc: "2.0", error: { code: -32000, message: "Too many requests, try again shortly" }, id: null });
+  });
 
   app.get("/", (_req: Request, res: Response) => {
     res.type("text/plain").send(`Inkview ${VERSION} MCP server. Endpoint: /mcp\n`);
@@ -44,6 +70,14 @@ async function startHttp(): Promise<void> {
         res.status(500).json({ jsonrpc: "2.0", error: { code: -32603, message: "Internal server error" }, id: null });
       }
     }
+  });
+
+  // Body parser errors (oversized or malformed JSON): answer without echoing or logging the body.
+  app.use((err: { status?: number; type?: string }, _req: Request, res: Response, next: NextFunction) => {
+    if (res.headersSent) return next(err);
+    const status = err.status === 413 ? 413 : err.status === 400 ? 400 : 500;
+    const message = status === 413 ? `Request body over ${cfg.bodyLimit}` : status === 400 ? "Invalid JSON" : "Internal server error";
+    res.status(status).json({ jsonrpc: "2.0", error: { code: status === 500 ? -32603 : -32700, message }, id: null });
   });
 
   const httpServer = app.listen(port, host, () => {

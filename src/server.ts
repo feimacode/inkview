@@ -8,7 +8,7 @@ import { McpServer, type CallToolResult, type ReadResourceResult } from "@modelc
 // Inlined at build time (esbuild text loader), so the package needs no files on disk.
 import appHtml from "../dist/ui/app.html";
 import { serverComponents } from "./components/server-registry.js";
-import { serverInstructions } from "./guidance.js";
+import { serverInstructions } from "./guidance/index.js";
 import { autoMeta, autoSchema, runAuto } from "./auto/tool.js";
 
 export const VERSION = __INKVIEW_VERSION__;

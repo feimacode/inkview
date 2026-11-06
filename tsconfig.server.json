@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "types": ["node"]
   },
-  "include": ["src/env.d.ts", "src/server.ts", "src/main.ts", "src/guidance.ts", "src/components/**/server.ts", "src/components/server-registry.ts", "src/auto"]
+  "include": ["src/env.d.ts", "src/server.ts", "src/main.ts", "src/guidance.ts", "src/components/**/server.ts", "src/components/server-registry.ts", "src/auto", "src/http", "src/guidance"]
 }

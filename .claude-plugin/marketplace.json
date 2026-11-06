@@ -1,0 +1,16 @@
+{
+  "name": "inkview",
+  "owner": {
+    "name": "feimacode"
+  },
+  "metadata": {
+    "description": "Inkview: interactive UI components for MCP Apps hosts."
+  },
+  "plugins": [
+    {
+      "name": "inkview",
+      "source": "./plugin",
+      "description": "Interactive UI components in the chat: profile cards, tables, search results, entity cards, comparisons, charts and product grids."
+    }
+  ]
+}
