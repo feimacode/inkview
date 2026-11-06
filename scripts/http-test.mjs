@@ -66,7 +66,29 @@ try {
 
   const health = await fetch(`http://localhost:${PORT}/healthz`).then((r) => r.json());
   assert.equal(health.ok, true);
-  console.log("All HTTP hardening checks passed.");
 } finally {
   srv.kill();
 }
+
+// 5. Host allow-list guards /mcp but not /healthz (container and Ansible health checks use localhost).
+{
+  const port = "3997";
+  const s2 = spawn(process.execPath, ["dist/inkview.js", "--http"], {
+    env: { ...process.env, PORT: port, INKVIEW_LOG: "off", INKVIEW_ALLOWED_HOSTS: "inkview.example.com" },
+    stdio: ["ignore", "pipe", "inherit"],
+  });
+  await new Promise((resolve) => s2.stdout.on("data", (d) => String(d).includes("listening") && resolve()));
+  try {
+    assert.equal((await fetch(`http://localhost:${port}/healthz`)).status, 200, "healthz open on localhost");
+    const mcp = await fetch(`http://localhost:${port}/mcp`, {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json, text/event-stream" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" }),
+    });
+    assert.equal(mcp.status, 403, "/mcp refuses an unlisted Host");
+    console.log("✓ INKVIEW_ALLOWED_HOSTS guards /mcp, /healthz stays reachable");
+  } finally {
+    s2.kill();
+  }
+}
+console.log("All HTTP hardening checks passed.");

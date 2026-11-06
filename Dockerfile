@@ -11,6 +11,8 @@ COPY . .
 RUN npm run build
 
 FROM ${NODE_IMAGE}
+LABEL org.opencontainers.image.source="https://github.com/feimacode/inkview" \
+      org.opencontainers.image.licenses="MIT"
 WORKDIR /app
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8080
 COPY --from=build /app/dist/inkview.js /app/dist/inkview.js.LEGAL.txt ./

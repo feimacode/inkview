@@ -15,6 +15,18 @@ MCP_URL=http://localhost:8080/mcp node scripts/smoke-test.mjs
 Put it behind HTTPS (any reverse proxy or platform TLS) and add
 `https://<your domain>/mcp` as a connector in Claude or an app in ChatGPT.
 
+## Prebuilt image
+
+Each release tag (`v*`) publishes `ghcr.io/feimacode/inkview:<version>` (and
+`latest`), built by the **Image** workflow:
+
+```bash
+docker run -p 8080:8080 ghcr.io/feimacode/inkview:0.1.0
+```
+
+The feimacode deployment runs this image on the shared Azure VM behind Traefik
+and Cloudflare, with the `inkview` Ansible role in `feimacode/feima-infra`.
+
 ## Without Docker
 
 ```bash
@@ -30,6 +42,7 @@ HOST=0.0.0.0 PORT=8080 npx -y @feimacode/inkview --http
 | `INKVIEW_RATE_LIMIT` | `120` | Requests per client IP per window; `0` turns it off. Excess gets HTTP 429 with `Retry-After` |
 | `INKVIEW_RATE_WINDOW_MS` | `60000` | Rate-limit window |
 | `INKVIEW_TRUST_PROXY` | off | Set to `1` behind a load balancer so the client IP comes from `X-Forwarded-For` |
+| `INKVIEW_CLIENT_IP_HEADER` | | Header a trusted proxy sets to the real client IP, e.g. `cf-connecting-ip` behind Cloudflare. Takes precedence over `INKVIEW_TRUST_PROXY` for rate limiting |
 | `INKVIEW_ALLOWED_HOSTS` | any | Comma-separated `Host` header allow-list (DNS rebinding protection) |
 | `INKVIEW_LOG` | on | `off` disables the access log |
 | `INKVIEW_UI_DOMAIN` | | Dedicated sandbox origin, if a host asks for one |

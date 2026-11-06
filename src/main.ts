@@ -6,11 +6,11 @@
  */
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
 import { createServer, VERSION } from "./server.js";
-import { describeRpc, httpConfig, logLine, RateLimiter } from "./http/limits.js";
+import { clientKey, describeRpc, httpConfig, logLine, RateLimiter } from "./http/limits.js";
 
 async function startHttp(): Promise<void> {
   // Loaded lazily so stdio start-up never parses the HTTP stack.
-  const { createMcpExpressApp } = await import("@modelcontextprotocol/express");
+  const { createMcpExpressApp, hostHeaderValidation } = await import("@modelcontextprotocol/express");
   const { NodeStreamableHTTPServerTransport } = await import("@modelcontextprotocol/node");
   type Request = import("express").Request;
   type Response = import("express").Response;
@@ -20,7 +20,7 @@ async function startHttp(): Promise<void> {
   const host = process.env.HOST ?? "127.0.0.1";
   // Tunnels (cloudflared, ngrok) forward a public Host header, so allow any
   // host here; the server binds to localhost by default and holds no state.
-  const app = createMcpExpressApp({ host: "0.0.0.0", jsonLimit: cfg.bodyLimit, ...(cfg.allowedHosts ? { allowedHosts: cfg.allowedHosts } : {}) });
+  const app = createMcpExpressApp({ host: "0.0.0.0", jsonLimit: cfg.bodyLimit });
   if (cfg.trustProxy) app.set("trust proxy", true);
 
   // Metadata-only access log: method, path, status, timing, JSON-RPC method and
@@ -37,9 +37,13 @@ async function startHttp(): Promise<void> {
     });
   }
 
+  // Host allow-list (DNS rebinding protection) on the MCP endpoint only, so
+  // health checks from Docker and Ansible on localhost keep working.
+  if (cfg.allowedHosts?.length) app.use("/mcp", hostHeaderValidation(cfg.allowedHosts));
+
   const limiter = new RateLimiter(cfg.rateLimit, cfg.rateWindowMs);
   app.use("/mcp", (req: Request, res: Response, next: NextFunction) => {
-    const retry = limiter.take(req.ip ?? "unknown");
+    const retry = limiter.take(clientKey(req.headers, req.ip, cfg.clientIpHeader));
     if (!retry) return next();
     res.set("Retry-After", String(retry));
     res.status(429).json({ jsonrpc: "2.0", error: { code: -32000, message: "Too many requests, try again shortly" }, id: null });

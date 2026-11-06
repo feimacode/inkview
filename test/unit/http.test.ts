@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { describeRpc, httpConfig, RateLimiter } from "../../src/http/limits.js";
+import { clientKey, describeRpc, httpConfig, RateLimiter } from "../../src/http/limits.js";
 
 test("rate limiter: fixed window per key", () => {
   let now = 0;
@@ -33,4 +33,11 @@ test("http config defaults and overrides", () => {
   assert.equal(o.trustProxy, true);
   assert.equal(o.log, false);
   assert.deepEqual(o.allowedHosts, ["a.io", "b.io"]);
+});
+
+test("client key prefers the configured proxy header", () => {
+  assert.equal(clientKey({ "cf-connecting-ip": "203.0.113.7" }, "10.0.0.2", "cf-connecting-ip"), "203.0.113.7");
+  assert.equal(clientKey({}, "10.0.0.2", "cf-connecting-ip"), "10.0.0.2", "falls back when the header is missing");
+  assert.equal(clientKey({ "cf-connecting-ip": "203.0.113.7" }, "10.0.0.2"), "10.0.0.2", "header ignored unless configured");
+  assert.equal(httpConfig({ INKVIEW_CLIENT_IP_HEADER: "CF-Connecting-IP" }).clientIpHeader, "cf-connecting-ip");
 });
