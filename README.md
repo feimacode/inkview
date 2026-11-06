@@ -73,6 +73,10 @@ Avatars only load from origins declared in the CSP (GitHub, LinkedIn media,
 Gravatar, unavatar.io, Wikimedia, Unsplash, X/Twitter images by default).
 Anything else falls back to initials.
 
+## Roadmap
+
+The MVP plan and task list: [docs/mvp-tasks.md](docs/mvp-tasks.md).
+
 ## License
 
 MIT
