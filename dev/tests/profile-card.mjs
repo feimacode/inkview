@@ -26,7 +26,7 @@ export default {
   },
   async "initials replace a missing avatar"({ render, assert }) {
     const frame = await render({ name: "Grace Hopper" });
-    await frame.getByText("GH").waitFor();
+    await frame.getByText("GH", { exact: true }).waitFor();
     assert.ok(true);
   },
 };

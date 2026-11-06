@@ -1,0 +1,24 @@
+.dt-bar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.dt-title { margin: 0; }
+.dt-filter {
+  font: inherit; font-size: 13px; padding: 6px 10px; min-width: 0; width: 180px; max-width: 100%;
+  border: 1px solid var(--ink-border); border-radius: var(--ink-radius-sm); background: var(--ink-bg); color: var(--ink-text);
+}
+.dt-scroll { overflow-x: auto; border: 1px solid var(--ink-border); border-radius: var(--ink-radius-sm); }
+.dt-scroll:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; }
+.dt table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13px; }
+.dt th, .dt td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--ink-border); white-space: nowrap; background: var(--ink-bg); }
+.dt tbody tr:last-child td { border-bottom: 0; }
+.dt th { position: sticky; top: 0; font-weight: 600; background: var(--ink-bg-subtle); }
+.dt th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; color: var(--ink-text); }
+.dt th button:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; border-radius: 3px; }
+.dt-arrow { color: var(--ink-text-faint); font-size: 11px; }
+.dt .dt-num { text-align: right; font-variant-numeric: tabular-nums; }
+.dt th.dt-num button { flex-direction: row-reverse; }
+.dt .dt-check { width: 1%; padding-right: 0; position: sticky; left: 0; z-index: 1; }
+.dt th:nth-child(2), .dt td:nth-child(2) { position: sticky; left: 30px; z-index: 1; }
+.dt td:nth-child(2) { font-weight: 550; }
+.dt tr.dt-selected td { background: var(--ink-bg-subtle); }
+.dt input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--ink-accent); }
+.dt input[type="checkbox"]:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; }
+.dt-caption { font-size: 12px; margin: 8px 0 0; }

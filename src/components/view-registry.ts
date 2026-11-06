@@ -1,10 +1,28 @@
 /** View-side registry: React view + structural guard per component. No zod here. */
 import type { ViewEntry } from "./types.js";
 import { meta as profileCardMeta } from "./profile-card/meta.js";
-import { View as ProfileCardView, accepts as profileCardAccepts } from "./profile-card/View.js";
+import * as profileCard from "./profile-card/View.js";
+import { meta as dataTableMeta } from "./data-table/meta.js";
+import * as dataTable from "./data-table/View.js";
+import { meta as resultListMeta } from "./result-list/meta.js";
+import * as resultList from "./result-list/View.js";
+import { meta as entityCardMeta } from "./entity-card/meta.js";
+import * as entityCard from "./entity-card/View.js";
+import { meta as comparisonMeta } from "./comparison/meta.js";
+import * as comparison from "./comparison/View.js";
+import { meta as chartMeta } from "./chart/meta.js";
+import * as chart from "./chart/View.js";
+import { meta as productGridMeta } from "./product-grid/meta.js";
+import * as productGrid from "./product-grid/View.js";
 
 export const viewComponents: ViewEntry[] = [
-  { meta: profileCardMeta, View: ProfileCardView, accepts: profileCardAccepts },
+  { meta: profileCardMeta, View: profileCard.View, accepts: profileCard.accepts },
+  { meta: dataTableMeta, View: dataTable.View, accepts: dataTable.accepts },
+  { meta: resultListMeta, View: resultList.View, accepts: resultList.accepts },
+  { meta: entityCardMeta, View: entityCard.View, accepts: entityCard.accepts },
+  { meta: comparisonMeta, View: comparison.View, accepts: comparison.accepts },
+  { meta: chartMeta, View: chart.View, accepts: chart.accepts },
+  { meta: productGridMeta, View: productGrid.View, accepts: productGrid.accepts },
 ];
 
 export const byComponent = new Map(viewComponents.map((c) => [c.meta.component, c]));

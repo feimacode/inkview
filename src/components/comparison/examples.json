@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Note-taking apps",
+    "data": {
+      "title": "Note-taking apps for a small team",
+      "items": [
+        { "name": "Notion", "subtitle": "All-in-one workspace" },
+        { "name": "Obsidian", "subtitle": "Local Markdown vault" },
+        { "name": "Apple Notes", "subtitle": "Built into Apple devices" }
+      ],
+      "criteria": ["Price per user / month", "Real-time collaboration", "Works offline", "Ease of use", "Platforms"],
+      "values": [
+        ["$10", true, false, { "rating": 4 }, "Web, desktop, mobile"],
+        ["Free ($4 sync)", false, true, { "rating": 3 }, "Desktop, mobile"],
+        ["Free", true, true, { "rating": 5 }, "Apple only"]
+      ],
+      "recommended": "Notion",
+      "reason": "Best fit for shared, real-time team docs across mixed platforms."
+    }
+  },
+  {
+    "name": "Two options, no recommendation",
+    "data": {
+      "items": [{ "name": "Plan A" }, { "name": "Plan B" }],
+      "criteria": ["Monthly cost", "Storage (GB)"],
+      "values": [[12, 100], [20, 1000]]
+    }
+  },
+  {
+    "name": "Five laptops with gaps",
+    "data": {
+      "title": "Laptops under $1,500",
+      "items": [{ "name": "MacBook Air 13" }, { "name": "XPS 13" }, { "name": "ThinkPad X1" }, { "name": "Zenbook 14" }, { "name": "Framework 13" }],
+      "criteria": ["Weight (kg)", "Battery (h)", "Repairable"],
+      "values": [[1.24, 18, false], [1.19, 12, false], [1.12, null, true], [1.2, 15], [1.3, 11, true]],
+      "recommended": "Framework 13",
+      "reason": "The only fully repairable option, at a small weight cost."
+    }
+  }
+]

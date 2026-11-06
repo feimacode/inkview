@@ -2,6 +2,12 @@
 import type { z } from "zod";
 import type { ComponentMeta } from "./types.js";
 import * as profileCard from "./profile-card/server.js";
+import * as dataTable from "./data-table/server.js";
+import * as resultList from "./result-list/server.js";
+import * as entityCard from "./entity-card/server.js";
+import * as comparison from "./comparison/server.js";
+import * as chart from "./chart/server.js";
+import * as productGrid from "./product-grid/server.js";
 
 export interface ServerEntry {
   meta: ComponentMeta;
@@ -9,4 +15,5 @@ export interface ServerEntry {
   toMarkdown(data: any): string;
 }
 
-export const serverComponents: ServerEntry[] = [profileCard];
+/** Order matters: it is the order tools are listed to the model. */
+export const serverComponents: ServerEntry[] = [profileCard, dataTable, resultList, entityCard, comparison, chart, productGrid];

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Startups with funding",
+    "data": {
+      "title": "Climate-tech startups in Berlin",
+      "caption": "Top 6 of 41 by total funding",
+      "columns": [
+        { "key": "name", "label": "Company", "type": "text" },
+        { "key": "stage", "label": "Stage", "type": "badge" },
+        { "key": "funding", "label": "Funding", "type": "money", "currency": "EUR" },
+        { "key": "employees", "label": "Employees", "type": "number" },
+        { "key": "founded", "label": "Founded", "type": "date" },
+        { "key": "site", "label": "Website", "type": "link" }
+      ],
+      "rows": [
+        { "name": "Enpal", "stage": "Series D", "funding": 1200000000, "employees": 4000, "founded": "2017-01-01", "site": "https://www.enpal.de" },
+        { "name": "1Komma5°", "stage": "Series B", "funding": 430000000, "employees": 2500, "founded": "2021-01-01", "site": "https://1komma5.com" },
+        { "name": "Ecoligo", "stage": "Series A", "funding": 26000000, "employees": 120, "founded": "2016-01-01", "site": "https://ecoligo.com" },
+        { "name": "Planetly", "stage": "Acquired", "funding": 5000000, "employees": 200, "founded": "2020-01-01", "site": "https://example.com/planetly" },
+        { "name": "Tado", "stage": "Late", "funding": 250000000, "employees": 350, "founded": "2011-01-01", "site": "https://www.tado.com" },
+        { "name": "Klim", "stage": "Seed", "funding": 6000000, "employees": 40, "founded": "2020-06-01", "site": "https://klim.eco" }
+      ],
+      "source": { "name": "Example dataset", "url": "https://example.com/data" }
+    }
+  },
+  {
+    "name": "Minimal",
+    "data": {
+      "columns": [{ "key": "city", "label": "City" }, { "key": "pop", "label": "Population", "type": "number" }],
+      "rows": [{ "city": "Tokyo", "pop": 37400000 }, { "city": "Delhi", "pop": 31000000 }, { "city": "Shanghai", "pop": 27100000 }]
+    }
+  },
+  {
+    "name": "Releases with missing values",
+    "data": {
+      "title": "Node.js releases",
+      "columns": [
+        { "key": "v", "label": "Version" },
+        { "key": "date", "label": "Released", "type": "date" },
+        { "key": "status", "label": "Status", "type": "badge" },
+        { "key": "notes", "label": "Notes", "type": "link" }
+      ],
+      "rows": [
+        { "v": "24", "date": "2025-05-06", "status": "Active LTS", "notes": { "label": "Changelog", "url": "https://nodejs.org/en/blog" } },
+        { "v": "22", "date": "2024-04-24", "status": "Maintenance" },
+        { "v": "20", "date": "2023-04-18", "status": "End of life", "notes": "https://nodejs.org/en/about/previous-releases" }
+      ]
+    }
+  }
+]

@@ -1,0 +1,16 @@
+.rl-list { list-style: none; margin: 0; padding: 0; }
+.rl-item { padding: 12px 0; border-top: 1px solid var(--ink-border); }
+.rl-item:first-child { border-top: 0; padding-top: 2px; }
+.rl-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-text-muted); min-width: 0; }
+.rl-meta span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rl-fav { width: 16px; height: 16px; border-radius: 4px; flex: none; }
+.rl-fav--generic { display: inline-grid; place-items: center; background: var(--ink-bg-subtle); color: var(--ink-text-muted); font-size: 10px; font-weight: 700; }
+.rl-title { margin: 4px 0 0; font-size: 15px; font-weight: 600; line-height: 1.35; }
+.rl-open { text-decoration: none; }
+.rl-open:hover { text-decoration: underline; }
+.rl-snippet {
+  margin: 4px 0 0; color: var(--ink-text-muted);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.rl-actions { margin-top: 8px; }
+.rl-actions .ink-btn { font-size: 12px; padding: 4px 10px; }

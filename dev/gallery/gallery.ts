@@ -3,7 +3,7 @@ import { examples } from "../../src/components/examples";
 import appHtml from "../../dist/ui/app.html?raw";
 
 const root = document.getElementById("gallery")!;
-for (const { tool, component, examples: list } of Object.values(examples)) {
+for (const { tool, component, examples: list } of examples) {
   const h2 = document.createElement("h2");
   h2.textContent = `${tool} (${component})`;
   root.append(h2);

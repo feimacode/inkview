@@ -1,0 +1,25 @@
+import { z } from "zod";
+
+const url = z.string().url();
+
+export const ProductSchema = z.looseObject({
+  title: z.string().min(1).max(200),
+  url: url.describe("The product page at the merchant."),
+  imageUrl: url.optional(),
+  price: z.number().nonnegative().optional(),
+  currency: z.string().length(3).optional().describe("ISO 4217, e.g. USD."),
+  rating: z.number().min(0).max(5).optional(),
+  reviewCount: z.number().int().nonnegative().optional(),
+  merchant: z.string().max(80).optional(),
+  availability: z.enum(["in_stock", "limited", "out_of_stock", "preorder", "unknown"]).optional(),
+  variants: z.string().max(120).optional().describe('Short summary, e.g. "3 colors, 2 sizes".'),
+});
+
+export const schema = z.looseObject({
+  title: z.string().max(120).optional(),
+  products: z.array(ProductSchema).min(1).max(12).describe("1 to 12 products, best match first."),
+  source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
+});
+
+export type Product = z.infer<typeof ProductSchema>;
+export type ProductGrid = z.infer<typeof schema>;
