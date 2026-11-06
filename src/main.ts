@@ -10,7 +10,7 @@ import { clientKey, describeRpc, httpConfig, logLine, RateLimiter } from "./http
 
 async function startHttp(): Promise<void> {
   // Loaded lazily so stdio start-up never parses the HTTP stack.
-  const { createMcpExpressApp } = await import("@modelcontextprotocol/express");
+  const { createMcpExpressApp, hostHeaderValidation } = await import("@modelcontextprotocol/express");
   const { NodeStreamableHTTPServerTransport } = await import("@modelcontextprotocol/node");
   type Request = import("express").Request;
   type Response = import("express").Response;
@@ -20,7 +20,7 @@ async function startHttp(): Promise<void> {
   const host = process.env.HOST ?? "127.0.0.1";
   // Tunnels (cloudflared, ngrok) forward a public Host header, so allow any
   // host here; the server binds to localhost by default and holds no state.
-  const app = createMcpExpressApp({ host: "0.0.0.0", jsonLimit: cfg.bodyLimit, ...(cfg.allowedHosts ? { allowedHosts: cfg.allowedHosts } : {}) });
+  const app = createMcpExpressApp({ host: "0.0.0.0", jsonLimit: cfg.bodyLimit });
   if (cfg.trustProxy) app.set("trust proxy", true);
 
   // Metadata-only access log: method, path, status, timing, JSON-RPC method and
@@ -36,6 +36,10 @@ async function startHttp(): Promise<void> {
       next();
     });
   }
+
+  // Host allow-list (DNS rebinding protection) on the MCP endpoint only, so
+  // health checks from Docker and Ansible on localhost keep working.
+  if (cfg.allowedHosts?.length) app.use("/mcp", hostHeaderValidation(cfg.allowedHosts));
 
   const limiter = new RateLimiter(cfg.rateLimit, cfg.rateWindowMs);
   app.use("/mcp", (req: Request, res: Response, next: NextFunction) => {
