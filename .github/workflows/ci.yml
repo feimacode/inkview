@@ -42,6 +42,9 @@ jobs:
           took=$(( $(date +%s) - start ))
           echo "cold npx took ${took}s"
           test "$took" -lt 15
+      - name: Gallery builds and shows every component
+        if: matrix.node == 22
+        run: npm run build:gallery && node scripts/gallery-check.mjs
       - run: npx -y @fission-ai/openspec@1.16.0 validate --all --strict
         if: matrix.node == 22
         env:

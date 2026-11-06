@@ -5,3 +5,4 @@ dist-dev/
 *.log
 .DS_Store
 *.tgz
+evals/reports/

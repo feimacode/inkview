@@ -29,9 +29,12 @@
     "test:render": "DEV_PAGE=host vite build -c dev/vite.config.ts && node scripts/render-test.mjs",
     "preview": "node scripts/preview.mjs",
     "build:mcpb": "node scripts/build-mcpb.mjs",
-    "gen:guidance": "node scripts/gen-guidance.mjs"
+    "gen:guidance": "node scripts/gen-guidance.mjs",
+    "evals": "npm run build && node evals/run.mjs",
+    "build:gallery": "npm run build:ui && DEV_PAGE=gallery vite build -c dev/vite.config.ts"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
     "@modelcontextprotocol/client": "^2.4.0",
     "@modelcontextprotocol/core": "^2.4.0",
     "@modelcontextprotocol/express": "^2.0.2",
