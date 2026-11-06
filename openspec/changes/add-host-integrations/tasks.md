@@ -2,7 +2,7 @@
 
 ## 1. Guidance source
 
-- [ ] 1.1 Create `src/guidance/` with per-component "use when" text and a generator for server instructions; verify the smoke test checks initialize instructions name every tool
+- [x] 1.1 Create `src/guidance/` with per-component "use when" text and a generator for server instructions; verify the smoke test checks initialize instructions name every tool
 
 ## 2. Claude plugin
 

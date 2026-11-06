@@ -14,11 +14,12 @@ Every pull request runs the **CI** workflow (`.github/workflows/ci.yml`):
 
 | Job | What it checks |
 | --- | --- |
-| `Test (Node 20)`, `Test (Node 22)` | typecheck, build, view bundle size (100 KB gzipped), MCP smoke tests over HTTP and stdio, render checks |
+| `Test (Node 20)`, `Test (Node 22)` | typecheck, build, view bundle size (100 KB gzipped), MCP smoke tests over HTTP and stdio, hosting limits and log checks, generated guidance up to date, unit tests, render checks |
 | `Test (Node 22)` extra steps | cold `npx` start under 15 s, `openspec validate --all --strict`, screenshots uploaded as the `screenshots` artifact |
 | `Stdio (Windows)` | the server starts and answers over stdio on Windows |
+| `Docker image` | the Dockerfile builds and the container passes the HTTP smoke test |
 
-Make `Test (Node 20)`, `Test (Node 22)` and `Stdio (Windows)` required in the
+Make `Test (Node 20)`, `Test (Node 22)`, `Stdio (Windows)` and `Docker image` required in the
 branch protection rules for `main`.
 
 ## Planning with OpenSpec
@@ -42,5 +43,12 @@ folder in `src/components/<name>/` with:
 
 Then register it in `src/components/server-registry.ts`,
 `src/components/view-registry.ts` and `src/components/examples.ts`, and add
-interaction checks in `dev/tests/<name>.mjs`. `npm run preview` shows it in
-light and dark.
+interaction checks in `dev/tests/<name>.mjs`, and a situation line in
+`src/guidance/index.ts`. `npm run preview` shows it in light and dark.
+
+## Model guidance
+
+`src/guidance/index.ts` is the one source for the server instructions, the
+Claude plugin Skill (`plugin/skills/inkview/SKILL.md`) and the ChatGPT app
+instructions (`docs/chatgpt-app.md`). Edit it, then run `npm run gen:guidance`;
+`npm test` fails if the generated files are out of date.

@@ -2,13 +2,13 @@
 
 ## 1. Server hardening
 
-- [ ] 1.1 Add a 256 KB body limit and per-IP rate limiting in HTTP mode; verify tests get 413 and 429
-- [ ] 1.2 Add metadata-only request logging; verify a test that a sentinel input value never appears in logs
-- [ ] 1.3 Make `ui.domain` and CSP image domains configurable by environment; verify the resource metadata reflects the config in a smoke test
+- [x] 1.1 Add a 256 KB body limit and per-IP rate limiting in HTTP mode; verify tests get 413 and 429
+- [x] 1.2 Add metadata-only request logging; verify a test that a sentinel input value never appears in logs
+- [x] 1.3 Make `ui.domain` and CSP image domains configurable by environment; verify the resource metadata reflects the config in a smoke test
 
 ## 2. Deployment
 
-- [ ] 2.1 Add a Dockerfile running the bundled server; verify the container passes the HTTP smoke test locally
+- [x] 2.1 Add a Dockerfile running the bundled server; verify the container passes the HTTP smoke test locally
 - [ ] 2.2 Provision the hosting service, domain and TLS; verify `https://<domain>/healthz` returns the version
 - [ ] 2.3 Add a deploy workflow from `main` after CI passes; verify a merge deploys and the version updates
 - [ ] 2.4 Add an external uptime check on `/healthz` with alerting; verify a test alert arrives

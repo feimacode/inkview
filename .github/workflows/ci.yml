@@ -59,3 +59,22 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: node scripts/stdio-test.mjs
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: docker build -t inkview:ci .
+      - run: docker run -d --name inkview -p 8080:8080 inkview:ci
+      - name: Smoke test against the container
+        run: |
+          for i in $(seq 1 20); do curl -fs localhost:8080/healthz && break; sleep 1; done
+          MCP_URL=http://localhost:8080/mcp node scripts/smoke-test.mjs
+      - if: always()
+        run: docker logs inkview
