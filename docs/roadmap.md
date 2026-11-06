@@ -32,6 +32,35 @@ and ChatGPT. Source plan: [Inkview: Product and Architecture Plan](https://claud
 Every component change depends on `add-component-runtime`. Within milestone 2 the
 order is a suggestion; components can be built in parallel.
 
+## After the MVP
+
+Proposed 2026-11-06, not yet approved. These come from the plan's "After" phase
+(v2 components, SDK for server builders, A2UI input). Store submissions stay in
+`prepare-public-launch`.
+
+| Milestone | Change | Capability |
+| --- | --- | --- |
+| 5. v2 components | `add-profile-grid` | profile-grid, profile-card (modified guidance) |
+| | `add-timeline` | timeline |
+| | `add-task-list` | task-list |
+| | `add-document-preview` | document-preview |
+| | `add-form` | form |
+| | `add-map` | map, hosted-server (privacy page) |
+| | `update-show-auto-v2` | auto-render (modified) |
+| 6. Builders | `add-server-sdk` | server-sdk |
+| | `add-a2ui-input` | a2ui-input |
+
+Suggested order inside milestone 5: profile grid first (it finishes the shortlist
+story), then timeline and task list, then document preview and form, then map,
+which needs a tile provider decision. `update-show-auto-v2` goes last and covers
+only the components that have shipped. Each new component adds eval prompts, but
+running evals stays paused until there is budget.
+
+Still open from the MVP (tasks in the existing changes): serve the privacy page
+and hosted setup steps (`add-hosted-server` 3.2), deploy from `main` after CI
+(`add-hosted-server` 2.3), the CONTRIBUTING dry run (`prepare-public-launch` 2.3),
+and the host checks that need Iven.
+
 ## Working with the changes
 
 ```bash
