@@ -4,19 +4,54 @@ Agent-agnostic UI components for [MCP Apps](https://github.com/modelcontextproto
 Your agent already has the data; Inkview draws it as a native-looking component
 right in the chat, in Claude, ChatGPT and any other host that renders MCP Apps.
 
-> **Pilot (v0.1):** one component, the **profile card**. Table, result list,
-> entity card, comparison, chart and product grid follow.
-
 ![Profile card](docs/img/profile-card-light.png)
+
+## Components
+
+| Tool | Draws | Try asking |
+| --- | --- | --- |
+| `show_profile_card` | A person: avatar, role, tags, links. Shortlist, open profile, draft outreach | "Find Ada Lovelace and show her profile card" |
+| `show_table` | Up to 50 typed rows (text, number, money, date, link, badge). Sort, filter, select rows to ask about, CSV download | "Show the 10 largest EU cities by population as a table" |
+| `show_results` | Up to 20 search results or sources with snippets. Open, dig deeper | "Search for MCP Apps docs and show the results" |
+| `show_entity_card` | A company, product, place or organization: facts and links. Open website, compare | "Show me a card for Stripe" |
+| `show_comparison` | 2 to 5 options side by side, with an optional recommendation. Choose this | "Compare Notion, Obsidian and Apple Notes for a small team" |
+| `show_chart` | Line or bar chart, up to 5 series. Tooltips, legend toggles, text summary for screen readers | "Chart our monthly signups for this year" |
+| `show_products` | Up to 12 products with price, rating and availability. Sort, view at store, compare (no cart) | "Find noise-cancelling headphones under $300" |
+| `show_auto` | Any JSON: picks the best component above, or formatted text | (fallback when the shape is unclear) |
+
+<p>
+<img src="docs/img/data-table-light.png" width="49%" alt="Data table">
+<img src="docs/img/comparison-light.png" width="49%" alt="Comparison">
+<img src="docs/img/chart-light.png" width="49%" alt="Chart">
+<img src="docs/img/entity-card-light.png" width="49%" alt="Entity card">
+<img src="docs/img/result-list-light.png" width="49%" alt="Result list">
+<img src="docs/img/product-grid-light.png" width="49%" alt="Product grid">
+</p>
+
+### How `show_auto` picks a component
+
+It looks at the data's shape, in this order, and the first match wins:
+
+1. **Product grid**: an array of items with a title or name, a URL and a price.
+2. **Result list**: an array of items with a title or name and a URL.
+3. **Chart**: rows of a date or label plus numeric columns (`[{month, users}]`), a `label → number` map (`{Mon: 3, Tue: 5}`), or `{x, series}`.
+4. **Profile card**: one person: a name plus a role (`title`, `jobTitle`, `role`) or person fields (`firstName`, `linkedin`).
+5. **Entity card**: one organization or place: a name plus org fields such as `website`, `industry`, `founded`, `headquarters`, `address` or `type`.
+6. **Data table**: an array of same-shaped records (first 50 rows kept).
+
+Wrappers like `{results: [...]}`, `{products: [...]}` and `{rows: [...]}` are unwrapped first.
+A `hint` (`"table"`, `"chart"`...) overrides detection when the data fits that
+component. Anything else is shown as formatted text. The text result names the
+explicit tool, so the model can call it directly next time.
 
 ## How it works
 
 Inkview is an MCP server of *render tools*. The agent gathers data with its own
-tools (search, LinkedIn, CRM...), then calls `show_profile_card` with it. The
+tools (search, LinkedIn, CRM...), then calls a render tool such as `show_table` or `show_profile_card` with it. The
 server validates the data and returns:
 
 - `structuredContent` for the UI, which the host draws from the tool's `ui://` resource in a sandboxed iframe
-- a markdown version of the same card, for the model and for text-only hosts (Claude Code, Codex CLI)
+- a markdown version of the same view, for the model and for text-only hosts (Claude Code, Codex CLI)
 
 The server is stateless: it stores nothing and never logs tool arguments.
 
@@ -61,7 +96,7 @@ These connect from the cloud, so run `npm run dev` plus a tunnel
 ## Test
 
 ```bash
-npm test     # build, bundle size budget, MCP smoke tests (HTTP and stdio), render checks
+npm test     # build, bundle size budget, MCP smoke tests (HTTP and stdio), unit tests, render checks
 ```
 
 Render checks draw every example in light, dark and 320 px, and check contrast,

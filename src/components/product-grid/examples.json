@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Headphones",
+    "data": {
+      "title": "Noise-cancelling headphones under $400",
+      "products": [
+        { "title": "Sony WH-1000XM6 Wireless Noise Canceling Headphones", "url": "https://example.com/p/sony-xm6", "price": 399.99, "currency": "USD", "rating": 4.7, "reviewCount": 2310, "merchant": "Example Electronics", "availability": "in_stock", "variants": "3 colors" },
+        { "title": "Bose QuietComfort Ultra Headphones", "url": "https://example.com/p/bose-qc-ultra", "price": 349, "currency": "USD", "rating": 4.6, "reviewCount": 5120, "merchant": "Example Store", "availability": "limited" },
+        { "title": "Apple AirPods Max (USB-C)", "url": "https://example.com/p/airpods-max", "price": 379, "currency": "USD", "rating": 4.5, "reviewCount": 880, "merchant": "Example Store", "availability": "in_stock", "variants": "5 colors" },
+        { "title": "Sennheiser Momentum 4 Wireless", "url": "https://example.com/p/momentum-4", "price": 279.95, "currency": "USD", "rating": 4.4, "reviewCount": 1904, "merchant": "Audio Example", "availability": "out_of_stock" },
+        { "title": "Anker Soundcore Space One", "url": "https://example.com/p/space-one", "price": 79.99, "currency": "USD", "rating": 4.3, "reviewCount": 12044, "merchant": "Example Market" }
+      ],
+      "source": { "name": "Example shopping search" }
+    }
+  },
+  { "name": "Minimal", "data": { "products": [{ "title": "Plain cotton T-shirt", "url": "https://example.com/p/tee" }, { "title": "Linen shirt", "url": "https://example.com/p/linen", "price": 49, "currency": "EUR" }] } },
+  {
+    "name": "Euro prices, preorder",
+    "data": {
+      "products": [
+        { "title": "Framework Laptop 13 DIY Edition", "url": "https://example.com/p/fw13", "price": 899, "currency": "EUR", "availability": "preorder", "merchant": "Framework" },
+        { "title": "Fairphone 6", "url": "https://example.com/p/fp6", "price": 599, "currency": "EUR", "rating": 4.2, "reviewCount": 312, "availability": "in_stock", "merchant": "Fairphone" },
+        { "title": "Shift6mq", "url": "https://example.com/p/shift", "currency": "EUR", "rating": 4.0, "reviewCount": 56 }
+      ]
+    }
+  }
+]

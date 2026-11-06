@@ -1,0 +1,11 @@
+.ec-head { display: flex; gap: 14px; align-items: center; }
+.ec-who { min-width: 0; }
+.ec-kind { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-text-faint); }
+.ec-name { margin: 1px 0 0; font-size: 18px; font-weight: 650; line-height: 1.25; }
+.ec-tagline { margin: 2px 0 0; color: var(--ink-text-muted); }
+.ec-desc { margin: 14px 0 0; }
+.ec-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px 16px; margin: 14px 0 0; }
+.ec-fact { min-width: 0; }
+.ec-fact dt { font-size: 12px; color: var(--ink-text-faint); }
+.ec-fact dd { margin: 1px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+.ec-links { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; }

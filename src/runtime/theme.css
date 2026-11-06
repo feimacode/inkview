@@ -14,6 +14,7 @@
   --ink-accent-text: #ffffff;
   --ink-ring: var(--color-ring-primary, #3b5bdb);
   --ink-good: #2f7d32;
+  --ink-star: #845400;
   --ink-bad: #b3261e;
   --ink-radius: var(--border-radius-lg, 14px);
   --ink-radius-sm: var(--border-radius-sm, 8px);
@@ -31,6 +32,7 @@
     --ink-accent: #7c93f5;
     --ink-accent-text: #10131f;
     --ink-good: #7bc47f;
+    --ink-star: #e3b341;
     --ink-bad: #f28b82;
   }
 }
@@ -44,6 +46,7 @@
   --ink-accent: #7c93f5;
   --ink-accent-text: #10131f;
   --ink-good: #7bc47f;
+  --ink-star: #e3b341;
   --ink-bad: #f28b82;
 }
 * { box-sizing: border-box; }

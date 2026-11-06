@@ -22,7 +22,7 @@
     "start": "node dist/inkview.js --http",
     "start:stdio": "node dist/inkview.js",
     "dev": "npm run build && node dist/inkview.js --http",
-    "test": "npm run build && node scripts/check-size.mjs && node scripts/smoke-test.mjs && node scripts/stdio-test.mjs && npm run test:render",
+    "test": "npm run build && node scripts/check-size.mjs && node scripts/smoke-test.mjs && node scripts/stdio-test.mjs && node scripts/unit-test.mjs && npm run test:render",
     "tunnel": "bash scripts/tunnel.sh",
     "prepare": "npm run build",
     "inspect": "npx @modelcontextprotocol/inspector node dist/inkview.js",

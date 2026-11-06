@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Web search",
+    "data": {
+      "query": "MCP Apps specification",
+      "results": [
+        { "title": "MCP Apps: interactive UIs for MCP tools", "url": "https://github.com/modelcontextprotocol/ext-apps", "source": "GitHub", "date": "2026-01-26", "snippet": "Build interactive UIs for MCP tools — charts, forms, dashboards — that render inline in Claude, ChatGPT and any other compliant chat client." },
+        { "title": "MCP Apps in ChatGPT", "url": "https://developers.openai.com/apps-sdk/mcp-apps-in-chatgpt/", "source": "OpenAI Developers", "date": "2026-02-10", "snippet": "ChatGPT renders MCP Apps resources declared with _meta.ui.resourceUri, alongside the Apps SDK bridge." },
+        { "title": "Getting started with MCP Apps in Claude", "url": "https://claude.com/docs/connectors/building/mcp-apps/getting-started", "source": "Claude Docs", "snippet": "Connectors can return interactive views that render inline in Claude on web, desktop and mobile." },
+        { "title": "VS Code adds MCP Apps support", "url": "https://code.visualstudio.com/blogs/2026/01/26/mcp-apps-support", "source": "VS Code Blog", "date": "2026-01-26" }
+      ]
+    }
+  },
+  {
+    "name": "Minimal",
+    "data": { "results": [{ "title": "Example Domain", "url": "https://example.com" }] }
+  },
+  {
+    "name": "Papers with long snippets",
+    "data": {
+      "title": "Papers on tool use in LLM agents",
+      "results": [
+        { "title": "Toolformer: Language Models Can Teach Themselves to Use Tools", "url": "https://arxiv.org/abs/2302.04761", "source": "arXiv", "date": "2023-02-09", "snippet": "Language models exhibit remarkable abilities to solve new tasks from just a few examples or textual instructions, especially at scale. They also, paradoxically, struggle with basic functionality, such as arithmetic or factual lookup, where much simpler and smaller models excel. In this paper, we show that LMs can teach themselves to use external tools via simple APIs and achieve the best of both worlds." },
+        { "title": "ReAct: Synergizing Reasoning and Acting in Language Models", "url": "https://arxiv.org/abs/2210.03629", "source": "arXiv", "date": "2022-10-06", "snippet": "We explore the use of LLMs to generate both reasoning traces and task-specific actions in an interleaved manner." }
+      ]
+    }
+  }
+]

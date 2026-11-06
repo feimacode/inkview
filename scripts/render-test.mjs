@@ -143,6 +143,17 @@ try {
       await frame.getByText("### Fallback text").waitFor({ timeout: 5000 });
       await page.close();
     });
+    await check("runtime · show_auto no-match shows formatted text", async () => {
+      const page = await ctx("light");
+      const frame = await render(page, {
+        toolName: "show_auto",
+        args: { data: "plain" },
+        result: { content: [{ type: "text", text: "No specific component matched.\n\n```json\n\"plain\"\n```" }], structuredContent: { component: "text", data: {} } },
+        theme: "light",
+      });
+      await frame.getByText("No specific component matched.").waitFor({ timeout: 5000 });
+      await page.close();
+    });
     await check("runtime · renders early from tool input", async () => {
       const page = await ctx("light");
       const frame = await render(page, { toolName: "show_profile_card", args: { name: "Early Bird" }, theme: "light" });

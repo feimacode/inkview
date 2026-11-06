@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Company",
+    "data": {
+      "name": "Stripe",
+      "kind": "company",
+      "tagline": "Financial infrastructure for the internet",
+      "description": "Stripe builds payments and financial software for businesses of every size, from startups to public companies.",
+      "facts": [
+        { "label": "Founded", "value": "2010" },
+        { "label": "Headquarters", "value": "San Francisco and Dublin" },
+        { "label": "Employees", "value": "About 8,000" },
+        { "label": "Founders", "value": "Patrick and John Collison" }
+      ],
+      "links": [{ "label": "Docs", "url": "https://docs.stripe.com" }, { "label": "Wikipedia", "url": "https://en.wikipedia.org/wiki/Stripe,_Inc." }],
+      "websiteUrl": "https://stripe.com",
+      "source": { "name": "Wikipedia", "url": "https://en.wikipedia.org/wiki/Stripe,_Inc." }
+    }
+  },
+  { "name": "Name only", "data": { "name": "Acme Robotics" } },
+  {
+    "name": "Place",
+    "data": {
+      "name": "Tempelhofer Feld",
+      "kind": "place",
+      "tagline": "Former airport turned public park, Berlin",
+      "facts": [{ "label": "Area", "value": "355 ha" }, { "label": "Opened as park", "value": "2010" }, { "label": "Hours", "value": "Sunrise to sunset" }],
+      "websiteUrl": "https://example.com/tempelhofer-feld"
+    }
+  }
+]

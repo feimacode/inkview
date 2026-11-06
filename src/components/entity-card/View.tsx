@@ -1,0 +1,65 @@
+import type { ViewProps } from "../types.js";
+import type { EntityCard } from "./schema.js";
+import { Avatar, Button, HostLink, Source, useBusy } from "../../runtime/primitives.js";
+import "./entity-card.css";
+
+export function accepts(d: unknown): d is EntityCard {
+  return !!d && typeof d === "object" && typeof (d as EntityCard).name === "string";
+}
+
+const KIND_LABEL = { company: "Company", organization: "Organization", place: "Place", other: "" } as const;
+
+export function View({ data: e, actions }: ViewProps<EntityCard>) {
+  const { busy, run } = useBusy();
+  const kind = e.kind ? KIND_LABEL[e.kind] : "";
+  return (
+    <article className="ink-card ec" aria-label={e.name}>
+      <header className="ec-head">
+        <Avatar src={e.logoUrl} name={e.name} shape="square" size={56} />
+        <div className="ec-who">
+          {kind && <p className="ec-kind">{kind}</p>}
+          <h2 className="ec-name">{e.name}</h2>
+          {e.tagline && <p className="ec-tagline">{e.tagline}</p>}
+        </div>
+      </header>
+      {e.description && <p className="ec-desc">{e.description}</p>}
+      {e.facts && e.facts.length > 0 && (
+        <dl className="ec-facts">
+          {e.facts.map((f) => (
+            <div key={f.label} className="ec-fact">
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {e.links && e.links.length > 0 && (
+        <nav className="ec-links" aria-label="Links">
+          {e.links.map((l) => (
+            <HostLink key={l.url} href={l.url} open={actions.openLink}>
+              {l.label}
+            </HostLink>
+          ))}
+        </nav>
+      )}
+      <div className="ink-actions">
+        {e.websiteUrl && (
+          <Button primary onClick={() => actions.openLink(e.websiteUrl!)}>
+            Open website
+          </Button>
+        )}
+        <Button
+          disabled={busy !== null}
+          onClick={() =>
+            run("compare", () =>
+              actions.sendMessage(`Compare ${e.name} with its main alternatives. Show the comparison with show_comparison.`),
+            )
+          }
+        >
+          {busy === "compare" ? "Asking…" : "Compare"}
+        </Button>
+      </div>
+      <Source source={e.source} open={actions.openLink} />
+    </article>
+  );
+}

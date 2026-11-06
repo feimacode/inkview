@@ -9,6 +9,7 @@ import { McpServer, type CallToolResult, type ReadResourceResult } from "@modelc
 import appHtml from "../dist/ui/app.html";
 import { serverComponents } from "./components/server-registry.js";
 import { serverInstructions } from "./guidance.js";
+import { autoMeta, autoSchema, runAuto } from "./auto/tool.js";
 
 export const VERSION = __INKVIEW_VERSION__;
 export const APP_URI = "ui://inkview/v1/app.html";
@@ -64,6 +65,27 @@ export function createServer(): McpServer {
       },
     );
   }
+
+  registerAppTool(
+    server,
+    autoMeta.tool,
+    {
+      title: autoMeta.title,
+      description: autoMeta.description,
+      inputSchema: autoSchema,
+      annotations: { readOnlyHint: true, openWorldHint: false, destructiveHint: false },
+      _meta: { ui: { resourceUri: APP_URI } },
+    },
+    async (args: { data?: unknown; hint?: string }): Promise<CallToolResult> => {
+      const r = runAuto(args);
+      return {
+        content: [{ type: "text", text: r.text }],
+        structuredContent: r.component
+          ? { component: r.component, schemaVersion: "1", data: r.data, chosenTool: r.tool }
+          : { component: "text", schemaVersion: "1", data: null },
+      };
+    },
+  );
 
   registerAppResource(
     server,

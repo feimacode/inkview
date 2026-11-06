@@ -1,0 +1,29 @@
+.pg-bar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.pg-title { margin: 0; }
+.pg-sort { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.pg-sort select {
+  font: inherit; font-size: 13px; padding: 5px 8px; border-radius: var(--ink-radius-sm);
+  border: 1px solid var(--ink-border); background: var(--ink-bg); color: var(--ink-text);
+}
+.pg-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.pg-card { display: flex; flex-direction: column; border: 1px solid var(--ink-border); border-radius: var(--ink-radius-sm); padding: 10px; min-width: 0; }
+.pg-card.pg-picked { border-color: var(--ink-accent); box-shadow: 0 0 0 1px var(--ink-accent); }
+.pg-img { width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 6px; background: #fff; }
+.pg-img--empty { display: grid; place-items: center; background: var(--ink-bg-subtle); color: var(--ink-text-faint); font-size: 28px; font-weight: 600; }
+.pg-name {
+  margin: 8px 0 0; font-size: 13px; font-weight: 600; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pg-price { margin: 4px 0 0; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pg-rating { margin: 2px 0 0; font-size: 12px; }
+.pg-rating > span:first-child { color: var(--ink-star); }
+.pg-meta { margin: 2px 0 0; font-size: 12px; overflow: hidden; text-overflow: ellipsis; }
+.pg-avail--out_of_stock { color: var(--ink-bad); font-weight: 600; }
+.pg-avail--in_stock { color: var(--ink-good); }
+.pg-actions { margin-top: auto; padding-top: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+.pg-actions .ink-btn { font-size: 12px; padding: 5px 10px; }
+.pg-pick { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink-text-muted); cursor: pointer; }
+.pg-pick input { accent-color: var(--ink-accent); }
+.pg-pick input:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; }
+.pg-hint { font-size: 12px; align-self: center; }
+@media (max-width: 420px) { .pg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } }

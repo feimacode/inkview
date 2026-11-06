@@ -2,6 +2,7 @@
 import { spawn } from "node:child_process";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
 
 const PORT = process.env.PORT ?? "3999";
 const srv = spawn(process.execPath, ["dist/inkview.js", "--http"], { env: { ...process.env, PORT }, stdio: ["ignore", "pipe", "inherit"] });
@@ -38,6 +39,45 @@ try {
   const bad = await client.callTool({ name: "show_profile_card", arguments: { headline: "no name" } });
   assert.equal(bad.isError, true, "missing name is rejected");
   console.log("✓ tools/call rejects invalid input");
+
+  // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
+  const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());
+  for (const d of dirs) {
+    const metaSrc = readFileSync(`src/components/${d.name}/meta.ts`, "utf8");
+    const toolName = metaSrc.match(/tool:\s*"([^"]+)"/)[1];
+    const component = metaSrc.match(/component:\s*"([^"]+)"/)[1];
+    const t = tools.find((x) => x.name === toolName);
+    assert.ok(t, `${toolName} is listed`);
+    assert.equal(t._meta?.ui?.resourceUri, "ui://inkview/v1/app.html");
+    assert.equal(t.annotations?.readOnlyHint, true);
+    const examples = JSON.parse(readFileSync(`src/components/${d.name}/examples.json`, "utf8"));
+    for (const ex of examples) {
+      const r = await client.callTool({ name: toolName, arguments: ex.data });
+      assert.ok(!r.isError, `${toolName} "${ex.name}": ${r.content?.[0]?.text}`);
+      assert.equal(r.structuredContent.component, component);
+      assert.ok(r.content[0].text.length > 0);
+    }
+    const bad = await client.callTool({ name: toolName, arguments: {} });
+    assert.equal(bad.isError, true, `${toolName} rejects an empty payload`);
+    console.log(`✓ ${toolName}: ${examples.length} examples, invalid input rejected`);
+  }
+
+  const autoCases = [
+    { name: "table", data: [{ city: "Oslo", population: 709000 }, { city: "Bergen", population: 291000 }, { city: "Trondheim", population: 212000 }], component: "data_table", tool: "show_table" },
+    { name: "profile", data: { name: "Ada Lovelace", title: "Mathematician", company: "Analytical Engines" }, component: "profile_card", tool: "show_profile_card" },
+    { name: "no match", data: "just a sentence", component: "text" },
+  ];
+  for (const c of autoCases) {
+    const r = await client.callTool({ name: "show_auto", arguments: { data: c.data } });
+    assert.ok(!r.isError, `show_auto ${c.name}: ${r.content?.[0]?.text}`);
+    assert.equal(r.structuredContent.component, c.component, `show_auto ${c.name} picks ${c.component}`);
+    if (c.tool) assert.ok(r.content[0].text.includes(c.tool), `show_auto ${c.name} names ${c.tool}`);
+  }
+  console.log("✓ show_auto: table, profile and no-match data");
+
+  const init = client.getInstructions?.() ?? "";
+  for (const t of tools) assert.ok(init.includes(t.name), `instructions mention ${t.name}`);
+  console.log("✓ initialize instructions name every tool");
 
   const rr = await client.readResource({ uri });
   const item = rr.contents[0];
