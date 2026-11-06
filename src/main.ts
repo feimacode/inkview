@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 /**
  * Inkview entry point.
- *   npx @feimacode/inkview          stdio (default), for Claude Desktop, Claude Code, Codex, Cursor, VS Code
+ *   npx -y @feimacode/inkview          stdio (default), for Claude Desktop, Claude Code, Codex, Cursor, VS Code
  *   npx @feimacode/inkview --http   streamable HTTP on PORT (default 3001), path /mcp
  */
-import { createMcpExpressApp } from "@modelcontextprotocol/express";
-import { NodeStreamableHTTPServerTransport } from "@modelcontextprotocol/node";
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
-import type { Request, Response } from "express";
 import { createServer, VERSION } from "./server.js";
 
 async function startHttp(): Promise<void> {
+  // Loaded lazily so stdio start-up never parses the HTTP stack.
+  const { createMcpExpressApp } = await import("@modelcontextprotocol/express");
+  const { NodeStreamableHTTPServerTransport } = await import("@modelcontextprotocol/node");
+  type Request = import("express").Request;
+  type Response = import("express").Response;
   const port = parseInt(process.env.PORT ?? "3001", 10);
   const host = process.env.HOST ?? "127.0.0.1";
   // Tunnels (cloudflared, ngrok) forward a public Host header, so allow any

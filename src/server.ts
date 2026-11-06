@@ -1,33 +1,22 @@
 /**
- * Inkview render server: one render tool per component, each tied to a
- * `ui://` resource that holds the component bundle. Stateless: it validates
- * and echoes data back, stores nothing, and never logs tool arguments.
+ * Inkview render server: one render tool per registered component, all
+ * linked to one shared `ui://` resource. Stateless: it validates and echoes
+ * data back, stores nothing, and never logs tool arguments.
  */
-import {
-  registerAppResource,
-  registerAppTool,
-  RESOURCE_MIME_TYPE,
-} from "@modelcontextprotocol/ext-apps/server";
+import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer, type CallToolResult, type ReadResourceResult } from "@modelcontextprotocol/server";
-import fs from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import {
-  PROFILE_CARD_SCHEMA_VERSION,
-  ProfileCardSchema,
-  profileCardToMarkdown,
-} from "./schemas/profile-card.js";
+// Inlined at build time (esbuild text loader), so the package needs no files on disk.
+import appHtml from "../dist/ui/app.html";
+import { serverComponents } from "./components/server-registry.js";
+import { serverInstructions } from "./guidance.js";
 
-export const VERSION = "0.1.0";
-
-// dist/server.js and dist/ui/ sit side by side after `npm run build`.
-const HERE = path.dirname(fileURLToPath(import.meta.url));
-const UI_DIR = path.join(HERE, "ui");
+export const VERSION = __INKVIEW_VERSION__;
+export const APP_URI = "ui://inkview/v1/app.html";
 
 /**
- * Image hosts the profile card may load avatars from. Hosts block any image
- * domain not declared in the resource CSP, so unknown domains fall back to
- * initials. Extend with INKVIEW_IMAGE_DOMAINS (comma separated origins).
+ * Image hosts components may load avatars and logos from. Hosts block any
+ * image domain not declared in the resource CSP, so unknown domains fall back
+ * to initials. Extend with INKVIEW_IMAGE_DOMAINS (comma separated origins).
  */
 const DEFAULT_IMAGE_DOMAINS = [
   "https://avatars.githubusercontent.com",
@@ -38,67 +27,59 @@ const DEFAULT_IMAGE_DOMAINS = [
   "https://images.unsplash.com",
   "https://pbs.twimg.com",
   "https://i.pravatar.cc",
+  "https://logo.clearbit.com",
+  "https://www.google.com",
+  "https://*.gstatic.com",
+  "https://icons.duckduckgo.com",
+  "https://m.media-amazon.com",
+  "https://i.ebayimg.com",
+  "https://cdn.shopify.com",
 ];
 
-function imageDomains(): string[] {
-  const extra = (process.env.INKVIEW_IMAGE_DOMAINS ?? "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+export function imageDomains(env: NodeJS.ProcessEnv = process.env): string[] {
+  const extra = (env.INKVIEW_IMAGE_DOMAINS ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   return [...DEFAULT_IMAGE_DOMAINS, ...extra];
 }
 
-const PROFILE_CARD_URI = `ui://inkview/profile-card-v${PROFILE_CARD_SCHEMA_VERSION}.html`;
-
 export function createServer(): McpServer {
-  const server = new McpServer(
-    { name: "inkview", version: VERSION },
-    {
-      instructions:
-        "Inkview draws UI components for data you already have. After you gather information about one specific person, call show_profile_card with it instead of writing the profile out as text. Do not invent fields you do not have.",
-    },
-  );
+  const server = new McpServer({ name: "inkview", version: VERSION }, { instructions: serverInstructions() });
 
-  registerAppTool(
-    server,
-    "show_profile_card",
-    {
-      title: "Show profile card",
-      description:
-        "Display one person as a visual profile card in the chat. Use it whenever your answer is about a single person (a candidate, a speaker, a founder, a contact) and you have at least their name plus a headline or a few facts. Pass only data you already gathered from your tools or the conversation; never invent a photo URL or links. For several people, call it once per person (up to 5). After calling it, add at most one sentence of commentary; do not repeat the card's contents.",
-      inputSchema: ProfileCardSchema,
-      annotations: { readOnlyHint: true, openWorldHint: false, destructiveHint: false },
-      _meta: { ui: { resourceUri: PROFILE_CARD_URI } },
-    },
-    async (args): Promise<CallToolResult> => {
-      const profile = ProfileCardSchema.parse(args);
-      return {
-        content: [{ type: "text", text: profileCardToMarkdown(profile) }],
-        structuredContent: { component: "profile_card", schemaVersion: PROFILE_CARD_SCHEMA_VERSION, profile },
-      };
-    },
-  );
+  for (const c of serverComponents) {
+    registerAppTool(
+      server,
+      c.meta.tool,
+      {
+        title: c.meta.title,
+        description: c.meta.description,
+        inputSchema: c.schema,
+        annotations: { readOnlyHint: true, openWorldHint: false, destructiveHint: false },
+        _meta: { ui: { resourceUri: APP_URI } },
+      },
+      async (args: Record<string, unknown>): Promise<CallToolResult> => {
+        const data = c.schema.parse(args);
+        return {
+          content: [{ type: "text", text: c.toMarkdown(data) }],
+          structuredContent: { component: c.meta.component, schemaVersion: c.meta.schemaVersion, data },
+        };
+      },
+    );
+  }
 
   registerAppResource(
     server,
-    "Inkview profile card",
-    PROFILE_CARD_URI,
-    { mimeType: RESOURCE_MIME_TYPE, description: "Inkview profile card component" },
+    "Inkview components",
+    APP_URI,
+    { mimeType: RESOURCE_MIME_TYPE, description: "Inkview UI components (v1)" },
     async (): Promise<ReadResourceResult> => {
-      const html = await fs.readFile(path.join(UI_DIR, "profile-card.html"), "utf-8");
       const domain = process.env.INKVIEW_UI_DOMAIN;
       return {
         contents: [
           {
-            uri: PROFILE_CARD_URI,
+            uri: APP_URI,
             mimeType: RESOURCE_MIME_TYPE,
-            text: html,
+            text: appHtml,
             _meta: {
-              ui: {
-                csp: { resourceDomains: imageDomains() },
-                prefersBorder: false,
-                ...(domain ? { domain } : {}),
-              },
+              ui: { csp: { resourceDomains: imageDomains() }, prefersBorder: false, ...(domain ? { domain } : {}) },
             },
           },
         ],

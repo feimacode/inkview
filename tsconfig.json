@@ -7,8 +7,9 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "resolveJsonModule": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": []
   },
-  "include": ["src/ui", "src/schemas"]
+  "include": ["src/env.d.ts", "src/runtime", "src/components", "dev"]
 }

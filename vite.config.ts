@@ -2,15 +2,29 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteSingleFile } from "vite-plugin-singlefile";
 import { resolve } from "node:path";
+import { readFileSync } from "node:fs";
 
-// Each component builds to one self-contained HTML file (JS and CSS inlined),
-// which is what an MCP App `ui://` resource serves.
+const { version } = JSON.parse(readFileSync(resolve(import.meta.dirname, "package.json"), "utf8"));
+
+// The shared view runtime builds to one self-contained HTML file (JS and CSS
+// inlined), served as the `ui://inkview/v1/app.html` MCP Apps resource.
 export default defineConfig({
   root: resolve(import.meta.dirname, "src/ui"),
   plugins: [react(), viteSingleFile()],
+  define: { __INKVIEW_VERSION__: JSON.stringify(version) },
+  // preact/compat keeps the React API (and the SDK's React hooks) at a
+  // fraction of react-dom's size; the view bundle has a 100 KB gzip budget.
+  resolve: {
+    alias: {
+      react: "preact/compat",
+      "react-dom/client": "preact/compat/client",
+      "react-dom": "preact/compat",
+      "react/jsx-runtime": "preact/jsx-runtime",
+    },
+  },
   build: {
     outDir: resolve(import.meta.dirname, "dist/ui"),
     emptyOutDir: true,
-    rollupOptions: { input: resolve(import.meta.dirname, "src/ui/profile-card.html") },
+    rollupOptions: { input: resolve(import.meta.dirname, "src/ui/app.html") },
   },
 });

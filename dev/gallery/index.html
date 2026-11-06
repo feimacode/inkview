@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inkview gallery</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { margin: 0; padding: 24px 16px; background: #f4f3f1; color: #1c1917; }
+  h1 { margin: 0 0 4px; font-size: 22px; } p.lead { margin: 0 0 24px; color: #57534e; }
+  h2 { font-size: 16px; margin: 32px 0 8px; } h3 { font-size: 13px; font-weight: 600; margin: 0 0 6px; color: #57534e; }
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .pane { border-radius: 12px; padding: 14px; } .pane.light { background: #fff; } .pane.dark { background: #1f1e1d; }
+  .pane.dark h3 { color: #c4c0bb; }
+  iframe { border: 0; width: 100%; height: 160px; display: block; }
+  .log { font: 12px ui-monospace, monospace; color: #57534e; min-height: 1em; margin-top: 6px; white-space: pre-wrap; }
+  .pane.dark .log { color: #a29d97; }
+</style>
+</head>
+<body>
+<h1>Inkview gallery</h1>
+<p class="lead">Every component example, rendered through a local MCP Apps host in light and dark.</p>
+<main id="gallery"></main>
+<script type="module" src="./gallery.ts"></script>
+</body>
+</html>

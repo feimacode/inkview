@@ -1,0 +1,100 @@
+/*
+ * Inkview design tokens. Each token reads the host's MCP Apps style variable
+ * first (Claude and ChatGPT send these), then falls back to Inkview's own.
+ */
+:root {
+  color-scheme: light dark;
+  --ink-bg: var(--color-background-primary, #ffffff);
+  --ink-bg-subtle: var(--color-background-secondary, #f5f5f4);
+  --ink-text: var(--color-text-primary, #1c1917);
+  --ink-text-muted: var(--color-text-secondary, #57534e);
+  --ink-text-faint: var(--color-text-tertiary, #78716c);
+  --ink-border: var(--color-border-primary, rgba(28, 25, 23, 0.12));
+  --ink-accent: #3b5bdb;
+  --ink-accent-text: #ffffff;
+  --ink-ring: var(--color-ring-primary, #3b5bdb);
+  --ink-good: #2f7d32;
+  --ink-bad: #b3261e;
+  --ink-radius: var(--border-radius-lg, 14px);
+  --ink-radius-sm: var(--border-radius-sm, 8px);
+  --ink-font: var(--font-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  --ink-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.06));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink-bg: var(--color-background-primary, #1c1b1a);
+    --ink-bg-subtle: var(--color-background-secondary, #292826);
+    --ink-text: var(--color-text-primary, #f5f5f4);
+    --ink-text-muted: var(--color-text-secondary, #c4c0bb);
+    --ink-text-faint: var(--color-text-tertiary, #a29d97);
+    --ink-border: var(--color-border-primary, rgba(245, 245, 244, 0.14));
+    --ink-accent: #7c93f5;
+    --ink-accent-text: #10131f;
+    --ink-good: #7bc47f;
+    --ink-bad: #f28b82;
+  }
+}
+:root[data-theme="dark"] {
+  --ink-bg: var(--color-background-primary, #1c1b1a);
+  --ink-bg-subtle: var(--color-background-secondary, #292826);
+  --ink-text: var(--color-text-primary, #f5f5f4);
+  --ink-text-muted: var(--color-text-secondary, #c4c0bb);
+  --ink-text-faint: var(--color-text-tertiary, #a29d97);
+  --ink-border: var(--color-border-primary, rgba(245, 245, 244, 0.14));
+  --ink-accent: #7c93f5;
+  --ink-accent-text: #10131f;
+  --ink-good: #7bc47f;
+  --ink-bad: #f28b82;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: transparent; }
+body { font-family: var(--ink-font); color: var(--ink-text); font-size: 14px; line-height: 1.45; }
+
+/* ---- Shared primitives ---- */
+.ink-card {
+  background: var(--ink-bg);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--ink-radius);
+  box-shadow: var(--ink-shadow);
+  padding: 18px;
+  max-width: 720px;
+}
+.ink-avatar {
+  flex: none; object-fit: cover; background: var(--ink-bg-subtle);
+  display: grid; place-items: center; font-weight: 600; color: var(--ink-text-muted);
+  border: 1px solid var(--ink-border);
+}
+.ink-avatar--circle { border-radius: 50%; }
+.ink-avatar--square { border-radius: var(--ink-radius-sm); }
+.ink-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.ink-chip {
+  background: var(--ink-bg-subtle); color: var(--ink-text-muted);
+  border-radius: 999px; padding: 2px 10px; font-size: 12px;
+}
+.ink-link {
+  background: none; border: 0; padding: 0; font: inherit; cursor: pointer; text-align: left;
+  color: var(--ink-accent); text-decoration: underline; text-underline-offset: 2px;
+}
+.ink-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.ink-btn {
+  font: inherit; font-size: 13px; font-weight: 550; cursor: pointer;
+  border-radius: var(--ink-radius-sm); padding: 7px 12px;
+  border: 1px solid var(--ink-border); background: var(--ink-bg); color: var(--ink-text);
+}
+.ink-btn--primary { background: var(--ink-accent); color: var(--ink-accent-text); border-color: transparent; }
+.ink-btn[aria-pressed="true"] { background: var(--ink-bg-subtle); }
+.ink-btn:disabled { opacity: 0.6; cursor: default; }
+.ink-btn:focus-visible, .ink-link:focus-visible, [tabindex]:focus-visible, input:focus-visible, select:focus-visible, th button:focus-visible {
+  outline: 2px solid var(--ink-ring); outline-offset: 2px;
+}
+.ink-source { margin: 12px 0 0; font-size: 12px; color: var(--ink-text-faint); }
+.ink-state { color: var(--ink-text-faint); padding: 12px 2px; margin: 0; }
+.ink-skeleton { background: var(--ink-bg-subtle); border-radius: 6px; height: 12px; margin: 8px 0; }
+.ink-text { margin: 0; white-space: pre-wrap; word-break: break-word; font: inherit; }
+.ink-title { margin: 0 0 10px; font-size: 16px; font-weight: 650; }
+.ink-muted { color: var(--ink-text-muted); }
+.ink-faint { color: var(--ink-text-faint); }
+.ink-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 420px) {
+  .ink-card { padding: 14px; }
+}

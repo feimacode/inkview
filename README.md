@@ -22,10 +22,14 @@ The server is stateless: it stores nothing and never logs tool arguments.
 
 | Piece | Where |
 | --- | --- |
-| Component schema + markdown fallback | `src/schemas/profile-card.ts` |
-| Render tool + `ui://` resource | `src/server.ts` |
+| One folder per component: `meta.ts`, `schema.ts`, `markdown.ts`, `View.tsx`, `examples.json` | `src/components/<name>/` |
+| Render tools + the shared `ui://inkview/v1/app.html` resource | `src/server.ts` |
 | HTTP (`/mcp`) and stdio entry point | `src/main.ts` |
-| React view (MCP Apps bridge, host theming) | `src/ui/` |
+| Shared view runtime (MCP Apps bridge, theming, states) | `src/runtime/` |
+| Dev host, preview gallery, render checks | `dev/`, `scripts/` |
+
+The server ships as one dependency-free file (`dist/inkview.js`, view HTML
+inlined), so a cold `npx` start takes about a second.
 
 ## Run it locally
 
@@ -36,14 +40,16 @@ Inkview is a stdio MCP server you start with `npx`:
 ```
 
 Claude Desktop renders the card; Claude Code and Codex print its markdown
-version. Setup for each app: **[docs/local-quickstart.md](docs/local-quickstart.md)**.
+version. Each release also has a `.mcpb` desktop extension for one-click
+install in Claude Desktop. Setup for each app: **[docs/local-quickstart.md](docs/local-quickstart.md)**.
 
 From source:
 
 ```bash
-npm install          # also builds
-node dist/main.js    # stdio
-npm run dev          # HTTP on http://localhost:3001/mcp
+npm install            # also builds
+node dist/inkview.js   # stdio
+npm run dev            # HTTP on http://localhost:3001/mcp
+npm run preview        # gallery of every component, light and dark, at http://localhost:5174
 ```
 
 ## Claude web and ChatGPT web
@@ -55,10 +61,13 @@ These connect from the cloud, so run `npm run dev` plus a tunnel
 ## Test
 
 ```bash
-npm test     # MCP smoke test (list, call, read resource) + render test in a headless test host
+npm test     # build, bundle size budget, MCP smoke tests (HTTP and stdio), render checks
 ```
 
-The render test needs Playwright's Chromium (`npx playwright install chromium`).
+Render checks draw every example in light, dark and 320 px, and check contrast,
+keyboard focus and each component's actions. They need Playwright's Chromium
+(`npx playwright install chromium`). Screenshots land in `dist-test/`.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Configuration
 
