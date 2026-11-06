@@ -1,0 +1,51 @@
+schema: spec-driven
+
+context: |
+  Inkview is an open-source layer of UI components for MCP Apps: render tools
+  that an agent calls with data it already holds, drawn inline by the host.
+  Hosts that render: Claude (web, desktop, mobile) and ChatGPT web. Text-only:
+  Claude Code (including claude.ai/code) and Codex, which get a markdown fallback.
+  Target users are end users who enable the MCP server; enterprise is not a focus.
+  Use the official MCP Apps standard and SDK; keep host-specific code in thin adapters.
+  The hosted build must be stateless: store nothing and never log tool arguments.
+  Never fetch or scrape data on the user's behalf; components only render data passed in.
+  Cart, checkout and payments are out of scope; product actions only link to the merchant.
+  Every component schema is versioned, accepts unknown fields, and defines a markdown fallback.
+  Local builds must run on Linux (including WSL), macOS and Windows with Node 20+.
+
+# Project context (optional)
+# Add only constraints that should guide OpenSpec artifacts and workflows.
+# Include constraints an agent cannot infer by reading the code.
+# Keep general project documentation and discoverable codebase facts out.
+# Example:
+#   context: |
+#     Designs and tasks must cover Windows, macOS, and Linux
+#     Write all artifacts in Spanish
+
+rules:
+  proposal:
+    - State what is out of scope
+  tasks:
+    - Each component change lands its schema, markdown fallback, view, examples and render tests together
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

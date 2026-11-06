@@ -75,7 +75,7 @@ Anything else falls back to initials.
 
 ## Roadmap
 
-The MVP plan and task list: [docs/mvp-tasks.md](docs/mvp-tasks.md).
+The MVP is planned as OpenSpec changes: see [docs/roadmap.md](docs/roadmap.md) and [`openspec/`](openspec).
 
 ## License
 
