@@ -1315,5 +1315,73 @@
    ]
   },
   "heldOut": true
+ },
+ {
+  "id": "doc-email-followup",
+  "expect": "show_document",
+  "prompt": "Draft a follow-up email to Marcus confirming the renewal terms we discussed and asking him to sign.",
+  "source": {
+   "to": "marcus.bell@northwind.example.com",
+   "cc": "priya@ledgerly.example.com",
+   "subject": "Re: Q4 renewal",
+   "terms": [
+    "pricing unchanged for two quarters",
+    "40 seats, up from 25",
+    "start date Monday, November 16"
+   ],
+   "call": "https://example.com/call"
+  }
+ },
+ {
+  "id": "doc-linkedin-launch",
+  "expect": "show_document",
+  "prompt": "Write a LinkedIn post announcing our 1.0 launch, under 280 characters.",
+  "source": {
+   "product": "Inkview 1.0",
+   "features": [
+    "profile cards, timelines and task lists in the chat",
+    "no dashboard to build"
+   ],
+   "link": "https://example.com/launch"
+  }
+ },
+ {
+  "id": "doc-weekly-report",
+  "expect": "show_document",
+  "prompt": "Turn these weekly numbers into a short status report I can send the team.",
+  "source": {
+   "period": "Week of November 2",
+   "metrics": [
+    { "label": "Activation", "before": "41%", "after": "57%" },
+    { "label": "Support tickets", "before": 34, "after": 19 }
+   ],
+   "risk": "import queue is still single-threaded"
+  },
+  "heldOut": true
+ },
+ {
+  "id": "doc-cover-letter",
+  "expect": "show_document",
+  "prompt": "Write a cover letter for the senior frontend role using my experience.",
+  "source": {
+   "role": "Senior Frontend Engineer at Northwind",
+   "experience": [
+    "six years building React design systems",
+    "led the Inkview component library",
+    "reduced bundle size by 40%"
+   ]
+  },
+  "heldOut": true
+ },
+ {
+  "id": "doc-support-reply",
+  "expect": "show_document",
+  "prompt": "Draft a reply to this customer complaint about the late delivery.",
+  "source": {
+   "customer": "Dana Whitfield",
+   "order": "NW-4821",
+   "issue": "delivery arrived six days late",
+   "remedy": "full shipping refund and 15% off the next order"
+  }
  }
 ]

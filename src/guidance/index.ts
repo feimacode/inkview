@@ -19,6 +19,7 @@ export const situations: Array<{ when: string; tool: string }> = [
   { when: "2 to 5 options the user is choosing between", tool: "show_comparison" },
   { when: "Numbers over time or across categories", tool: "show_chart" },
   { when: "Shopping results (2 to 12 products)", tool: "show_products" },
+  { when: "A draft email, message, post, letter or report to review, edit and approve", tool: "show_document" },
   { when: "Structured data that fits none of the above clearly", tool: autoMeta.tool },
 ];
 
@@ -46,7 +47,7 @@ function table(): string {
 }
 
 export const skillDescription =
-  "Show people, timelines, task lists, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.";
+  "Show people, timelines, task lists, drafts, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.";
 
 export function skillMarkdown(): string {
   return `---

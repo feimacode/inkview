@@ -192,3 +192,29 @@ test("timeline markdown orders mixed date precision and validates input limits",
   assert.equal(tooMany.success, false);
   assert.match(JSON.stringify(tooMany.error!.issues), /50 most relevant events.*caption/);
 });
+
+test("document markdown: email header and minimal fallback", () => {
+  const c = get("document_preview");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        kind: "email",
+        title: "Renewal",
+        meta: { to: "marcus@example.com", cc: "priya@example.com", subject: "Re: renewal" },
+        body: "Hi Marcus,\n\nThanks!",
+      }),
+    ),
+    "### Renewal\n\n- **To:** marcus@example.com\n- **Cc:** priya@example.com\n- **Subject:** Re: renewal\n\nHi Marcus,\n\nThanks!",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ body: "Just a note." })), "Just a note.");
+});
+
+test("document rejects a body over 20,000 characters, unknown kinds and too much metadata", () => {
+  const c = get("document_preview");
+  const tooLong = c.schema.safeParse({ body: "x".repeat(20001) });
+  assert.equal(tooLong.success, false);
+  assert.match(JSON.stringify(tooLong.error!.issues), /20,000/);
+  assert.equal(c.schema.safeParse({ kind: "tweet", body: "x" }).success, false);
+  const meta = Object.fromEntries(Array.from({ length: 7 }, (_, i) => [`k${i}`, "v"]));
+  assert.equal(c.schema.safeParse({ body: "x", meta }).success, false);
+});

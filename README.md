@@ -62,6 +62,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 | `show_comparison` | 2 to 5 options side by side, with an optional recommendation. Choose this | "Compare Notion, Obsidian and Apple Notes for a small team" |
 | `show_chart` | Line or bar chart, up to 5 series. Tooltips, legend toggles, text summary for screen readers | "Chart our monthly signups for this year" |
 | `show_products` | Up to 12 products with price, rating and availability. Sort, view at store, compare (no cart) | "Find noise-cancelling headphones under $300" |
+| `show_document` | One draft document — email, message, post, letter or report — with its header, rendered markdown body, word and character counts and an optional character limit. Edit it in place, copy it, approve it and send it back | "Draft a follow-up email to Marcus about the renewal" |
 | `show_auto` | Any JSON: picks the best component above, or formatted text | (fallback when the shape is unclear) |
 
 <p>
@@ -74,6 +75,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 <img src="docs/img/product-grid-light.png" width="49%" alt="Product grid">
 <img src="docs/img/timeline-light.png" width="49%" alt="Timeline">
 <img src="docs/img/task-list-light.png" width="49%" alt="Task list">
+<img src="docs/img/document-preview-light.png" width="49%" alt="Document preview">
 </p>
 
 ### How `show_auto` picks a component
