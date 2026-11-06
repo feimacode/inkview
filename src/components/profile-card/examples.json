@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Full profile",
+    "data": {
+      "name": "Mira Hoffmann",
+      "headline": "Staff Rust Engineer at Ferrous Labs",
+      "company": "Ferrous Labs",
+      "location": "Berlin, Germany",
+      "about": "Builds low-latency storage engines in Rust. Previously led the query runtime team at a large analytics company and maintains two popular async crates.",
+      "highlights": ["10 years in systems programming, 6 in Rust", "Maintainer of an async I/O crate with 4M downloads", "Speaker at RustConf 2025"],
+      "tags": ["Rust", "Tokio", "Databases", "Distributed systems"],
+      "links": [{ "label": "GitHub", "url": "https://github.com/example" }, { "label": "Website", "url": "https://example.com" }],
+      "profileUrl": "https://example.com/mira",
+      "source": { "name": "Example search", "url": "https://example.com/search" }
+    }
+  },
+  { "name": "Name only", "data": { "name": "Grace Hopper" } },
+  {
+    "name": "Headline and tags",
+    "data": {
+      "name": "Ada Lovelace",
+      "headline": "Mathematician, first computer programmer",
+      "location": "London, UK",
+      "tags": ["Analytical Engine", "Mathematics"],
+      "profileUrl": "https://en.wikipedia.org/wiki/Ada_Lovelace"
+    }
+  }
+]

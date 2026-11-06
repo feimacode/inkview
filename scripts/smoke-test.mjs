@@ -4,7 +4,7 @@ import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/cli
 import assert from "node:assert/strict";
 
 const PORT = process.env.PORT ?? "3999";
-const srv = spawn(process.execPath, ["dist/main.js", "--http"], { env: { ...process.env, PORT }, stdio: ["ignore", "pipe", "inherit"] });
+const srv = spawn(process.execPath, ["dist/inkview.js", "--http"], { env: { ...process.env, PORT }, stdio: ["ignore", "pipe", "inherit"] });
 await new Promise((resolve) => srv.stdout.on("data", (d) => String(d).includes("listening") && resolve()));
 
 try {
@@ -15,7 +15,7 @@ try {
   const tool = tools.find((t) => t.name === "show_profile_card");
   assert.ok(tool, "show_profile_card is listed");
   const uri = tool._meta?.ui?.resourceUri;
-  assert.match(uri, /^ui:\/\//, "tool links a ui:// resource");
+  assert.equal(uri, "ui://inkview/v1/app.html", "tools share the v1 resource");
   console.log("✓ tools/list:", tool.name, "→", uri);
 
   const res = await client.callTool({
@@ -30,7 +30,8 @@ try {
     },
   });
   assert.equal(res.isError ?? false, false);
-  assert.equal(res.structuredContent.profile.name, "Ada Lovelace");
+  assert.equal(res.structuredContent.component, "profile_card");
+  assert.equal(res.structuredContent.data.name, "Ada Lovelace");
   assert.match(res.content[0].text, /### Ada Lovelace/);
   console.log("✓ tools/call: structuredContent + markdown fallback");
 

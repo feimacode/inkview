@@ -3,15 +3,16 @@
 Inkview runs as a local stdio MCP server: your agent app starts it with `npx`,
 talks to it over stdin/stdout, and nothing leaves your machine.
 
-Until the package is on npm, point `npx` at the release tarball
-(`feimacode-inkview-0.1.0.tgz`). After publishing, replace
-`--package=/path/to/feimacode-inkview-0.1.0.tgz inkview` with `@feimacode/inkview`.
-
-Check it runs:
+The package is one file with no dependencies, so the first `npx` start takes
+about a second.
 
 ```bash
-npx -y --package=/path/to/feimacode-inkview-0.1.0.tgz inkview --version   # prints 0.1.0
+npx -y @feimacode/inkview --version   # prints the version
 ```
+
+Before the first npm release, use a tarball instead: build one with `npm pack`
+and replace `@feimacode/inkview` below with
+`--package=/path/to/feimacode-inkview-<version>.tgz inkview`.
 
 ## Which apps show the card
 
@@ -34,21 +35,29 @@ to check that the model picks the tool and fills the schema well.
      "mcpServers": {
        "inkview": {
          "command": "npx",
-         "args": ["-y", "--package=/path/to/feimacode-inkview-0.1.0.tgz", "inkview"]
+         "args": ["-y", "@feimacode/inkview"]
        }
      }
    }
    ```
-   After publishing: `"args": ["-y", "@feimacode/inkview"]`.
 3. Quit and reopen Claude Desktop. **Inkview** appears under the + menu → Connectors.
 
 If Claude Desktop can't find `npx` (common with nvm), use the full path from
 `which npx` as `command`.
 
+Or skip config files: download `inkview-<version>.mcpb` from the
+[releases](https://github.com/feimacode/inkview/releases) and open it with
+Claude Desktop.
+
+**Claude Desktop under WSL:** the config lives at
+`~/.config/Claude/claude_desktop_config.json` and paths are Linux paths. If the
+first start times out, install once with `npm install -g @feimacode/inkview`
+and set `"command"` to the full path from `which inkview`, with no `args`.
+
 ## Claude Code (terminal or desktop Code tab)
 
 ```bash
-claude mcp add inkview -- npx -y --package=/path/to/feimacode-inkview-0.1.0.tgz inkview
+claude mcp add inkview -- npx -y @feimacode/inkview
 claude mcp list        # inkview should show ✓ Connected
 ```
 
@@ -66,9 +75,9 @@ session opens:
 }
 ```
 
-(`npx` builds it from the repo on first run, which takes about a minute.)
-After publishing to npm, use `["-y", "@feimacode/inkview"]` instead. The output
-is the markdown version, as in the terminal.
+(`npx` builds it from the repo on first run, which takes about a minute;
+`["-y", "@feimacode/inkview"]` is faster once it's on npm.) The output is the
+markdown version, as in the terminal.
 
 ## Codex CLI
 
@@ -77,7 +86,7 @@ is the markdown version, as in the terminal.
 ```toml
 [mcp_servers.inkview]
 command = "npx"
-args = ["-y", "--package=/path/to/feimacode-inkview-0.1.0.tgz", "inkview"]
+args = ["-y", "@feimacode/inkview"]
 ```
 
 ## Prompts to try

@@ -5,10 +5,9 @@
     "moduleResolution": "NodeNext",
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "declaration": false,
+    "noEmit": true,
+    "resolveJsonModule": true,
     "types": ["node"]
   },
-  "include": ["src/server.ts", "src/main.ts", "src/schemas"]
+  "include": ["src/env.d.ts", "src/server.ts", "src/main.ts", "src/guidance.ts", "src/components/**/server.ts", "src/components/server-registry.ts"]
 }

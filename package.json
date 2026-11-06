@@ -8,48 +8,51 @@
     "node": ">=20"
   },
   "bin": {
-    "inkview": "dist/main.js"
+    "inkview": "dist/inkview.js"
   },
   "files": [
-    "dist"
+    "dist/inkview.js",
+    "dist/inkview.js.LEGAL.txt"
   ],
   "scripts": {
     "build:ui": "vite build",
-    "build:server": "tsc -p tsconfig.server.json",
+    "build:server": "node scripts/build-server.mjs",
     "build": "npm run build:ui && npm run build:server",
-    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.server.json",
-    "start": "node dist/main.js --http",
-    "start:stdio": "node dist/main.js",
-    "dev": "npm run build && node dist/main.js --http",
-    "test": "npm run build && node scripts/smoke-test.mjs && node scripts/stdio-test.mjs && vite build -c test/vite.host.config.ts && node test/render-test.mjs",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.server.json",
+    "start": "node dist/inkview.js --http",
+    "start:stdio": "node dist/inkview.js",
+    "dev": "npm run build && node dist/inkview.js --http",
+    "test": "npm run build && node scripts/check-size.mjs && node scripts/smoke-test.mjs && node scripts/stdio-test.mjs && npm run test:render",
     "tunnel": "bash scripts/tunnel.sh",
-    "test:smoke": "npm run build && node scripts/smoke-test.mjs",
     "prepare": "npm run build",
-    "inspect": "npx @modelcontextprotocol/inspector node dist/main.js"
+    "inspect": "npx @modelcontextprotocol/inspector node dist/inkview.js",
+    "test:render": "DEV_PAGE=host vite build -c dev/vite.config.ts && node scripts/render-test.mjs",
+    "preview": "node scripts/preview.mjs",
+    "build:mcpb": "node scripts/build-mcpb.mjs"
   },
-  "dependencies": {
+  "devDependencies": {
     "@modelcontextprotocol/client": "^2.4.0",
     "@modelcontextprotocol/core": "^2.4.0",
     "@modelcontextprotocol/express": "^2.0.2",
     "@modelcontextprotocol/ext-apps": "^2.0.4",
     "@modelcontextprotocol/node": "^2.1.2",
     "@modelcontextprotocol/server": "^2.4.0",
-    "express": "^5.3.0",
-    "zod": "^4.6.7"
-  },
-  "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.2.1",
+    "esbuild": "^0.28.2",
+    "express": "^5.3.0",
     "playwright": "^1.63.0",
+    "preact": "^10.29.8",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.6",
-    "vite-plugin-singlefile": "^2.3.4"
+    "vite-plugin-singlefile": "^2.3.4",
+    "zod": "^4.6.7"
   },
   "repository": {
     "type": "git",
@@ -65,5 +68,6 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "main": "dist/inkview.js"
 }
