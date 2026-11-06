@@ -117,3 +117,40 @@ test("product grid markdown has prices and store links; no more than 12", () => 
   );
   assert.equal(c.schema.safeParse({ products: Array.from({ length: 13 }, () => ({ title: "t", url: "https://t.io" })) }).success, false);
 });
+
+test("timeline markdown: full and minimal payloads", () => {
+  const c = get("timeline");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Northstar",
+        caption: "2 of 7 events",
+        events: [
+          { date: "2020-04", title: "First release", detail: "Opened to everyone.", url: "https://example.com/release", category: "Product" },
+          { date: "2019", title: "Founded" },
+        ],
+        source: { name: "Press kit", url: "https://example.com/press" },
+      }),
+    ),
+    "### Northstar\n\n- 2019: Founded\n- 2020-04: [First release](https://example.com/release) · Product\n  Opened to everyone.\n\n_2 of 7 events_\n\n_Source: [Press kit](https://example.com/press)_",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ events: [{ date: "2024", title: "Founded" }] })), "- 2024: Founded");
+});
+
+test("timeline markdown orders mixed date precision and validates input limits", () => {
+  const c = get("timeline");
+  const data = c.schema.parse({
+    events: [
+      { date: "2019-04-12", title: "Series A" },
+      { date: "2019-01", title: "Prototype" },
+      { date: "2019", title: "Founded" },
+    ],
+  });
+  assert.equal(c.toMarkdown(data), "- 2019: Founded\n- 2019-01: Prototype\n- 2019-04-12: Series A");
+  const invalidDate = c.schema.safeParse({ events: [{ date: "sometime in spring", title: "Launch" }] });
+  assert.equal(invalidDate.success, false);
+  assert.match(JSON.stringify(invalidDate.error!.issues), /YYYY-MM-DD, YYYY-MM or YYYY/);
+  const tooMany = c.schema.safeParse({ events: Array.from({ length: 51 }, (_, i) => ({ date: "2024", title: `Event ${i}` })) });
+  assert.equal(tooMany.success, false);
+  assert.match(JSON.stringify(tooMany.error!.issues), /50 most relevant events.*caption/);
+});

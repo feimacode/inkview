@@ -44,6 +44,28 @@ try {
   assert.equal(bad.isError, true, "missing name is rejected");
   console.log("✓ tools/call rejects invalid input");
 
+  const timeline = await client.callTool({
+    name: "show_timeline",
+    arguments: {
+      title: "Northstar",
+      events: [
+        { date: "2020-04", title: "First release" },
+        { date: "2019", title: "Founded" },
+        { date: "2020-04-12", title: "First customer" },
+      ],
+    },
+  });
+  assert.equal(timeline.isError ?? false, false);
+  assert.equal(timeline.structuredContent.component, "timeline");
+  assert.match(timeline.content[0].text, /- 2019: Founded[\s\S]*- 2020-04: First release/);
+  const badTimeline = await client.callTool({
+    name: "show_timeline",
+    arguments: { events: [{ date: "sometime in spring", title: "Launch" }] },
+  });
+  assert.equal(badTimeline.isError, true, "unreadable timeline date is rejected");
+  assert.match(badTimeline.content[0].text, /YYYY-MM-DD, YYYY-MM or YYYY/);
+  console.log("✓ show_timeline: valid payload and invalid date");
+
   // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
   const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());
   for (const d of dirs) {

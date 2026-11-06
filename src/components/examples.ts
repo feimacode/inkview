@@ -9,6 +9,7 @@ import entityCard from "./entity-card/examples.json";
 import comparison from "./comparison/examples.json";
 import chart from "./chart/examples.json";
 import productGrid from "./product-grid/examples.json";
+import timeline from "./timeline/examples.json";
 
 const byComponent: Record<string, unknown> = {
   profile_card: profileCard,
@@ -19,6 +20,7 @@ const byComponent: Record<string, unknown> = {
   comparison,
   chart,
   product_grid: productGrid,
+  timeline,
 };
 
 export const examples = viewComponents.map((c) => ({
