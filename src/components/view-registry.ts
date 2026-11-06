@@ -2,6 +2,8 @@
 import type { ViewEntry } from "./types.js";
 import { meta as profileCardMeta } from "./profile-card/meta.js";
 import * as profileCard from "./profile-card/View.js";
+import { meta as profileGridMeta } from "./profile-grid/meta.js";
+import * as profileGrid from "./profile-grid/View.js";
 import { meta as dataTableMeta } from "./data-table/meta.js";
 import * as dataTable from "./data-table/View.js";
 import { meta as resultListMeta } from "./result-list/meta.js";
@@ -17,6 +19,7 @@ import * as productGrid from "./product-grid/View.js";
 
 export const viewComponents: ViewEntry[] = [
   { meta: profileCardMeta, View: profileCard.View, accepts: profileCard.accepts },
+  { meta: profileGridMeta, View: profileGrid.View, accepts: profileGrid.accepts },
   { meta: dataTableMeta, View: dataTable.View, accepts: dataTable.accepts },
   { meta: resultListMeta, View: resultList.View, accepts: resultList.accepts },
   { meta: entityCardMeta, View: entityCard.View, accepts: entityCard.accepts },

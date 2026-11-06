@@ -90,6 +90,160 @@
   }
  },
  {
+  "id": "profiles-speakers",
+  "expect": "show_profiles",
+  "prompt": "Show me the speakers from the AI Summit as profiles.",
+  "source": [
+   {
+    "name": "Mira Hoffmann",
+    "headline": "Staff Rust Engineer at Ferrous Labs",
+    "company": "Ferrous Labs",
+    "location": "Berlin, Germany",
+    "profile_url": "https://example.com/speakers/mira-hoffmann"
+   },
+   {
+    "name": "Daniel Okafor",
+    "headline": "Head of Machine Learning at Northwind",
+    "company": "Northwind",
+    "location": "Lagos, Nigeria",
+    "profile_url": "https://example.com/speakers/daniel-okafor"
+   },
+   {
+    "name": "Sofia Marchetti",
+    "headline": "Product lead for developer tools at Aster",
+    "company": "Aster",
+    "location": "Milan, Italy"
+   },
+   {
+    "name": "Kenji Watanabe",
+    "headline": "Research scientist, retrieval and ranking",
+    "company": "Keio University",
+    "location": "Tokyo, Japan"
+   }
+  ]
+ },
+ {
+  "id": "profiles-candidates",
+  "expect": "show_profiles",
+  "prompt": "Give me a quick profile overview of these four candidates I'm interviewing.",
+  "source": [
+   {
+    "name": "Amara Nwosu",
+    "headline": "Senior backend engineer, distributed systems",
+    "company": "Paystack",
+    "location": "Lagos, Nigeria",
+    "years_experience": 8
+   },
+   {
+    "name": "Tomás Ruiz",
+    "headline": "Staff engineer, platform infrastructure",
+    "company": "Mercado Libre",
+    "location": "Buenos Aires, Argentina",
+    "years_experience": 12
+   },
+   {
+    "name": "Hannah Berg",
+    "headline": "Backend engineer, Go and PostgreSQL",
+    "company": "Spotify",
+    "location": "Stockholm, Sweden",
+    "years_experience": 6
+   },
+   {
+    "name": "Rahul Mehta",
+    "headline": "Senior software engineer, streaming data",
+    "company": "Confluent",
+    "location": "Bengaluru, India",
+    "years_experience": 9
+   }
+  ]
+ },
+ {
+  "id": "profiles-attendees",
+  "expect": "show_profiles",
+  "prompt": "Here's the attendee list from last night's meetup. Show me the people.",
+  "source": [
+   {
+    "name": "Nadia Petrov",
+    "headline": "Founder, Developer Tools Collective",
+    "location": "Berlin, Germany"
+   },
+   {
+    "name": "Owen Clarke",
+    "headline": "Engineering manager at Harbor & Pine",
+    "location": "London, UK"
+   },
+   {
+    "name": "Mei Ling",
+    "headline": "Compliance lead at Ledgerly",
+    "location": "Singapore"
+   },
+   {
+    "name": "Jonas Weber",
+    "headline": "Senior engineer, Rust and API design",
+    "location": "Nuremberg, Germany"
+   },
+   {
+    "name": "Fatima Zahra",
+    "headline": "Backend engineer, payments and ledgers",
+    "location": "Casablanca, Morocco"
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "profiles-investors",
+  "expect": "show_profiles",
+  "prompt": "Which of these investors should I talk to for my seed round? Show their profiles.",
+  "source": [
+   {
+    "name": "Priya Raman",
+    "headline": "Founder and CEO of Graphline",
+    "company": "Graphline",
+    "location": "Bengaluru, India",
+    "invests_in": "seed and Series A developer tools"
+   },
+   {
+    "name": "Lucas Ferreira",
+    "headline": "Partner at Southline Ventures",
+    "company": "Southline Ventures",
+    "location": "São Paulo, Brazil",
+    "invests_in": "LatAm fintech"
+   },
+   {
+    "name": "Hana Kobayashi",
+    "headline": "Angel investor, former CTO",
+    "location": "Portland, OR",
+    "invests_in": "climate and consumer"
+   }
+  ]
+ },
+ {
+  "id": "profiles-team",
+  "expect": "show_profiles",
+  "prompt": "Show me profiles for the engineers on the platform team.",
+  "source": [
+   {
+    "name": "Alex Kim",
+    "headline": "Platform engineer",
+    "company": "Northwind",
+    "location": "Seattle, WA"
+   },
+   {
+    "name": "Sam Ortiz",
+    "headline": "Engineering manager, platform",
+    "company": "Northwind",
+    "location": "Austin, TX"
+   },
+   {
+    "name": "Jo Park",
+    "headline": "Site reliability engineer",
+    "company": "Northwind",
+    "location": "Seoul, South Korea"
+   }
+  ],
+  "heldOut": true
+ },
+ {
   "id": "table-cities",
   "expect": "show_table",
   "prompt": "What are the five largest cities in the EU by population?",

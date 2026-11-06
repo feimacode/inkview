@@ -1,0 +1,48 @@
+.pgr-head { margin-bottom: 12px; }
+.pgr-title { margin: 0; font-size: 16px; font-weight: 650; line-height: 1.3; }
+.pgr-caption { margin: 4px 0 0; font-size: 13px; }
+.pgr-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px;
+}
+.pgr-card {
+  display: flex; align-items: flex-start; gap: 6px; min-width: 0;
+  border: 1px solid var(--ink-border); border-radius: var(--ink-radius-sm); padding: 10px;
+}
+.pgr-card.pgr-picked { border-color: var(--ink-accent); box-shadow: 0 0 0 1px var(--ink-accent); }
+.pgr-open {
+  display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0;
+  margin: 0; padding: 0; border: 0; background: none; font: inherit; color: inherit;
+  text-align: left; cursor: pointer; border-radius: var(--ink-radius-sm);
+}
+.pgr-open:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; }
+.pgr-who { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pgr-name { font-size: 14px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.pgr-headline {
+  font-size: 12.5px; color: var(--ink-text-muted); line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pgr-meta { font-size: 12px; color: var(--ink-text-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pgr-pick { flex: none; display: inline-flex; padding: 2px 0 0; cursor: pointer; }
+.pgr-pick input { width: 16px; height: 16px; margin: 0; accent-color: var(--ink-accent); }
+.pgr-shortlist { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--ink-border); }
+.pgr-shortlist-label {
+  margin: 0; font-size: 11px; font-weight: 650; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--ink-text-muted);
+}
+.pgr-shortlist ul { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.pgr-shortlist li {
+  display: inline-flex; align-items: center; gap: 2px; max-width: 100%;
+  background: var(--ink-bg-subtle); border-radius: 999px; padding: 2px 3px 2px 10px; font-size: 12.5px;
+}
+.pgr-shortlist li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pgr-remove {
+  border: 0; background: none; color: var(--ink-text-muted); cursor: pointer;
+  font: inherit; font-size: 14px; line-height: 1; padding: 2px 5px; border-radius: 999px;
+}
+.pgr-remove:disabled { opacity: 0.6; cursor: default; }
+.pgr-remove:focus-visible { outline: 2px solid var(--ink-ring); outline-offset: 2px; }
+.pgr-expanded > .ink-btn { margin-bottom: 10px; }
+@media (max-width: 420px) {
+  .pgr-grid { grid-template-columns: 1fr; gap: 8px; }
+}

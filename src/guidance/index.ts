@@ -10,6 +10,7 @@ import { autoMeta } from "../auto/tool.js";
 /** Situation → tool, in the order a model should consider them. */
 export const situations: Array<{ when: string; tool: string }> = [
   { when: "One person (candidate, speaker, founder, contact)", tool: "show_profile_card" },
+  { when: "Several people (candidates, speakers, attendees, contacts)", tool: "show_profiles" },
   { when: "3 or more records with the same fields", tool: "show_table" },
   { when: "Web, news, paper or document search results", tool: "show_results" },
   { when: "One company, organization, product or place", tool: "show_entity_card" },
