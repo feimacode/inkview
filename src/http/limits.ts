@@ -12,6 +12,8 @@ export interface HttpConfig {
   /** Trust X-Forwarded-For (set when behind a load balancer or tunnel). */
   trustProxy: boolean;
   log: boolean;
+  /** Header holding the real client IP, set by a trusted proxy (e.g. cf-connecting-ip). */
+  clientIpHeader?: string;
   /** Host header allow-list (DNS rebinding protection) for public deployments. */
   allowedHosts?: string[];
 }
@@ -27,6 +29,7 @@ export function httpConfig(env: NodeJS.ProcessEnv = process.env): HttpConfig {
     rateWindowMs: int(env.INKVIEW_RATE_WINDOW_MS, 60_000),
     trustProxy: env.INKVIEW_TRUST_PROXY === "1" || env.INKVIEW_TRUST_PROXY === "true",
     log: env.INKVIEW_LOG !== "off",
+    clientIpHeader: env.INKVIEW_CLIENT_IP_HEADER?.trim().toLowerCase() || undefined,
     allowedHosts: env.INKVIEW_ALLOWED_HOSTS?.split(",").map((h) => h.trim()).filter(Boolean),
   };
 }
@@ -49,6 +52,16 @@ export class RateLimiter {
     e.count++;
     return e.count > this.limit ? Math.max(1, Math.ceil((e.reset - t) / 1000)) : 0;
   }
+}
+
+/** Rate-limit key: the trusted proxy's client IP header when configured, else the socket/X-Forwarded-For IP. */
+export function clientKey(headers: Record<string, string | string[] | undefined>, ip: string | undefined, header?: string): string {
+  if (header) {
+    const v = headers[header];
+    const first = (Array.isArray(v) ? v[0] : v)?.split(",")[0].trim();
+    if (first) return first.slice(0, 64);
+  }
+  return ip ?? "unknown";
 }
 
 /** The only request facts that may be logged: JSON-RPC method and, for tools/call, the tool name. */
