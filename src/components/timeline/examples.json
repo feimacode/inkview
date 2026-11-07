@@ -1,0 +1,93 @@
+[
+  {
+    "name": "Company history",
+    "data": {
+      "title": "Northstar's journey",
+      "caption": "Six defining moments",
+      "events": [
+        {
+          "date": "2021-03",
+          "title": "Series A raised",
+          "detail": "A $12M round funded the first international team.",
+          "url": "https://example.com/northstar/series-a",
+          "category": "Funding"
+        },
+        {
+          "date": "2019",
+          "title": "Northstar founded",
+          "detail": "Two engineers started building collaborative mapping tools.",
+          "category": "Company"
+        },
+        {
+          "date": "2024-09",
+          "title": "One million workspaces",
+          "category": "Growth"
+        },
+        {
+          "date": "2020-06-15",
+          "title": "First public release",
+          "detail": "The collaborative atlas opened to everyone.",
+          "url": "https://example.com/northstar/launch",
+          "category": "Product"
+        },
+        {
+          "date": "2022",
+          "title": "Berlin studio opened",
+          "category": "Company"
+        },
+        {
+          "date": "2023-05-04",
+          "title": "Real-time comments shipped",
+          "detail": "Teams could discuss places directly on the map.",
+          "category": "Product"
+        }
+      ],
+      "source": {
+        "name": "Northstar press kit",
+        "url": "https://example.com/northstar/press"
+      }
+    }
+  },
+  {
+    "name": "Project milestones",
+    "data": {
+      "events": [
+        { "date": "2026-01", "title": "Discovery complete" },
+        { "date": "2026-03-18", "title": "Private beta" },
+        { "date": "2026-06", "title": "General availability" }
+      ]
+    }
+  },
+  {
+    "name": "Career",
+    "data": {
+      "title": "Maya Chen",
+      "events": [
+        {
+          "date": "2016",
+          "title": "BSc Computer Science",
+          "detail": "University of Washington",
+          "category": "Education"
+        },
+        {
+          "date": "2018-07",
+          "title": "Software engineer at Fieldwork",
+          "detail": "Built offline-first field research tools.",
+          "category": "Work"
+        },
+        {
+          "date": "2021-02-08",
+          "title": "Lead engineer at Northstar",
+          "detail": "Led the real-time collaboration platform.",
+          "url": "https://example.com/maya/northstar",
+          "category": "Work"
+        },
+        {
+          "date": "2025",
+          "title": "Engineering director at Atlas",
+          "category": "Work"
+        }
+      ]
+    }
+  }
+]

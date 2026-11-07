@@ -244,6 +244,80 @@
   "heldOut": true
  },
  {
+  "id": "timeline-company",
+  "expect": "show_timeline",
+  "prompt": "Show Northstar's company history as a timeline",
+  "source": [
+   {
+    "date": "2019",
+    "event": "Northstar founded",
+    "detail": "Two engineers started building collaborative mapping tools."
+   },
+   {
+    "date": "2020-06-15",
+    "event": "First public release",
+    "detail": "The collaborative atlas opened to everyone.",
+    "url": "https://example.com/northstar/launch"
+   },
+   {
+    "date": "2021-03",
+    "event": "Series A raised",
+    "detail": "A $12M round funded the first international team.",
+    "url": "https://example.com/northstar/series-a"
+   },
+   {
+    "date": "2024-09",
+    "event": "One million workspaces"
+   }
+  ]
+ },
+ {
+  "id": "timeline-project",
+  "expect": "show_timeline",
+  "prompt": "What are the major milestones in this project plan? Put them in order for me.",
+  "source": [
+   { "date": "2026-01", "title": "Discovery complete" },
+   { "date": "2026-03-18", "title": "Private beta" },
+   { "date": "2026-06", "title": "General availability" }
+  ]
+ },
+ {
+  "id": "timeline-career",
+  "expect": "show_timeline",
+  "prompt": "Give me an overview of Maya Chen's career so far.",
+  "source": {
+   "name": "Maya Chen",
+   "history": [
+    { "year": 2016, "event": "BSc Computer Science", "organization": "University of Washington" },
+    { "date": "2018-07", "event": "Software engineer at Fieldwork", "detail": "Built offline-first field research tools." },
+    { "date": "2021-02-08", "event": "Lead engineer at Northstar", "detail": "Led the real-time collaboration platform." },
+    { "year": 2025, "event": "Engineering director at Atlas" }
+   ]
+  }
+ },
+ {
+  "id": "timeline-story",
+  "expect": "show_timeline",
+  "prompt": "Walk me through how the Rhine shipping disruption unfolded this week.",
+  "source": [
+   { "date": "2026-11-03", "headline": "Shipping firms add surcharges", "summary": "Low-water surcharges return for the second year." },
+   { "date": "2026-11-04", "headline": "Rhine levels drop near Kaub", "summary": "Barges are running at reduced loads." },
+   { "date": "2026-11-05", "headline": "Rain forecast could ease shipping", "summary": "Forecasters expect rain in the Alps next week." }
+  ]
+ },
+ {
+  "id": "timeline-product",
+  "expect": "show_timeline",
+  "prompt": "Show the key product launches from this changelog on a timeline.",
+  "source": [
+   { "date": "2022", "title": "Shared workspaces", "description": "Teams could organize maps together." },
+   { "date": "2023-05-04", "title": "Real-time comments", "description": "Teams could discuss places directly on the map." },
+   { "date": "2024-02", "title": "Mobile offline mode", "description": "Saved maps became available without a connection." },
+   { "date": "2025-08-19", "title": "Public API", "description": "Developers could automate map imports and exports." }
+  ],
+  "heldOut": true
+ },
+ {
   "id": "table-cities",
   "expect": "show_table",
   "prompt": "What are the five largest cities in the EU by population?",
