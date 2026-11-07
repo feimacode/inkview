@@ -1493,6 +1493,85 @@
   "heldOut": true
  },
  {
+  "id": "auto-map-cafes",
+  "expect": "show_auto",
+  "prompt": "Show me these cafes.",
+  "source": [
+   { "name": "Coffee Collective Bernikow", "address": "Bernikowsgade 3, Copenhagen", "lat": 55.6778, "lng": 12.5785 },
+   { "name": "Prolog Coffee Bar", "address": "Ravnsborggade 7, Copenhagen", "lat": 55.6863, "lng": 12.5579 },
+   { "name": "April Coffee", "address": "Ryesgade 4, Copenhagen", "lat": 55.6878, "lng": 12.5689 }
+  ]
+ },
+ {
+  "id": "auto-map-offices",
+  "expect": "show_auto",
+  "prompt": "Here are our office locations. Display them.",
+  "source": [
+   { "label": "Berlin", "lat": 52.52, "lng": 13.405 },
+   { "label": "Lisbon", "lat": 38.7223, "lng": -9.1393 },
+   { "label": "Toronto", "lat": 43.6532, "lng": -79.3832 }
+  ]
+ },
+ {
+  "id": "auto-timeline-release",
+  "expect": "show_auto",
+  "prompt": "Show the release history.",
+  "source": [
+   { "date": "2025-02", "title": "Public beta", "detail": "Opened to the waiting list." },
+   { "date": "2025-09-14", "title": "Version 1.0", "detail": "First stable release." },
+   { "date": "2026-04", "title": "Team workspaces" }
+  ]
+ },
+ {
+  "id": "auto-timeline-incident",
+  "expect": "show_auto",
+  "prompt": "This is the incident log. Display it for me.",
+  "source": [
+   { "date": "2026-11-04", "event": "Latency alert fired", "detail": "p99 exceeded 2s for ten minutes." },
+   { "date": "2026-11-04", "event": "Rollback started", "detail": "Reverted to the previous build." },
+   { "date": "2026-11-05", "event": "Root cause confirmed", "detail": "A missing index on the events table." }
+  ]
+ },
+ {
+  "id": "auto-tasks-errands",
+  "expect": "show_auto",
+  "prompt": "Show my errands for today.",
+  "source": [
+   { "title": "Renew the passport", "status": "To do", "due": "2026-11-09" },
+   { "title": "Pick up the parcel", "status": "Done" },
+   { "title": "Book the dentist", "status": "In progress" }
+  ]
+ },
+ {
+  "id": "auto-tasks-bugs",
+  "expect": "show_auto",
+  "prompt": "Here are the bug reports. Display them.",
+  "source": [
+   { "title": "Login fails on Safari 18", "status": "To do", "priority": "high" },
+   { "title": "Export omits empty columns", "status": "In progress" },
+   { "title": "Typo in welcome email", "status": "Done" }
+  ]
+ },
+ {
+  "id": "auto-profiles-panelists",
+  "expect": "show_auto",
+  "prompt": "Show me these panelists.",
+  "source": [
+   { "name": "Mira Hoffmann", "headline": "Staff Rust Engineer at Ferrous Labs", "company": "Ferrous Labs" },
+   { "name": "Daniel Okafor", "headline": "Head of Machine Learning at Northwind", "company": "Northwind" },
+   { "name": "Sofia Marchetti", "headline": "Product lead for developer tools at Aster", "company": "Aster" }
+  ]
+ },
+ {
+  "id": "auto-profiles-hires",
+  "expect": "show_auto",
+  "prompt": "Display the new hires.",
+  "source": [
+   { "name": "Amara Nwosu", "headline": "Senior backend engineer" },
+   { "name": "Tomas Ruiz", "headline": "Staff engineer, platform" }
+  ]
+ },
+ {
   "id": "none-one-detail",
   "expect": null,
   "prompt": "Rename my project. Ask me what to call it.",

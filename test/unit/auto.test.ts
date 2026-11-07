@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { detect } from "../../src/auto/detect.js";
-import { runAuto } from "../../src/auto/tool.js";
+import { detect } from "../../packages/inkview/src/auto/detect.js";
+import { runAuto } from "../../packages/inkview/src/auto/tool.js";
 
 const comp = (data: unknown, hint?: string) => runAuto({ data, hint }).component;
 
@@ -36,6 +36,38 @@ test("entity: an organization or place", () => {
   assert.equal(comp({ name: "Stripe", industry: "Payments", founded: 2010, website: "https://stripe.com" }), "entity_card");
   assert.equal(comp({ name: "Tempelhofer Feld", type: "park", address: "Berlin" }), "entity_card");
   assert.equal(comp({ name: "MIT", kind: "university", headquarters: "Cambridge, MA" }), "entity_card");
+});
+
+test("map: places with coordinates", () => {
+  assert.equal(comp([{ name: "Reyes", lat: 55.6778, lng: 12.5785 }, { name: "Prolog", lat: 55.6863, lng: 12.5579 }]), "map");
+  assert.equal(comp({ name: "Feimacom", address: "Sveavagen 1, Stockholm", lat: 59.3346, lng: 18.0633 }), "map");
+  assert.equal(comp([{ label: "A", latitude: 52.5, longitude: 13.4 }, { label: "B", latitude: 52.6, longitude: 13.5 }]), "map");
+});
+
+test("timeline: dated events", () => {
+  assert.equal(comp([{ date: "2019", event: "Founded" }, { date: "2020-06-15", title: "First release" }]), "timeline");
+  assert.equal(comp([{ year: 2016, event: "BSc" }, { year: 2021, event: "Lead engineer" }]), "timeline");
+  assert.equal(comp({ name: "Maya Chen", history: [{ year: 2016, event: "BSc" }, { date: "2018-07", event: "Engineer" }] }), "timeline");
+});
+
+test("tasks: items with a status or done flag", () => {
+  assert.equal(comp([{ title: "Write docs", status: "To do" }, { title: "Ship", status: "Done" }]), "task_list");
+  assert.equal(comp([{ title: "Review budget", done: true }, { title: "Book flights", done: false }]), "task_list");
+  assert.equal(comp({ title: "Sprint 42", items: [{ title: "Search filters", status: "Review" }, { title: "Bulk import", status: "Doing" }] }), "task_list");
+});
+
+test("profile grid: several people with roles", () => {
+  assert.equal(comp([{ name: "Mira Hoffmann", headline: "Staff Rust Engineer" }, { name: "Daniel Okafor", headline: "Head of ML" }]), "profile_grid");
+  assert.equal(comp({ people: [{ name: "Ada", jobTitle: "Mathematician" }, { name: "Grace", jobTitle: "Admiral" }] }), "profile_grid");
+});
+
+test("hint names the new components", () => {
+  const events = [{ date: "2026-01", title: "Discovery" }, { date: "2026-03", title: "Beta" }];
+  assert.equal(comp(events), "timeline");
+  assert.equal(comp(events, "timeline"), "timeline");
+  assert.equal(comp([{ name: "A", lat: 1, lng: 2 }, { name: "B", lat: 3, lng: 4 }], "map"), "map");
+  assert.equal(comp([{ title: "A", status: "To do" }, { title: "B", status: "Done" }], "tasks"), "task_list");
+  assert.equal(comp([{ name: "A", headline: "x" }, { name: "B", headline: "y" }], "profiles"), "profile_grid");
 });
 
 test("table: same-shaped records", () => {
