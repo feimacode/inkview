@@ -100,3 +100,10 @@ test("result names the explicit tool", () => {
 test("rejects data over 100 KB", () => {
   assert.throws(() => runAuto({ data: "x".repeat(110 * 1024) }), /at most 100 KB/);
 });
+
+test("map via show_auto carries the tile config, like show_map", () => {
+  const r = runAuto({ data: [{ name: "Reyes", lat: 55.6778, lng: 12.5785 }, { name: "Prolog", lat: 55.6863, lng: 12.5579 }] });
+  assert.equal(r.component, "map");
+  assert.ok(r.config && typeof r.config === "object" && "tileTemplate" in r.config);
+  assert.equal(runAuto({ data: [{ id: 1, name: "a" }, { id: 2, name: "b" }, { id: 3, name: "c" }] }).config, undefined);
+});

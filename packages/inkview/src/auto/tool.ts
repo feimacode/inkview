@@ -21,6 +21,8 @@ export interface AutoResult {
   component: string | null;
   tool: string | null;
   data: Record<string, unknown> | null;
+  /** Server settings for the chosen component, such as the map's tile provider. */
+  config?: unknown;
   text: string;
 }
 
@@ -39,6 +41,7 @@ export function runAuto(args: { data?: unknown; hint?: string }): AutoResult {
         component: entry.meta.component,
         tool: entry.meta.tool,
         data: parsed.data,
+        config: entry.config?.(),
         text: `Shown with ${entry.meta.tool}${note}. Next time call ${entry.meta.tool} directly.\n\n${entry.toMarkdown(parsed.data)}`,
       };
     }

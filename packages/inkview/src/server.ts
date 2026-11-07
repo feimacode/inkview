@@ -62,7 +62,13 @@ export function createServer(): McpServer {
       return {
         content: [{ type: "text", text: r.text }],
         structuredContent: r.component
-          ? { component: r.component, schemaVersion: "1", data: r.data, chosenTool: r.tool }
+          ? {
+              component: r.component,
+              schemaVersion: "1",
+              data: r.data,
+              chosenTool: r.tool,
+              ...(r.config !== undefined ? { config: r.config } : {}),
+            }
           : { component: "text", schemaVersion: "1", data: null },
       };
     },
