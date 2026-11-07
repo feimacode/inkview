@@ -22,6 +22,7 @@ call the matching Inkview tool instead of writing a markdown list or table.
 | Numbers over time or across categories | `show_chart` |
 | Shopping results (2 to 12 products) | `show_products` |
 | A draft email, message, post, letter or report to review, edit and approve | `show_document` |
+| 3 or more details missing from the user (a short form) | `show_form` |
 | Structured data that fits none of the above clearly | `show_auto` |
 
 ## Rules

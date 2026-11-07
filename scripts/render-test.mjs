@@ -108,6 +108,9 @@ try {
         const visible = await frame.locator("body").evaluate(() => {
           const el = document.activeElement;
           if (!el || el === document.body) return true;
+          // Date-like inputs move focus between internal segments and highlight them
+          // natively, so the input itself reports no outline while a segment is focused.
+          if (el.matches?.("input[type=date], input[type=time], input[type=datetime-local], input[type=month], input[type=week]")) return true;
           const s = getComputedStyle(el);
           return s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0;
         });

@@ -1383,5 +1383,72 @@
    "issue": "delivery arrived six days late",
    "remedy": "full shipping refund and 15% off the next order"
   }
+ },
+ {
+  "id": "form-trip-brief",
+  "expect": "show_form",
+  "prompt": "I'm planning a trip and haven't decided anything yet. Ask me for the details you need.",
+  "source": {
+   "travelers": 4,
+   "max_budget_usd": 2500,
+   "destination_options": [
+    "Lisbon",
+    "Porto",
+    "Seville"
+   ]
+  }
+ },
+ {
+  "id": "form-job-alert",
+  "expect": "show_form",
+  "prompt": "Set up job alerts for me. Ask for my preferences.",
+  "source": {
+   "roles": [
+    "Frontend",
+    "Full stack"
+   ],
+   "locations": [
+    "Berlin",
+    "Remote"
+   ],
+   "minimum_salary_eur": 85000
+  }
+ },
+ {
+  "id": "form-feedback-call",
+  "expect": "show_form",
+  "prompt": "I just finished the onboarding flow. Collect my feedback.",
+  "source": null
+ },
+ {
+  "id": "form-project-kickoff",
+  "expect": "show_form",
+  "prompt": "Start a project brief for the website refresh. Ask me what you need.",
+  "source": {
+   "deadline": "2027-01-15",
+   "team_size": 5
+  },
+  "heldOut": true
+ },
+ {
+  "id": "form-event-rsvp",
+  "expect": "show_form",
+  "prompt": "Collect my details for the conference registration.",
+  "source": {
+   "conference": "Inkview Conf",
+   "dates": "2027-03-10 to 2027-03-12"
+  }
+ },
+ {
+  "id": "none-one-detail",
+  "expect": null,
+  "prompt": "Rename my project. Ask me what to call it.",
+  "source": null
+ },
+ {
+  "id": "none-two-details",
+  "expect": null,
+  "prompt": "Set a reminder to call Sam. Ask me for the date and time.",
+  "source": null
  }
 ]

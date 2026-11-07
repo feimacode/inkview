@@ -12,6 +12,7 @@ import * as productGrid from "./product-grid/server.js";
 import * as timeline from "./timeline/server.js";
 import * as taskList from "./task-list/server.js";
 import * as documentPreview from "./document-preview/server.js";
+import * as form from "./form/server.js";
 
 export interface ServerEntry {
   meta: ComponentMeta;
@@ -20,4 +21,4 @@ export interface ServerEntry {
 }
 
 /** Order matters: it is the order tools are listed to the model. */
-export const serverComponents: ServerEntry[] = [profileCard, profileGrid, dataTable, resultList, entityCard, comparison, chart, productGrid, timeline, taskList, documentPreview];
+export const serverComponents: ServerEntry[] = [profileCard, profileGrid, dataTable, resultList, entityCard, comparison, chart, productGrid, timeline, taskList, documentPreview, form];
