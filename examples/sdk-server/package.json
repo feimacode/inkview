@@ -1,0 +1,17 @@
+{
+  "name": "@feimacode/inkview-sdk-example",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Sample MCP server that renders Inkview components through the SDK.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@feimacode/inkview-sdk": "*",
+    "@modelcontextprotocol/ext-apps": "^2.0.4",
+    "@modelcontextprotocol/server": "^2.4.0"
+  }
+}

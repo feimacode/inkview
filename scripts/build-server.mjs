@@ -1,13 +1,21 @@
 // Bundles the server, its dependencies and the view HTML into one file,
-// dist/inkview.js, so the published package has no runtime dependencies.
+// packages/inkview/dist/inkview.js, so the published package has no runtime dependencies.
 import { build } from "esbuild";
-import { readFileSync, chmodSync } from "node:fs";
+import { readFileSync, chmodSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 
-const { version } = JSON.parse(readFileSync("package.json", "utf8"));
+const ROOT = resolve(import.meta.dirname, "..");
+const PKG = resolve(ROOT, "packages/inkview");
+const view = resolve(ROOT, "dist/ui/app.html");
+if (!existsSync(view)) {
+  console.error("dist/ui/app.html is missing: run npm run build:ui first.");
+  process.exit(1);
+}
+const { version } = JSON.parse(readFileSync(resolve(PKG, "package.json"), "utf8"));
 
 await build({
-  entryPoints: ["src/main.ts"],
-  outfile: "dist/inkview.js",
+  entryPoints: [resolve(PKG, "src/main.ts")],
+  outfile: resolve(PKG, "dist/inkview.js"),
   bundle: true,
   platform: "node",
   target: "node20",
@@ -22,4 +30,4 @@ await build({
   },
   logLevel: "warning",
 });
-chmodSync("dist/inkview.js", 0o755);
+chmodSync(resolve(PKG, "dist/inkview.js"), 0o755);

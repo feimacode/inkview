@@ -9,7 +9,7 @@ const PORT = process.env.PORT ?? "3999";
 const MCP_URL = process.env.MCP_URL ?? `http://localhost:${PORT}/mcp`;
 const srv = process.env.MCP_URL
   ? null
-  : spawn(process.execPath, ["dist/inkview.js", "--http"], { env: { ...process.env, PORT, INKVIEW_LOG: "off" }, stdio: ["ignore", "pipe", "inherit"] });
+  : spawn(process.execPath, ["packages/inkview/dist/inkview.js", "--http"], { env: { ...process.env, PORT, INKVIEW_LOG: "off" }, stdio: ["ignore", "pipe", "inherit"] });
 if (srv) await new Promise((resolve) => srv.stdout.on("data", (d) => String(d).includes("listening") && resolve()));
 
 try {

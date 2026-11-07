@@ -13,6 +13,7 @@ await build({
   format: "esm",
   outExtension: { ".js": ".mjs" },
   packages: "external",
+  loader: { ".html": "text" },
   define: { __INKVIEW_VERSION__: '"test"' },
   logLevel: "warning",
 });

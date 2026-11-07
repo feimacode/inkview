@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 export const MAX_PLACES = 50;
+/** Upper bound for servers that raise the place cap through the SDK. */
+export const HARD_MAX_PLACES = 500;
 
 const coordinate = (label: string, min: number, max: number) =>
   z
@@ -24,16 +26,20 @@ const place = z.looseObject({
   url: z.string().url().optional().describe("Page with more about this place."),
 });
 
-export const schema = z.looseObject({
-  title: z.string().min(1).max(120).optional().describe("Heading above the map."),
-  caption: z.string().max(300).optional().describe('Short note under the map, e.g. "12 of 40 places".'),
-  places: z
-    .array(place)
-    .min(1)
-    .max(MAX_PLACES, `Send the ${MAX_PLACES} most relevant places and state the total in caption.`)
-    .describe("1 to 50 places, each with a label and WGS84 coordinates."),
-  source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
-});
+export function mapSchema(maxPlaces = MAX_PLACES) {
+  return z.looseObject({
+    title: z.string().min(1).max(120).optional().describe("Heading above the map."),
+    caption: z.string().max(300).optional().describe('Short note under the map, e.g. "12 of 40 places".'),
+    places: z
+      .array(place)
+      .min(1)
+      .max(maxPlaces, `Send the ${maxPlaces} most relevant places and state the total in caption.`)
+      .describe(`1 to ${maxPlaces} places, each with a label and WGS84 coordinates.`),
+    source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+  });
+}
+
+export const schema = mapSchema();
 
 export type MapData = z.infer<typeof schema>;
 export type MapPlace = MapData["places"][number];

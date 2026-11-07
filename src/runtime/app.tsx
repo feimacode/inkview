@@ -29,8 +29,19 @@ function fromResult(result: ToolResultLike): Rendered | null {
   return text ? { kind: "text", text } : null;
 }
 
-function fromInput(toolName: string | undefined, args: unknown): Rendered | null {
-  const entry = toolName ? byTool.get(toolName) : undefined;
+interface ToolLike {
+  name?: string;
+  _meta?: { inkview?: { component?: unknown }; ui?: { component?: unknown } };
+}
+
+/** SDK tools name their component in `_meta.inkview.component`; built-in tools are mapped by name. */
+function componentFromMeta(tool: ToolLike | undefined): ViewEntry | undefined {
+  const id = tool?._meta?.inkview?.component ?? tool?._meta?.ui?.component;
+  return typeof id === "string" ? byComponent.get(id) : undefined;
+}
+
+function fromInput(tool: ToolLike | undefined, args: unknown): Rendered | null {
+  const entry = componentFromMeta(tool) ?? (tool?.name ? byTool.get(tool.name) : undefined);
   return entry && entry.accepts(args) ? { kind: "component", entry, data: args } : null;
 }
 
@@ -93,7 +104,7 @@ function Root() {
     capabilities: {},
     onAppCreated: (app) => {
       app.ontoolinput = (params) => {
-        const r = fromInput(app.getHostContext()?.toolInfo?.tool?.name, params.arguments);
+        const r = fromInput(app.getHostContext()?.toolInfo?.tool as ToolLike | undefined, params.arguments);
         if (r) setRendered((prev) => prev ?? r);
       };
       app.ontoolresult = (result) => {

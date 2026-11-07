@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 const PORT = "3998";
 const URL_ = `http://localhost:${PORT}/mcp`;
 const SENTINEL = "SENTINEL-7f3a9c";
-const srv = spawn(process.execPath, ["dist/inkview.js", "--http"], {
+const srv = spawn(process.execPath, ["packages/inkview/dist/inkview.js", "--http"], {
   env: {
     ...process.env,
     PORT,
@@ -73,7 +73,7 @@ try {
 // 5. Host allow-list guards /mcp but not /healthz (container and Ansible health checks use localhost).
 {
   const port = "3997";
-  const s2 = spawn(process.execPath, ["dist/inkview.js", "--http"], {
+  const s2 = spawn(process.execPath, ["packages/inkview/dist/inkview.js", "--http"], {
     env: { ...process.env, PORT: port, INKVIEW_LOG: "off", INKVIEW_ALLOWED_HOSTS: "inkview.example.com" },
     stdio: ["ignore", "pipe", "inherit"],
   });

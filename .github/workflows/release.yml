@@ -1,8 +1,9 @@
 name: Release
 
-# Push a tag like v0.2.0 to publish @feimacode/inkview to npm (with
-# provenance) and attach the .mcpb desktop extension to a GitHub release.
-# Needs an NPM_TOKEN secret, or npm trusted publishing configured for this repo.
+# Push a tag like v0.2.0 to publish @feimacode/inkview and @feimacode/inkview-sdk
+# to npm (with provenance) and attach the .mcpb desktop extension to a GitHub
+# release. Needs an NPM_TOKEN secret, or npm trusted publishing configured for
+# this repo.
 on:
   push:
     tags: ["v*"]
@@ -24,10 +25,20 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Check tag matches package.json
-        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+        run: |
+          test "v$(node -p 'require("./packages/inkview/package.json").version')" = "$GITHUB_REF_NAME"
+          test "v$(node -p 'require("./packages/sdk/package.json").version')" = "$GITHUB_REF_NAME"
       - run: npm test
       - run: npm run build:mcpb
-      - run: npm publish --provenance --access public
+      - name: Check the SDK package contents
+        run: |
+          npm pack -w @feimacode/inkview-sdk --pack-destination dist-test
+          tar -tzf dist-test/feimacode-inkview-sdk-*.tgz | grep -qx 'package/dist/index.d.ts'
+          tar -xzOf dist-test/feimacode-inkview-sdk-*.tgz package/dist/index.js | grep -q '<div id="root">'
+      - run: npm publish -w @feimacode/inkview --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish -w @feimacode/inkview-sdk --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: GitHub release

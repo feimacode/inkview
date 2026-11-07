@@ -1,6 +1,6 @@
 /** The show_auto render tool: detection + validation against the chosen component's schema. */
 import { z } from "zod";
-import { serverComponents } from "../components/server-registry.js";
+import { serverComponents } from "../../../../src/components/server-registry.js";
 import { detect } from "./detect.js";
 
 export const MAX_AUTO_BYTES = 100 * 1024;
@@ -9,12 +9,12 @@ export const autoMeta = {
   tool: "show_auto",
   title: "Show data (auto)",
   description:
-    "Display any JSON data with the best matching Inkview component, picked from its shape: products become a product grid, search results a result list, numeric series a chart, a person a profile card, a company or place an entity card, same-shaped records a table, anything else formatted text. Prefer the specific show_* tool when you know which component fits; use this when you are unsure. Optional hint names a component (table, chart, profile, entity, results, products). Pass only data you have.",
+    "Display any JSON data with the best matching Inkview component, picked from its shape: products become a product grid, search results a result list, places with coordinates a map, dated events a timeline, items with a status a task list, numeric series a chart, two or more people a profile grid, a person a profile card, a company or place an entity card, same-shaped records a table, anything else formatted text. Prefer the specific show_* tool when you know which component fits; use this when you are unsure. Optional hint names a component (table, chart, map, timeline, tasks, profiles, profile, entity, results, products). Pass only data you have.",
 };
 
 export const autoSchema = z.looseObject({
   data: z.unknown().describe("The data to display: any JSON object or array."),
-  hint: z.string().max(40).optional().describe("Preferred component: table, chart, profile, entity, results or products."),
+  hint: z.string().max(40).optional().describe("Preferred component: table, chart, map, timeline, tasks, profiles, profile, entity, results or products."),
 });
 
 export interface AutoResult {

@@ -4,7 +4,7 @@
  * (docs/chatgpt-app.md) are all generated from here by `npm run gen:guidance`,
  * and a unit test fails when the generated files drift.
  */
-import { serverComponents } from "../components/server-registry.js";
+import { serverComponents } from "../../../../src/components/server-registry.js";
 import { autoMeta } from "../auto/tool.js";
 
 /** Situation → tool, in the order a model should consider them. */

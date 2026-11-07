@@ -4,7 +4,7 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 import { resolve } from "node:path";
 import { readFileSync } from "node:fs";
 
-const { version } = JSON.parse(readFileSync(resolve(import.meta.dirname, "package.json"), "utf8"));
+const { version } = JSON.parse(readFileSync(resolve(import.meta.dirname, "packages/inkview/package.json"), "utf8"));
 
 // The shared view runtime builds to one self-contained HTML file (JS and CSS
 // inlined), served as the `ui://inkview/v1/app.html` MCP Apps resource.

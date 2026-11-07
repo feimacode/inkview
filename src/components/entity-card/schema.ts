@@ -2,20 +2,28 @@ import { z } from "zod";
 
 const url = z.string().url();
 
-export const schema = z.looseObject({
-  name: z.string().min(1).max(120),
-  kind: z.enum(["company", "organization", "place", "other"]).optional(),
-  logoUrl: url.optional().describe("Logo or photo URL from your sources; never invent one. A monogram is shown otherwise."),
-  tagline: z.string().max(160).optional().describe('One line, e.g. "Payments infrastructure for the internet".'),
-  description: z.string().max(600).optional(),
-  facts: z
-    .array(z.looseObject({ label: z.string().min(1).max(40), value: z.string().min(1).max(120) }))
-    .max(8)
-    .optional()
-    .describe('Up to 8 label/value pairs, e.g. {"label": "Founded", "value": "2010"}.'),
-  links: z.array(z.looseObject({ label: z.string().min(1).max(60), url })).max(6).optional(),
-  websiteUrl: url.optional().describe('Opened by the "Open website" button.'),
-  source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
-});
+export const MAX_FACTS = 8;
+/** Upper bound for servers that raise the fact cap through the SDK. */
+export const HARD_MAX_FACTS = 50;
+
+export function entityCardSchema(maxFacts = MAX_FACTS) {
+  return z.looseObject({
+    name: z.string().min(1).max(120),
+    kind: z.enum(["company", "organization", "place", "other"]).optional(),
+    logoUrl: url.optional().describe("Logo or photo URL from your sources; never invent one. A monogram is shown otherwise."),
+    tagline: z.string().max(160).optional().describe('One line, e.g. "Payments infrastructure for the internet".'),
+    description: z.string().max(600).optional(),
+    facts: z
+      .array(z.looseObject({ label: z.string().min(1).max(40), value: z.string().min(1).max(120) }))
+      .max(maxFacts)
+      .optional()
+      .describe(`Up to ${maxFacts} label/value pairs, e.g. {"label": "Founded", "value": "2010"}.`),
+    links: z.array(z.looseObject({ label: z.string().min(1).max(60), url })).max(6).optional(),
+    websiteUrl: url.optional().describe('Opened by the "Open website" button.'),
+    source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
+  });
+}
+
+export const schema = entityCardSchema();
 
 export type EntityCard = z.infer<typeof schema>;

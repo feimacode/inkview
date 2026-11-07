@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { clientKey, describeRpc, httpConfig, RateLimiter } from "../../src/http/limits.js";
+import { clientKey, describeRpc, httpConfig, RateLimiter } from "../../packages/inkview/src/http/limits.js";
 
 test("rate limiter: fixed window per key", () => {
   let now = 0;

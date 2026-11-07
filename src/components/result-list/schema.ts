@@ -12,11 +12,19 @@ export const ResultSchema = z.looseObject({
   score: z.number().optional().describe("Relevance score, if your tool gave one."),
 });
 
-export const schema = z.looseObject({
-  title: z.string().max(120).optional(),
-  query: z.string().max(200).optional().describe("The search query, shown above the list."),
-  results: z.array(ResultSchema).min(1).max(20).describe("1 to 20 results, best first."),
-});
+export const MAX_RESULTS = 20;
+/** Upper bound for servers that raise the result cap through the SDK. */
+export const HARD_MAX_RESULTS = 200;
+
+export function resultListSchema(maxResults = MAX_RESULTS) {
+  return z.looseObject({
+    title: z.string().max(120).optional(),
+    query: z.string().max(200).optional().describe("The search query, shown above the list."),
+    results: z.array(ResultSchema).min(1).max(maxResults).describe(`1 to ${maxResults} results, best first.`),
+  });
+}
+
+export const schema = resultListSchema();
 
 export type Result = z.infer<typeof ResultSchema>;
 export type ResultList = z.infer<typeof schema>;

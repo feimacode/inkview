@@ -5,7 +5,7 @@
 //   npm run evals -- --ids profile-ada,table-cities
 //
 // Reads the real tool definitions and server instructions from the built server
-// (dist/inkview.js over stdio), asks Claude each prompt with its source data, and
+// (packages/inkview/dist/inkview.js over stdio), asks Claude each prompt with its source data, and
 // validates every Inkview call by sending it to that same server.
 // Credentials: ANTHROPIC_API_KEY, or an `ant auth login` profile.
 // EVAL_MODEL (default claude-opus-5-5) and EVAL_EFFORT (default: the model's own) tune the run.
@@ -42,7 +42,7 @@ if (opts.limit) prompts = prompts.slice(0, Number(opts.limit));
 const skill = readFileSync("plugin/skills/inkview/SKILL.md", "utf8").replace(/^---[\s\S]*?---\s*/, "");
 
 const mcp = new Client({ name: "inkview-evals", version: "0" });
-await mcp.connect(new StdioClientTransport({ command: process.execPath, args: ["dist/inkview.js"] }));
+await mcp.connect(new StdioClientTransport({ command: process.execPath, args: ["packages/inkview/dist/inkview.js"] }));
 const instructions = mcp.getInstructions?.() ?? "";
 const { tools: mcpTools } = await mcp.listTools();
 const inkviewNames = new Set(mcpTools.map((t) => t.name));
