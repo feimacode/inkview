@@ -18,6 +18,7 @@ call the matching Inkview tool instead of writing a markdown list or table.
 | 3 or more records with the same fields | `show_table` |
 | Web, news, paper or document search results | `show_results` |
 | One company, organization, product or place | `show_entity_card` |
+| Places with coordinates where location or distance matters | `show_map` |
 | 2 to 5 options the user is choosing between | `show_comparison` |
 | Numbers over time or across categories | `show_chart` |
 | Shopping results (2 to 12 products) | `show_products` |

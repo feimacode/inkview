@@ -16,6 +16,7 @@ export const situations: Array<{ when: string; tool: string }> = [
   { when: "3 or more records with the same fields", tool: "show_table" },
   { when: "Web, news, paper or document search results", tool: "show_results" },
   { when: "One company, organization, product or place", tool: "show_entity_card" },
+  { when: "Places with coordinates where location or distance matters", tool: "show_map" },
   { when: "2 to 5 options the user is choosing between", tool: "show_comparison" },
   { when: "Numbers over time or across categories", tool: "show_chart" },
   { when: "Shopping results (2 to 12 products)", tool: "show_products" },

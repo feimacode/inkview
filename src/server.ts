@@ -8,39 +8,14 @@ import { McpServer, type CallToolResult, type ReadResourceResult } from "@modelc
 // Inlined at build time (esbuild text loader), so the package needs no files on disk.
 import appHtml from "../dist/ui/app.html";
 import { serverComponents } from "./components/server-registry.js";
+import { imageDomains, resourceMeta } from "./resource.js";
 import { serverInstructions } from "./guidance/index.js";
 import { autoMeta, autoSchema, runAuto } from "./auto/tool.js";
 
 export const VERSION = __INKVIEW_VERSION__;
 export const APP_URI = "ui://inkview/v1/app.html";
 
-/**
- * Image hosts components may load avatars and logos from. Hosts block any
- * image domain not declared in the resource CSP, so unknown domains fall back
- * to initials. Extend with INKVIEW_IMAGE_DOMAINS (comma separated origins).
- */
-const DEFAULT_IMAGE_DOMAINS = [
-  "https://avatars.githubusercontent.com",
-  "https://media.licdn.com",
-  "https://*.gravatar.com",
-  "https://unavatar.io",
-  "https://upload.wikimedia.org",
-  "https://images.unsplash.com",
-  "https://pbs.twimg.com",
-  "https://i.pravatar.cc",
-  "https://logo.clearbit.com",
-  "https://www.google.com",
-  "https://*.gstatic.com",
-  "https://icons.duckduckgo.com",
-  "https://m.media-amazon.com",
-  "https://i.ebayimg.com",
-  "https://cdn.shopify.com",
-];
-
-export function imageDomains(env: NodeJS.ProcessEnv = process.env): string[] {
-  const extra = (env.INKVIEW_IMAGE_DOMAINS ?? "").split(",").map((s) => s.trim()).filter(Boolean);
-  return [...DEFAULT_IMAGE_DOMAINS, ...extra];
-}
+export { imageDomains };
 
 export function createServer(): McpServer {
   const server = new McpServer({ name: "inkview", version: VERSION }, { instructions: serverInstructions() });
@@ -58,9 +33,15 @@ export function createServer(): McpServer {
       },
       async (args: Record<string, unknown>): Promise<CallToolResult> => {
         const data = c.schema.parse(args);
+        const config = c.config?.();
         return {
           content: [{ type: "text", text: c.toMarkdown(data) }],
-          structuredContent: { component: c.meta.component, schemaVersion: c.meta.schemaVersion, data },
+          structuredContent: {
+            component: c.meta.component,
+            schemaVersion: c.meta.schemaVersion,
+            data,
+            ...(config !== undefined ? { config } : {}),
+          },
         };
       },
     );
@@ -93,16 +74,13 @@ export function createServer(): McpServer {
     APP_URI,
     { mimeType: RESOURCE_MIME_TYPE, description: "Inkview UI components (v1)" },
     async (): Promise<ReadResourceResult> => {
-      const domain = process.env.INKVIEW_UI_DOMAIN;
       return {
         contents: [
           {
             uri: APP_URI,
             mimeType: RESOURCE_MIME_TYPE,
             text: appHtml,
-            _meta: {
-              ui: { csp: { resourceDomains: imageDomains() }, prefersBorder: false, ...(domain ? { domain } : {}) },
-            },
+            _meta: resourceMeta(),
           },
         ],
       };

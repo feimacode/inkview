@@ -47,6 +47,15 @@ HOST=0.0.0.0 PORT=8080 npx -y @feimacode/inkview --http
 | `INKVIEW_LOG` | on | `off` disables the access log |
 | `INKVIEW_UI_DOMAIN` | | Dedicated sandbox origin, if a host asks for one |
 | `INKVIEW_IMAGE_DOMAINS` | | Extra image origins for the component CSP, comma separated |
+| `INKVIEW_MAP_TILES` | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` | Raster tile template with `{z}`, `{x}`, `{y}` and an optional `{s}`. Its host is added to the component CSP automatically. `off` disables tiles and leaves the neutral-grid fallback |
+| `INKVIEW_MAP_ATTRIBUTION` | `© OpenStreetMap contributors` | Attribution shown on the map; set it to match your tile provider's terms |
+
+For heavy or commercial use, point `INKVIEW_MAP_TILES` at your own tile server or a
+licensed provider and set `INKVIEW_MAP_ATTRIBUTION` to its required credit. Tiles
+load straight from the browser, so the provider must allow the app's sandbox origin
+and be reachable by end users. The tile host is derived from the template and sent
+with the component's CSP metadata, so a typo there silently leaves the map on the
+neutral grid.
 
 ## What gets logged
 

@@ -33,14 +33,16 @@ export interface ViewActions {
   locale: string;
 }
 
-export interface ViewProps<T> {
+export interface ViewProps<T, C = any> {
   data: T;
   actions: ViewActions;
+  /** Settings the server attached to the result, when the component accepts them. */
+  config?: C;
 }
 
 export interface ViewEntry<T = any> {
   meta: ComponentMeta;
-  View: ComponentType<ViewProps<T>>;
+  View: ComponentType<ViewProps<T, any>>;
   /** Cheap structural check, used instead of shipping zod to the view. */
   accepts(data: unknown): data is T;
 }

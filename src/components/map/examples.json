@@ -1,0 +1,113 @@
+[
+  {
+    "name": "Restaurants in Copenhagen",
+    "data": {
+      "title": "Dinner in Copenhagen",
+      "caption": "4 of 9 places within walking distance of the centre.",
+      "places": [
+        {
+          "id": "noma",
+          "label": "Noma",
+          "lat": 55.6833,
+          "lng": 12.6103,
+          "category": "Restaurant",
+          "address": "Refshalevej 96, 1432 Copenhagen",
+          "detail": "Seasonal Nordic tasting menu in a converted warehouse on Christianshavn.",
+          "url": "https://noma.dk"
+        },
+        {
+          "id": "reffen",
+          "label": "Reffen",
+          "lat": 55.6905,
+          "lng": 12.6047,
+          "category": "Street food",
+          "address": "Refshalevej 167A, 1432 Copenhagen",
+          "detail": "Open-air street food market with around 40 stalls."
+        },
+        {
+          "id": "gasoline",
+          "label": "Gasoline Grill",
+          "lat": 55.6784,
+          "lng": 12.5772,
+          "category": "Burgers",
+          "address": "Landgreven 10, 1301 Copenhagen",
+          "detail": "Small burger counter; expect a short queue."
+        },
+        {
+          "id": "la-banchina",
+          "label": "La Banchina",
+          "lat": 55.6908,
+          "lng": 12.61,
+          "category": "Cafe",
+          "address": "Refshalevej 141, 1432 Copenhagen",
+          "detail": "Waterside cafe with a sauna and a small swimming spot."
+        }
+      ],
+      "source": { "name": "City guide research" }
+    }
+  },
+  {
+    "name": "Conference venues",
+    "data": {
+      "title": "Conference venues",
+      "places": [
+        {
+          "id": "bella",
+          "label": "Bella Center",
+          "lat": 55.6383,
+          "lng": 12.5794,
+          "category": "Venue",
+          "address": "Center Boulevard 5, 2300 Copenhagen",
+          "detail": "Large exhibition and conference centre next to the metro."
+        },
+        {
+          "id": "tivoli",
+          "label": "Tivoli Congress Center",
+          "lat": 55.6736,
+          "lng": 12.5681,
+          "category": "Venue",
+          "address": "Arni Magnussons Gade 2, 1577 Copenhagen",
+          "detail": "Central venue a short walk from the main station."
+        },
+        {
+          "id": "dr-byen",
+          "label": "DR Koncerthuset",
+          "lat": 55.6584,
+          "lng": 12.5886,
+          "category": "Venue",
+          "address": "Ørestads Boulevard 13, 2300 Copenhagen",
+          "detail": "Concert hall used for plenary sessions and evening events."
+        }
+      ],
+      "source": { "name": "Venue shortlist", "url": "https://example.com/venues" }
+    }
+  },
+  {
+    "name": "Multi-city trip",
+    "data": {
+      "title": "October trip",
+      "caption": "Three stops over five days.",
+      "places": [
+        { "label": "Copenhagen", "lat": 55.6761, "lng": 12.5683, "detail": "Two nights, arrival Sunday." },
+        { "label": "Malmö", "lat": 55.605, "lng": 13.0038, "detail": "Day trip by train across the Øresund bridge." },
+        { "label": "Gothenburg", "lat": 57.7089, "lng": 11.9746, "detail": "Two nights, departure Thursday." }
+      ]
+    }
+  },
+  {
+    "name": "Single place",
+    "data": {
+      "title": "The office",
+      "places": [
+        {
+          "label": "Feimacom office",
+          "lat": 59.3346,
+          "lng": 18.0633,
+          "category": "Office",
+          "address": "Sveavägen 1, Stockholm",
+          "detail": "Entrance on the courtyard side; ring the bell for the third floor."
+        }
+      ]
+    }
+  }
+]

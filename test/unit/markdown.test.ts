@@ -246,6 +246,50 @@ test("form markdown: minimal payload", () => {
   );
 });
 
+test("map markdown: numbered places with addresses, links, caption and source", () => {
+  const c = get("map");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Dinner in Copenhagen",
+        caption: "2 of 9 places",
+        places: [
+          { label: "Noma", lat: 55.6833, lng: 12.6103, address: "Refshalevej 96", url: "https://noma.dk" },
+          { label: "Reffen", lat: 55.6905, lng: 12.6047 },
+        ],
+        source: { name: "City guide", url: "https://example.com/copenhagen" },
+      }),
+    ),
+    "### Dinner in Copenhagen\n\n1. [Noma](https://noma.dk) — Refshalevej 96 — 55.6833, 12.6103\n2. **Reffen** — 55.6905, 12.6047\n\n_2 of 9 places_\n\n_Source: [City guide](https://example.com/copenhagen)_",
+  );
+});
+
+test("map markdown: minimal payload is one numbered place", () => {
+  const c = get("map");
+  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Office", lat: 59.3346, lng: 18.0633 }] })), "1. **Office** — 59.3346, 18.0633");
+  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Null Island", lat: 0, lng: 0 }] })), "1. **Null Island** — 0, 0");
+});
+
+test("map rejects out-of-range coordinates, more than 50 places and missing coordinates", () => {
+  const c = get("map");
+  const lat = c.schema.safeParse({ places: [{ label: "Noma", lat: 91, lng: 12 }] });
+  assert.equal(lat.success, false);
+  assert.match(JSON.stringify(lat.error!.issues), /Latitude must be at most 90/);
+
+  const lng = c.schema.safeParse({ places: [{ label: "Noma", lat: 55, lng: -181 }] });
+  assert.equal(lng.success, false);
+  assert.match(JSON.stringify(lng.error!.issues), /Longitude must be at least -180/);
+
+  const many = c.schema.safeParse({ places: Array.from({ length: 51 }, (_, i) => ({ label: `Place ${i}`, lat: 55, lng: 12 })) });
+  assert.equal(many.success, false);
+  assert.match(JSON.stringify(many.error!.issues), /50 most relevant places.*caption/);
+
+  const missing = c.schema.safeParse({ places: [{ label: "Somewhere" }] });
+  assert.equal(missing.success, false);
+  assert.match(JSON.stringify(missing.error!.issues), /Coordinates are required/);
+  assert.match(JSON.stringify(missing.error!.issues), /does not look up addresses/);
+});
+
 test("form rejects too many fields, missing options, secrets, duplicate names and bad defaults", () => {
   const c = get("form");
   const field = (name: string, extra: Record<string, unknown> = {}) => ({ name, label: name, type: "text", ...extra });

@@ -1440,6 +1440,59 @@
   }
  },
  {
+  "id": "map-coffee",
+  "expect": "show_map",
+  "prompt": "Show these coffee shops on a map so I can see how close they are.",
+  "source": [
+   { "name": "Coffee Collective Bernikow", "address": "Bernikowsgade 3, Copenhagen", "lat": 55.6778, "lng": 12.5785 },
+   { "name": "Prolog Coffee Bar", "address": "Ravnsborggade 7, Copenhagen", "lat": 55.6863, "lng": 12.5579 },
+   { "name": "April Coffee", "address": "Ryesgade 4, Copenhagen", "lat": 55.6878, "lng": 12.5689 }
+  ]
+ },
+ {
+  "id": "map-venues",
+  "expect": "show_map",
+  "prompt": "Where are these conference venues in relation to each other?",
+  "source": [
+   { "name": "Bella Center", "address": "Center Boulevard 5, Copenhagen", "lat": 55.6383, "lng": 12.5794 },
+   { "name": "Tivoli Congress Center", "address": "Arni Magnussons Gade 2, Copenhagen", "lat": 55.6736, "lng": 12.5681 },
+   { "name": "DR Koncerthuset", "address": "Ørestads Boulevard 13, Copenhagen", "lat": 55.6584, "lng": 12.5886 }
+  ]
+ },
+ {
+  "id": "map-trip",
+  "expect": "show_map",
+  "prompt": "Map the stops on our road trip through Denmark and Sweden.",
+  "source": [
+   { "name": "Copenhagen", "lat": 55.6761, "lng": 12.5683 },
+   { "name": "Roskilde", "lat": 55.6415, "lng": 12.0803 },
+   { "name": "Malmö", "lat": 55.605, "lng": 13.0038 },
+   { "name": "Gothenburg", "lat": 57.7089, "lng": 11.9746 }
+  ]
+ },
+ {
+  "id": "map-office",
+  "expect": "show_map",
+  "prompt": "Show me where the Feimacom office is on a map.",
+  "source": {
+   "name": "Feimacom",
+   "address": "Sveavägen 1, Stockholm",
+   "lat": 59.3346,
+   "lng": 18.0633
+  }
+ },
+ {
+  "id": "map-hotels",
+  "expect": "show_map",
+  "prompt": "Plot the hotels on my shortlist so I can compare their locations.",
+  "source": [
+   { "name": "Hotel Ottilia", "address": "Bryggernes Plads 7, Copenhagen", "lat": 55.6689, "lng": 12.545 },
+   { "name": "Hotel Sanders", "address": "Tordenskjoldsgade 15, Copenhagen", "lat": 55.6784, "lng": 12.5764 },
+   { "name": "Nobis Hotel", "address": "Niels Brocks Gade 1, Copenhagen", "lat": 55.6797, "lng": 12.5886 }
+  ],
+  "heldOut": true
+ },
+ {
   "id": "none-one-detail",
   "expect": null,
   "prompt": "Rename my project. Ask me what to call it.",

@@ -44,7 +44,21 @@ const contrastProbe = () => {
 };
 
 const browser = await chromium.launch();
-const ctx = (theme, width = 720) => browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme });
+// One transparent pixel stands in for every tile, so screenshots are offline and stable.
+const TILE_PNG = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  "base64",
+);
+const configs = {
+  map: { tileTemplate: "https://tiles.test/{z}/{x}/{y}.png", attribution: "Test tiles" },
+};
+const ctx = async (theme, width = 720) => {
+  const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme });
+  await page.route("https://tiles.test/**", (route) =>
+    route.fulfill({ status: 200, contentType: "image/png", body: TILE_PNG }),
+  );
+  return page;
+};
 
 async function render(page, opts) {
   await page.goto(hostUrl);
@@ -77,7 +91,7 @@ try {
           const page = await ctx(theme);
           const errors = [];
           page.on("pageerror", (e) => errors.push(e.message));
-          const frame = await render(page, { toolName: tool, component: id, args: ex.data, theme });
+          const frame = await render(page, { toolName: tool, component: id, args: ex.data, theme, config: configs[dir.name] });
           await frame.locator(".ink-card").first().waitFor({ timeout: 5000 });
           await page.waitForTimeout(150);
           await page.screenshot({ path: `dist-test/${dir.name}-${i}-${theme}.png`, fullPage: true });
@@ -89,7 +103,7 @@ try {
       }
       await check(`${dir.name} · ${ex.name} · 320 px`, async () => {
         const page = await ctx("light", 352);
-        const frame = await render(page, { toolName: tool, component: id, args: ex.data, theme: "light" });
+        const frame = await render(page, { toolName: tool, component: id, args: ex.data, theme: "light", config: configs[dir.name] });
         await frame.locator(".ink-card").first().waitFor({ timeout: 5000 });
         await page.screenshot({ path: `dist-test/${dir.name}-${i}-320.png`, fullPage: true });
         const overflow = await frame.locator("body").evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -99,7 +113,7 @@ try {
     }
     await check(`${dir.name} · keyboard focus is visible`, async () => {
       const page = await ctx("light");
-      const frame = await render(page, { toolName: tool, component: id, args: examples[0].data, theme: "light" });
+      const frame = await render(page, { toolName: tool, component: id, args: examples[0].data, theme: "light", config: configs[dir.name] });
       await frame.locator(".ink-card").first().waitFor();
       const count = await frame.locator("button:not(:disabled), a[href], input, select, [tabindex='0']").count();
       await frame.locator("body").click({ position: { x: 1, y: 1 } });

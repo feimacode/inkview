@@ -19,11 +19,11 @@ The map is the first component whose view loads third-party content that is not 
 
 **Tile provider is configuration, not code.** `INKVIEW_MAP_TILES` holds a URL template and `INKVIEW_MAP_ATTRIBUTION` its credit line; the server adds the template's host to the UI resource CSP. `off` disables tiles. Self-hosters pick their own.
 
-**Recommended default for the hosted server: needs Iven's decision.**
+**Default for the hosted server: OpenStreetMap standard tiles until launch.**
 1. OpenStreetMap's standard tiles. Free, but the OSMF tile usage policy forbids heavy use by apps and asks for a valid Referer, which sandboxed iframes may not send. Fine for testing, risky at directory scale.
 2. A commercial provider's free tier (for example MapTiler, Stadia Maps or Thunderforest) with a key restricted by domain. Free at low volume, but the key is visible to users and host sandbox origins vary, so domain restriction may not hold.
 3. Self-hosted raster tiles on the feimacode VM. Full control and no third party sees viewports, but storage and bandwidth grow with use.
-Recommendation: start with 1 while not launched, behind the config switch, and move to 2 before directory submission.
+Decision: ship with 1 (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`, attribution "© OpenStreetMap contributors") behind the config switch while Inkview is not listed in a directory, and move to 2 before directory submission. The switch means the change is deployment, not code.
 
 **Fallback without tiles.** Pins are drawn on a neutral grid projected the same way, with the linked list unchanged, so the user still sees relative positions.
 
