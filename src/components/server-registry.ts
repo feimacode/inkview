@@ -2,6 +2,7 @@
 import type { z } from "zod";
 import type { ComponentMeta } from "./types.js";
 import * as profileCard from "./profile-card/server.js";
+import * as profileGrid from "./profile-grid/server.js";
 import * as dataTable from "./data-table/server.js";
 import * as resultList from "./result-list/server.js";
 import * as entityCard from "./entity-card/server.js";
@@ -16,4 +17,4 @@ export interface ServerEntry {
 }
 
 /** Order matters: it is the order tools are listed to the model. */
-export const serverComponents: ServerEntry[] = [profileCard, dataTable, resultList, entityCard, comparison, chart, productGrid];
+export const serverComponents: ServerEntry[] = [profileCard, profileGrid, dataTable, resultList, entityCard, comparison, chart, productGrid];

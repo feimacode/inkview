@@ -2,6 +2,7 @@
 import type { Example } from "./types.js";
 import { viewComponents } from "./view-registry.js";
 import profileCard from "./profile-card/examples.json";
+import profileGrid from "./profile-grid/examples.json";
 import dataTable from "./data-table/examples.json";
 import resultList from "./result-list/examples.json";
 import entityCard from "./entity-card/examples.json";
@@ -11,6 +12,7 @@ import productGrid from "./product-grid/examples.json";
 
 const byComponent: Record<string, unknown> = {
   profile_card: profileCard,
+  profile_grid: profileGrid,
   data_table: dataTable,
   result_list: resultList,
   entity_card: entityCard,

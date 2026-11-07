@@ -53,6 +53,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 | Tool | Draws | Try asking |
 | --- | --- | --- |
 | `show_profile_card` | A person: avatar, role, tags, links. Shortlist, open profile, draft outreach | "Find Ada Lovelace and show her profile card" |
+| `show_profiles` | 2 to 24 people as a responsive grid of compact cards. Select several to ask about, add to a shortlist, expand one into the full profile | "Who is speaking at AI Summit 2026? Show me the speakers" |
 | `show_table` | Up to 50 typed rows (text, number, money, date, link, badge). Sort, filter, select rows to ask about, CSV download | "Show the 10 largest EU cities by population as a table" |
 | `show_results` | Up to 20 search results or sources with snippets. Open, dig deeper | "Search for MCP Apps docs and show the results" |
 | `show_entity_card` | A company, product, place or organization: facts and links. Open website, compare | "Show me a card for Stripe" |
@@ -62,6 +63,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 | `show_auto` | Any JSON: picks the best component above, or formatted text | (fallback when the shape is unclear) |
 
 <p>
+<img src="docs/img/profile-grid-light.png" width="49%" alt="Profile grid">
 <img src="docs/img/data-table-light.png" width="49%" alt="Data table">
 <img src="docs/img/comparison-light.png" width="49%" alt="Comparison">
 <img src="docs/img/chart-light.png" width="49%" alt="Chart">

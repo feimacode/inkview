@@ -29,6 +29,34 @@ test("profile card markdown: name heading, links, minimal", () => {
   assert.match(c.toMarkdown(c.schema.parse({ name: "Ada", profileUrl: "https://x.org" })), /\[Profile\]\(https:\/\/x\.org\)/);
 });
 
+test("profile grid markdown: numbered people with headlines and profile links", () => {
+  const c = get("profile_grid");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Speakers",
+        caption: "Top 2 of 9",
+        people: [
+          { name: "Mira Hoffmann", headline: "Staff Engineer", profileUrl: "https://x.io/mira" },
+          { name: "Ada" },
+        ],
+      }),
+    ),
+    "### Speakers\n\n_Top 2 of 9_\n\n1. **Mira Hoffmann** — Staff Engineer — [Profile](https://x.io/mira)\n2. **Ada**",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ people: [{ name: "Ada" }, { name: "Grace" }] })), "1. **Ada**\n2. **Grace**");
+});
+
+test("profile grid rejects fewer than 2 and more than 24 people", () => {
+  const c = get("profile_grid");
+  const one = c.schema.safeParse({ people: [{ name: "Ada" }] });
+  assert.equal(one.success, false);
+  assert.match(JSON.stringify(one.error!.issues), /at least 2 people/);
+  const many = c.schema.safeParse({ people: Array.from({ length: 25 }, (_, i) => ({ name: `P ${i}` })) });
+  assert.equal(many.success, false);
+  assert.match(JSON.stringify(many.error!.issues), /at most 24 people/);
+});
+
 test("table markdown is a pipe table with caption and escaped pipes", () => {
   const c = get("data_table");
   const md = c.toMarkdown(

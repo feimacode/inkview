@@ -1,0 +1,169 @@
+[
+  {
+    "name": "Conference speakers",
+    "data": {
+      "title": "AI Summit 2026 speakers",
+      "caption": "Showing the 6 most relevant of 42 speakers",
+      "source": { "name": "AI Summit program", "url": "https://example.com/ai-summit/speakers" },
+      "people": [
+        {
+          "name": "Mira Hoffmann",
+          "headline": "Staff Rust Engineer at Ferrous Labs",
+          "company": "Ferrous Labs",
+          "location": "Berlin, Germany",
+          "avatarUrl": "https://i.pravatar.cc/96?img=12",
+          "highlights": ["Maintainer of an async I/O crate with 4M downloads", "Speaker at RustConf 2025"],
+          "tags": ["Rust", "Databases"],
+          "profileUrl": "https://example.com/speakers/mira-hoffmann"
+        },
+        {
+          "name": "Daniel Okafor",
+          "headline": "Head of Machine Learning at Northwind",
+          "company": "Northwind",
+          "location": "Lagos, Nigeria",
+          "avatarUrl": "https://i.pravatar.cc/96?img=33",
+          "highlights": ["Led the team behind a 40-language speech model"],
+          "tags": ["Machine learning", "Speech"],
+          "profileUrl": "https://example.com/speakers/daniel-okafor"
+        },
+        {
+          "name": "Sofia Marchetti",
+          "headline": "Product lead for developer tools at Aster",
+          "company": "Aster",
+          "location": "Milan, Italy",
+          "avatarUrl": "https://i.pravatar.cc/96?img=45",
+          "profileUrl": "https://example.com/speakers/sofia-marchetti"
+        },
+        {
+          "name": "Kenji Watanabe",
+          "headline": "Research scientist, retrieval and ranking",
+          "company": "Keio University",
+          "location": "Tokyo, Japan",
+          "avatarUrl": "https://i.pravatar.cc/96?img=59",
+          "tags": ["IR", "Evaluation"],
+          "profileUrl": "https://example.com/speakers/kenji-watanabe"
+        },
+        {
+          "name": "Priya Raman",
+          "headline": "Founder and CEO of Graphline",
+          "company": "Graphline",
+          "location": "Bengaluru, India",
+          "avatarUrl": "https://i.pravatar.cc/96?img=25",
+          "highlights": ["Raised a $24M Series A in 2025"],
+          "profileUrl": "https://example.com/speakers/priya-raman"
+        },
+        {
+          "name": "Lucas Ferreira",
+          "headline": "AI safety researcher at the Alignment Institute",
+          "company": "Alignment Institute",
+          "location": "São Paulo, Brazil",
+          "avatarUrl": "https://i.pravatar.cc/96?img=68",
+          "profileUrl": "https://example.com/speakers/lucas-ferreira"
+        }
+      ]
+    }
+  },
+  {
+    "name": "Candidates",
+    "data": {
+      "title": "Backend engineer candidates",
+      "caption": "8 candidates matching the posting, strongest first",
+      "people": [
+        {
+          "name": "Amara Nwosu",
+          "headline": "Senior backend engineer, distributed systems",
+          "company": "Paystack",
+          "location": "Lagos, Nigeria",
+          "avatarUrl": "https://i.pravatar.cc/96?img=5",
+          "highlights": ["Cut payment settlement latency by 60%"],
+          "profileUrl": "https://example.com/people/amara-nwosu"
+        },
+        {
+          "name": "Tomás Ruiz",
+          "headline": "Staff engineer, platform infrastructure",
+          "company": "Mercado Libre",
+          "location": "Buenos Aires, Argentina",
+          "avatarUrl": "https://i.pravatar.cc/96?img=13",
+          "highlights": ["Runs a 400-service Kubernetes platform"],
+          "profileUrl": "https://example.com/people/tomas-ruiz"
+        },
+        {
+          "name": "Hannah Berg",
+          "headline": "Backend engineer, Go and PostgreSQL",
+          "company": "Spotify",
+          "location": "Stockholm, Sweden",
+          "avatarUrl": "https://i.pravatar.cc/96?img=47",
+          "profileUrl": "https://example.com/people/hannah-berg"
+        },
+        {
+          "name": "Rahul Mehta",
+          "headline": "Senior software engineer, streaming data",
+          "company": "Confluent",
+          "location": "Bengaluru, India",
+          "avatarUrl": "https://i.pravatar.cc/96?img=52",
+          "highlights": ["Committer on an Apache Kafka client"],
+          "profileUrl": "https://example.com/people/rahul-mehta"
+        },
+        {
+          "name": "Elena Petrova",
+          "headline": "Backend engineer, Python and event-driven design",
+          "company": "Revolut",
+          "location": "Vilnius, Lithuania",
+          "profileUrl": "https://example.com/people/elena-petrova"
+        },
+        {
+          "name": "Marcus Lee",
+          "headline": "Infrastructure engineer, observability",
+          "company": "Datadog",
+          "location": "New York, USA",
+          "avatarUrl": "https://i.pravatar.cc/96?img=15",
+          "profileUrl": "https://example.com/people/marcus-lee"
+        },
+        {
+          "name": "Fatima Zahra",
+          "headline": "Backend engineer, payments and ledgers",
+          "company": "Stripe",
+          "location": "Casablanca, Morocco",
+          "avatarUrl": "https://i.pravatar.cc/96?img=32",
+          "highlights": ["Built a double-entry ledger serving 12M accounts"],
+          "profileUrl": "https://example.com/people/fatima-zahra"
+        },
+        {
+          "name": "Jonas Weber",
+          "headline": "Senior engineer, Rust and API design",
+          "company": "Hetzner",
+          "location": "Nuremberg, Germany",
+          "profileUrl": "https://example.com/people/jonas-weber"
+        }
+      ]
+    }
+  },
+  {
+    "name": "Two people, names only",
+    "data": {
+      "people": [{ "name": "Grace Hopper" }, { "name": "Ada Lovelace" }]
+    }
+  },
+  {
+    "name": "Highlights only",
+    "data": {
+      "title": "Possible advisors",
+      "people": [
+        {
+          "name": "Nadia Petrov",
+          "highlights": ["Scaled a developer tool from 0 to 2M users", "Angel investor in 14 companies"],
+          "profileUrl": "https://example.com/people/nadia-petrov"
+        },
+        {
+          "name": "Owen Clarke",
+          "highlights": ["Former VP Engineering at two public companies"],
+          "profileUrl": "https://example.com/people/owen-clarke"
+        },
+        {
+          "name": "Mei Ling",
+          "highlights": ["Advises early-stage fintech teams on compliance"]
+        }
+      ]
+    }
+  }
+]

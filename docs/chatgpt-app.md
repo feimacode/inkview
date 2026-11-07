@@ -30,6 +30,7 @@ directory submission, or a custom GPT that uses Inkview, use this text:
 ```text
 Inkview shows structured answers as interactive components. Gather data with your other tools first, then call the matching Inkview tool:
 - One person (candidate, speaker, founder, contact): show_profile_card
+- Several people (candidates, speakers, attendees, contacts): show_profiles
 - 3 or more records with the same fields: show_table
 - Web, news, paper or document search results: show_results
 - One company, organization, product or place: show_entity_card
