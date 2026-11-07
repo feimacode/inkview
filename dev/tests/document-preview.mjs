@@ -16,13 +16,15 @@ export default {
     assert.equal(await frame.locator(".dp-body li").count(), 3);
   },
 
-  async "post header shows platform and account, and links open through the host"({ render, events, examples, assert }) {
+  async "post header shows platform and account, and links open through the host"({ render, events, examples, assert, page }) {
     const frame = await render(examples[1].data);
     await frame.locator(".dp-body .dp-p").first().waitFor();
     assert.equal(await frame.locator(".dp-kind").textContent(), "Post");
     assert.deepEqual(await frame.locator(".dp-meta dt").allTextContents(), ["Platform", "Account"]);
     assert.deepEqual(await frame.locator(".dp-meta dd").allTextContents(), ["LinkedIn", "@inkview"]);
     await frame.getByRole("button", { name: "Read the launch note" }).click();
+    // The host bridge records the link asynchronously; wait for it like the other link checks do.
+    await page.waitForTimeout(200);
     assert.ok((await events()).some((event) => event.openLink === "https://example.com/launch"));
   },
 
