@@ -55,6 +55,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 | `show_profile_card` | A person: avatar, role, tags, links. Shortlist, open profile, draft outreach | "Find Ada Lovelace and show her profile card" |
 | `show_profiles` | 2 to 24 people as a responsive grid of compact cards. Select several to ask about, add to a shortlist, expand one into the full profile | "Who is speaking at AI Summit 2026? Show me the speakers" |
 | `show_timeline` | Up to 50 dated events on a vertical timeline. Expand details, filter categories, reverse order, open links or ask about an event | "Show Northstar's company history as a timeline" |
+| `show_tasks` | Up to 50 tasks with a status, as a grouped checklist or a board. Check items off, move them between statuses, send the changes back. Overdue and priority cues | "Show the website relaunch tasks as a checklist" |
 | `show_table` | Up to 50 typed rows (text, number, money, date, link, badge). Sort, filter, select rows to ask about, CSV download | "Show the 10 largest EU cities by population as a table" |
 | `show_results` | Up to 20 search results or sources with snippets. Open, dig deeper | "Search for MCP Apps docs and show the results" |
 | `show_entity_card` | A company, product, place or organization: facts and links. Open website, compare | "Show me a card for Stripe" |
@@ -72,6 +73,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 <img src="docs/img/result-list-light.png" width="49%" alt="Result list">
 <img src="docs/img/product-grid-light.png" width="49%" alt="Product grid">
 <img src="docs/img/timeline-light.png" width="49%" alt="Timeline">
+<img src="docs/img/task-list-light.png" width="49%" alt="Task list">
 </p>
 
 ### How `show_auto` picks a component

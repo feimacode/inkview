@@ -66,6 +66,28 @@ try {
   assert.match(badTimeline.content[0].text, /YYYY-MM-DD, YYYY-MM or YYYY/);
   console.log("✓ show_timeline: valid payload and invalid date");
 
+  const tasks = await client.callTool({
+    name: "show_tasks",
+    arguments: {
+      title: "Launch",
+      items: [
+        { title: "Book venue", status: "To do", owner: "Priya", due: "2026-11-03" },
+        { title: "Send invites", status: "In progress" },
+        { title: "Draft agenda", status: "Done" },
+      ],
+    },
+  });
+  assert.equal(tasks.isError ?? false, false);
+  assert.equal(tasks.structuredContent.component, "task_list");
+  assert.match(tasks.content[0].text, /#### To do\n- \[ \] Book venue — Priya · due 2026-11-03[\s\S]*#### Done\n- \[x\] Draft agenda/);
+  const badTasks = await client.callTool({
+    name: "show_tasks",
+    arguments: { items: [{ title: "Book venue", status: "Blocked" }] },
+  });
+  assert.equal(badTasks.isError, true, "unknown status is rejected");
+  assert.match(badTasks.content[0].text, /not one of: To do, In progress, Done/);
+  console.log("✓ show_tasks: valid payload and unknown status");
+
   // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
   const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());
   for (const d of dirs) {

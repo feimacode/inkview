@@ -12,6 +12,7 @@ export const situations: Array<{ when: string; tool: string }> = [
   { when: "One person (candidate, speaker, founder, contact)", tool: "show_profile_card" },
   { when: "Several people (candidates, speakers, attendees, contacts)", tool: "show_profiles" },
   { when: "Dated events in a history, project milestones, a career or unfolding story", tool: "show_timeline" },
+  { when: "To-dos, action items or issues with a status", tool: "show_tasks" },
   { when: "3 or more records with the same fields", tool: "show_table" },
   { when: "Web, news, paper or document search results", tool: "show_results" },
   { when: "One company, organization, product or place", tool: "show_entity_card" },
@@ -45,7 +46,7 @@ function table(): string {
 }
 
 export const skillDescription =
-  "Show people, timelines, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.";
+  "Show people, timelines, task lists, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.";
 
 export function skillMarkdown(): string {
   return `---

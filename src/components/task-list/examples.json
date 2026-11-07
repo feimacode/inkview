@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Launch plan",
+    "data": {
+      "title": "Website relaunch",
+      "items": [
+        {
+          "id": "copy",
+          "title": "Write the new homepage copy",
+          "status": "Done",
+          "owner": "Priya",
+          "priority": "medium",
+          "url": "https://example.com/relaunch/copy",
+          "labels": ["Content"]
+        },
+        {
+          "id": "design",
+          "title": "Ship the responsive layout",
+          "status": "In progress",
+          "owner": "Marco",
+          "due": "2026-11-20",
+          "priority": "high",
+          "labels": ["Design"]
+        },
+        {
+          "id": "redirects",
+          "title": "Map the old URLs to new pages",
+          "status": "In progress",
+          "owner": "Priya",
+          "due": "2026-11-03",
+          "priority": "high"
+        },
+        {
+          "id": "analytics",
+          "title": "Set up the launch dashboard",
+          "status": "To do",
+          "owner": "Sam",
+          "due": "2026-12-01",
+          "priority": "low",
+          "labels": ["Analytics"]
+        },
+        {
+          "id": "qa",
+          "title": "Run accessibility checks on every template",
+          "status": "To do",
+          "due": "2026-11-25"
+        }
+      ],
+      "source": { "name": "Relaunch tracker", "url": "https://example.com/relaunch" }
+    }
+  },
+  {
+    "name": "Sprint board",
+    "data": {
+      "title": "Sprint 42",
+      "statuses": ["Backlog", "Doing", "Review", "Shipped"],
+      "items": [
+        { "title": "Offline drafts", "status": "Shipped", "owner": "Ana" },
+        { "title": "Search filters", "status": "Review", "owner": "Kai", "priority": "medium" },
+        { "title": "Bulk import", "status": "Doing", "owner": "Ana", "due": "2026-11-14" },
+        { "title": "Keyboard shortcuts", "status": "Doing", "owner": "Kai", "priority": "high" },
+        { "title": "Usage report", "status": "Backlog" },
+        { "title": "Audit log export", "status": "Backlog", "priority": "low", "labels": ["Enterprise"] }
+      ]
+    }
+  },
+  {
+    "name": "Single task",
+    "data": {
+      "items": [{ "title": "Book the venue", "status": "To do" }]
+    }
+  }
+]

@@ -18,6 +18,8 @@ import { meta as productGridMeta } from "./product-grid/meta.js";
 import * as productGrid from "./product-grid/View.js";
 import { meta as timelineMeta } from "./timeline/meta.js";
 import * as timeline from "./timeline/View.js";
+import { meta as taskListMeta } from "./task-list/meta.js";
+import * as taskList from "./task-list/View.js";
 
 export const viewComponents: ViewEntry[] = [
   { meta: profileCardMeta, View: profileCard.View, accepts: profileCard.accepts },
@@ -29,6 +31,7 @@ export const viewComponents: ViewEntry[] = [
   { meta: chartMeta, View: chart.View, accepts: chart.accepts },
   { meta: productGridMeta, View: productGrid.View, accepts: productGrid.accepts },
   { meta: timelineMeta, View: timeline.View, accepts: timeline.accepts },
+  { meta: taskListMeta, View: taskList.View, accepts: taskList.accepts },
 ];
 
 export const byComponent = new Map(viewComponents.map((c) => [c.meta.component, c]));
