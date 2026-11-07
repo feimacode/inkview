@@ -13,18 +13,18 @@ import type { ViewActions, ViewEntry } from "../components/types.js";
 import "./theme.css";
 
 type Rendered =
-  | { kind: "component"; entry: ViewEntry; data: unknown }
+  | { kind: "component"; entry: ViewEntry; data: unknown; config?: unknown }
   | { kind: "text"; text: string };
 
 interface ToolResultLike {
   content?: Array<{ type: string; text?: string }>;
-  structuredContent?: { component?: unknown; data?: unknown };
+  structuredContent?: { component?: unknown; data?: unknown; config?: unknown };
 }
 
 function fromResult(result: ToolResultLike): Rendered | null {
   const sc = result.structuredContent;
   const entry = typeof sc?.component === "string" ? byComponent.get(sc.component) : undefined;
-  if (entry && entry.accepts(sc?.data)) return { kind: "component", entry, data: sc!.data };
+  if (entry && entry.accepts(sc?.data)) return { kind: "component", entry, data: sc!.data, config: sc!.config };
   const text = (result.content ?? []).filter((c) => c.type === "text" && c.text).map((c) => c.text).join("\n\n");
   return text ? { kind: "text", text } : null;
 }
@@ -119,7 +119,7 @@ function Root() {
   if (!rendered) return cancelled ? <p className="ink-state">Cancelled.</p> : <Skeleton />;
   if (rendered.kind === "text" || !actions) return rendered.kind === "text" ? <TextFallback text={rendered.text} /> : <Skeleton />;
   const { View } = rendered.entry;
-  return <View data={rendered.data} actions={actions} />;
+  return <View data={rendered.data} actions={actions} config={rendered.config} />;
 }
 
 createRoot(document.getElementById("root")!).render(

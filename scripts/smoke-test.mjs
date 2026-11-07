@@ -144,6 +144,31 @@ try {
   assert.match(badSecret.content[0].text, /cannot collect secrets/);
   console.log("✓ show_form: valid payload, missing options and secret field");
 
+  const mapTool = tools.find((t) => t.name === "show_map");
+  assert.ok(mapTool, "show_map is listed");
+  assert.match(mapTool.description, /Use it when/);
+  const map = await client.callTool({
+    name: "show_map",
+    arguments: {
+      title: "Dinner in Copenhagen",
+      places: [
+        { label: "Noma", lat: 55.6833, lng: 12.6103, address: "Refshalevej 96" },
+        { label: "Reffen", lat: 55.6905, lng: 12.6047 },
+      ],
+    },
+  });
+  assert.equal(map.isError ?? false, false);
+  assert.equal(map.structuredContent.component, "map");
+  assert.match(map.content[0].text, /1\. \*\*Noma\*\* — Refshalevej 96 — 55\.6833, 12\.6103/);
+  const badMap = await client.callTool({
+    name: "show_map",
+    arguments: { places: [{ label: "Somewhere" }] },
+  });
+  assert.equal(badMap.isError, true, "a place without coordinates is rejected");
+  assert.match(badMap.content[0].text, /coordinates are required/i);
+  assert.match(badMap.content[0].text, /does not look up addresses/i);
+  console.log("✓ show_map: valid payload and missing coordinates");
+
   // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
   const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());
   for (const d of dirs) {

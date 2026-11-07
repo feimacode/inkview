@@ -17,6 +17,8 @@ export interface MountOptions {
   onEvent?: (e: Record<string, unknown>) => void;
   /** Cancel the call before sending any input. */
   cancel?: boolean;
+  /** Settings the server would attach to the result. */
+  config?: unknown;
 }
 
 export const DEFAULT_CAPS = { openLinks: {}, message: { text: {} }, updateModelContext: { text: {} }, downloadFile: {} };
@@ -55,6 +57,9 @@ export async function mount(iframe: HTMLIFrameElement, o: MountOptions): Promise
 }
 
 /** The tool result the server would return, built from an example payload. */
-export function resultFor(component: string, data: Record<string, unknown>) {
-  return { content: [{ type: "text", text: `(${component})` }], structuredContent: { component, schemaVersion: "1", data } };
+export function resultFor(component: string, data: Record<string, unknown>, config?: unknown) {
+  return {
+    content: [{ type: "text", text: `(${component})` }],
+    structuredContent: { component, schemaVersion: "1", data, ...(config !== undefined ? { config } : {}) },
+  };
 }

@@ -24,6 +24,8 @@ import { meta as documentPreviewMeta } from "./document-preview/meta.js";
 import * as documentPreview from "./document-preview/View.js";
 import { meta as formMeta } from "./form/meta.js";
 import * as form from "./form/View.js";
+import { meta as mapMeta } from "./map/meta.js";
+import * as map from "./map/View.js";
 
 export const viewComponents: ViewEntry[] = [
   { meta: profileCardMeta, View: profileCard.View, accepts: profileCard.accepts },
@@ -38,6 +40,7 @@ export const viewComponents: ViewEntry[] = [
   { meta: taskListMeta, View: taskList.View, accepts: taskList.accepts },
   { meta: documentPreviewMeta, View: documentPreview.View, accepts: documentPreview.accepts },
   { meta: formMeta, View: form.View, accepts: form.accepts },
+  { meta: mapMeta, View: map.View, accepts: map.accepts },
 ];
 
 export const byComponent = new Map(viewComponents.map((c) => [c.meta.component, c]));
