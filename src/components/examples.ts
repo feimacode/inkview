@@ -12,6 +12,7 @@ import productGrid from "./product-grid/examples.json";
 import timeline from "./timeline/examples.json";
 import taskList from "./task-list/examples.json";
 import documentPreview from "./document-preview/examples.json";
+import form from "./form/examples.json";
 
 const byComponent: Record<string, unknown> = {
   profile_card: profileCard,
@@ -25,6 +26,7 @@ const byComponent: Record<string, unknown> = {
   timeline,
   task_list: taskList,
   document_preview: documentPreview,
+  form,
 };
 
 export const examples = viewComponents.map((c) => ({

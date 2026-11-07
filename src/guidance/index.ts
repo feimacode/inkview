@@ -20,6 +20,7 @@ export const situations: Array<{ when: string; tool: string }> = [
   { when: "Numbers over time or across categories", tool: "show_chart" },
   { when: "Shopping results (2 to 12 products)", tool: "show_products" },
   { when: "A draft email, message, post, letter or report to review, edit and approve", tool: "show_document" },
+  { when: "3 or more details missing from the user (a short form)", tool: "show_form" },
   { when: "Structured data that fits none of the above clearly", tool: autoMeta.tool },
 ];
 

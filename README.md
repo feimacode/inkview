@@ -63,6 +63,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 | `show_chart` | Line or bar chart, up to 5 series. Tooltips, legend toggles, text summary for screen readers | "Chart our monthly signups for this year" |
 | `show_products` | Up to 12 products with price, rating and availability. Sort, view at store, compare (no cart) | "Find noise-cancelling headphones under $300" |
 | `show_document` | One draft document — email, message, post, letter or report — with its header, rendered markdown body, word and character counts and an optional character limit. Edit it in place, copy it, approve it and send it back | "Draft a follow-up email to Marcus about the renewal" |
+| `show_form` | 1 to 12 typed inputs — text, long text, number, date, choice, multi-choice, checkbox, email, URL — with labels, help and inline validation. Submit the answers back to chat or cancel | "Ask me a few questions to plan our trip to Lisbon" |
 | `show_auto` | Any JSON: picks the best component above, or formatted text | (fallback when the shape is unclear) |
 
 <p>

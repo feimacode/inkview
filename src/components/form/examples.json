@@ -1,0 +1,131 @@
+[
+  {
+    "name": "Trip request",
+    "data": {
+      "title": "Plan the trip",
+      "intro": "A few details and I will draft an itinerary and a packing list.",
+      "submitLabel": "Send answers",
+      "fields": [
+        {
+          "name": "destination",
+          "label": "Destination",
+          "type": "text",
+          "help": "City or region",
+          "required": true
+        },
+        {
+          "name": "startDate",
+          "label": "Start date",
+          "type": "date",
+          "min": "2026-11-15",
+          "max": "2026-12-20",
+          "required": true
+        },
+        {
+          "name": "endDate",
+          "label": "End date",
+          "type": "date",
+          "min": "2026-11-15",
+          "max": "2026-12-31",
+          "required": true
+        },
+        {
+          "name": "travel",
+          "label": "Getting there",
+          "type": "select",
+          "options": ["Train", "Plane", "Car"],
+          "default": "Train"
+        },
+        {
+          "name": "nights",
+          "label": "Nights",
+          "type": "number",
+          "min": 1,
+          "max": 14,
+          "default": 3
+        },
+        {
+          "name": "dietary",
+          "label": "Dietary needs",
+          "type": "multiselect",
+          "options": ["Vegetarian", "Vegan", "Gluten free", "Nut free"],
+          "help": "Pick all that apply"
+        },
+        {
+          "name": "remote",
+          "label": "I can join remotely",
+          "type": "checkbox",
+          "default": false
+        },
+        {
+          "name": "notes",
+          "label": "Anything else",
+          "type": "textarea",
+          "help": "Optional, up to a few sentences"
+        },
+        {
+          "name": "contact",
+          "label": "Contact email",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "reference",
+          "label": "Reference link",
+          "type": "url",
+          "help": "The booking page, if you have one"
+        }
+      ]
+    }
+  },
+  {
+    "name": "Quick feedback",
+    "data": {
+      "title": "Quick feedback",
+      "intro": "Two minutes, four questions.",
+      "fields": [
+        {
+          "name": "rating",
+          "label": "How would you rate the session",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "default": 7,
+          "required": true
+        },
+        {
+          "name": "topic",
+          "label": "Best part",
+          "type": "select",
+          "options": ["The examples", "The live demo", "The questions", "The pacing"],
+          "required": true
+        },
+        {
+          "name": "improve",
+          "label": "What should change",
+          "type": "textarea",
+          "help": "One thing is enough"
+        },
+        {
+          "name": "followup",
+          "label": "Send me the follow-up notes",
+          "type": "checkbox",
+          "default": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "One question",
+    "data": {
+      "fields": [
+        {
+          "name": "name",
+          "label": "What should I call you",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  }
+]

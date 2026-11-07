@@ -218,3 +218,55 @@ test("document rejects a body over 20,000 characters, unknown kinds and too much
   const meta = Object.fromEntries(Array.from({ length: 7 }, (_, i) => [`k${i}`, "v"]));
   assert.equal(c.schema.safeParse({ body: "x", meta }).success, false);
 });
+
+test("form markdown: full payload with types, help and ranges", () => {
+  const c = get("form");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Plan the offsite",
+        intro: "A few details and I will draft the options.",
+        fields: [
+          { name: "destination", label: "Destination", type: "text", help: "City or region", required: true },
+          { name: "dates", label: "Preferred date", type: "date", min: "2026-11-15", max: "2026-12-20" },
+          { name: "travel", label: "Travel", type: "select", options: ["Train", "Plane", "Car"] },
+          { name: "contact", label: "Contact email", type: "email", required: true },
+        ],
+      }),
+    ),
+    "### Plan the offsite\n\nA few details and I will draft the options.\n\n1. **Destination** (required) — text. City or region\n2. **Preferred date** — date, YYYY-MM-DD from 2026-11-15 to 2026-12-20.\n3. **Travel** — one of: Train, Plane, Car.\n4. **Contact email** (required) — email address.\n\nReply in chat with your answers.",
+  );
+});
+
+test("form markdown: minimal payload", () => {
+  const c = get("form");
+  assert.equal(
+    c.toMarkdown(c.schema.parse({ fields: [{ name: "name", label: "Your name", type: "text", required: true }] })),
+    "1. **Your name** (required) — text.\n\nReply in chat with your answers.",
+  );
+});
+
+test("form rejects too many fields, missing options, secrets, duplicate names and bad defaults", () => {
+  const c = get("form");
+  const field = (name: string, extra: Record<string, unknown> = {}) => ({ name, label: name, type: "text", ...extra });
+
+  const tooMany = c.schema.safeParse({ fields: Array.from({ length: 13 }, (_, i) => field(`f${i}`)) });
+  assert.equal(tooMany.success, false);
+  assert.match(JSON.stringify(tooMany.error!.issues), /at most 12 fields/);
+
+  const noOptions = c.schema.safeParse({ fields: [{ name: "travel", label: "Travel", type: "select" }] });
+  assert.equal(noOptions.success, false);
+  assert.match(JSON.stringify(noOptions.error!.issues), /Travel.*needs options/);
+
+  const secret = c.schema.safeParse({ fields: [{ name: "password", label: "Password", type: "text" }] });
+  assert.equal(secret.success, false);
+  assert.match(JSON.stringify(secret.error!.issues), /cannot collect secrets/);
+
+  const duplicate = c.schema.safeParse({ fields: [field("name"), field("name")] });
+  assert.equal(duplicate.success, false);
+  assert.match(JSON.stringify(duplicate.error!.issues), /used more than once/);
+
+  const badDefault = c.schema.safeParse({ fields: [{ name: "travel", label: "Travel", type: "select", options: ["Train"], default: "Plane" }] });
+  assert.equal(badDefault.success, false);
+  assert.match(JSON.stringify(badDefault.error!.issues), /default must be one of its options/);
+});

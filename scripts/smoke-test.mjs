@@ -108,6 +108,42 @@ try {
   assert.match(badDoc.content[0].text, /20,000/);
   console.log("✓ show_document: valid payload and over-long body");
 
+  const formTool = tools.find((t) => t.name === "show_form");
+  assert.ok(formTool, "show_form is listed");
+  assert.match(formTool.description, /3 or more inputs are missing/);
+  const form = await client.callTool({
+    name: "show_form",
+    arguments: {
+      title: "Trip details",
+      fields: [
+        { name: "destination", label: "Destination", type: "text", required: true },
+        { name: "travel", label: "Travel", type: "select", options: ["Train", "Plane", "Car"] },
+        { name: "travelers", label: "Travelers", type: "number", min: 1, max: 8 },
+        { name: "contact", label: "Contact", type: "email", required: true },
+      ],
+    },
+  });
+  assert.equal(form.isError ?? false, false);
+  assert.equal(form.structuredContent.component, "form");
+  assert.ok(form.content[0].text.includes("1. **Destination** (required) — text."), form.content[0].text);
+  assert.ok(form.content[0].text.includes("2. **Travel** — one of: Train, Plane, Car."), form.content[0].text);
+  assert.match(form.content[0].text, /Reply in chat with your answers\.$/);
+
+  const badOptions = await client.callTool({
+    name: "show_form",
+    arguments: { fields: [{ name: "travel", label: "Travel", type: "select" }] },
+  });
+  assert.equal(badOptions.isError, true, "a select without options is rejected");
+  assert.match(badOptions.content[0].text, /Travel.*needs options/);
+
+  const badSecret = await client.callTool({
+    name: "show_form",
+    arguments: { fields: [{ name: "password", label: "Password", type: "text" }] },
+  });
+  assert.equal(badSecret.isError, true, "a secret field is rejected");
+  assert.match(badSecret.content[0].text, /cannot collect secrets/);
+  console.log("✓ show_form: valid payload, missing options and secret field");
+
   // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
   const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());
   for (const d of dirs) {
