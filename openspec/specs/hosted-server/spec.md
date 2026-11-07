@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change add-map. Update Purpose after archive.
+The public hosted Inkview server: what it serves, what it keeps, and what it tells users about third parties their chat app contacts while showing Inkview components.
 
 ## Requirements
 
