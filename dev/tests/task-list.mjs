@@ -64,6 +64,20 @@ export default {
     assert.equal(await doneGroup.locator(".tk-item-title").allTextContents().then((t) => t.includes("Book venue")), true);
   },
 
+  async "moving an item back clears the change from the model context"({ render, events, page, assert }) {
+    const frame = await render({ items });
+    const checkbox = frame.getByRole("checkbox", { name: 'Mark "Book venue" as done' });
+    await checkbox.click();
+    await page.waitForTimeout(100);
+    await checkbox.click();
+    await page.waitForTimeout(100);
+    const updates = (await events()).filter((e) => e.modelContext).map((e) => e.modelContext.content);
+    assert.equal(updates.length, 2);
+    assert.match(updates[0][0].text, /Book venue: Done/);
+    assert.deepEqual(updates[1], []);
+    assert.equal(await frame.getByRole("button", { name: "Send changes", exact: true }).isDisabled(), true);
+  },
+
   async "without model-context support only Send changes is offered"({ render, events, page, assert }) {
     const frame = await render({ items }, { capabilities: { openLinks: {}, message: { text: {} } } });
     await frame.getByRole("checkbox", { name: 'Mark "Send invites" as done' }).click();

@@ -54,9 +54,10 @@ export function View({ data, actions }: ViewProps<TaskList>) {
     const next = items.map((item, i) => (i === index ? { ...item, status } : item));
     setItems(next);
     const changed = next.flatMap((item, i) => (item.status !== data.items[i].status ? [i] : []));
-    if (actions.setModelContext && changed.length) {
+    if (actions.setModelContext) {
+      // Clear the context when every item is back where it started, so the agent never sees a stale change.
       const list = data.title ? `The task list "${data.title}"` : "The task list";
-      void actions.setModelContext(`${list} now shows these user changes:\n${lines(next, changed)}`);
+      void actions.setModelContext(changed.length ? `${list} now shows these user changes:\n${lines(next, changed)}` : null);
     }
   };
 
