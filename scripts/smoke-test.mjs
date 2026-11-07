@@ -88,6 +88,26 @@ try {
   assert.match(badTasks.content[0].text, /not one of: To do, In progress, Done/);
   console.log("✓ show_tasks: valid payload and unknown status");
 
+  const doc = await client.callTool({
+    name: "show_document",
+    arguments: {
+      kind: "email",
+      title: "Renewal follow-up",
+      meta: { to: "marcus@example.com", subject: "Re: renewal" },
+      body: "Hi Marcus,\n\nThanks for the call.",
+    },
+  });
+  assert.equal(doc.isError ?? false, false);
+  assert.equal(doc.structuredContent.component, "document_preview");
+  assert.ok(
+    doc.content[0].text.includes("### Renewal follow-up\n\n- **To:** marcus@example.com\n- **Subject:** Re: renewal\n\nHi Marcus,\n\nThanks for the call."),
+    doc.content[0].text,
+  );
+  const badDoc = await client.callTool({ name: "show_document", arguments: { body: "x".repeat(20001) } });
+  assert.equal(badDoc.isError, true, "body over 20,000 characters is rejected");
+  assert.match(badDoc.content[0].text, /20,000/);
+  console.log("✓ show_document: valid payload and over-long body");
+
   // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
   const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());
   for (const d of dirs) {

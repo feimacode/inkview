@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Follow-up email",
+    "data": {
+      "kind": "email",
+      "title": "Follow-up on the renewal",
+      "meta": {
+        "to": "marcus.bell@northwind.example.com",
+        "cc": "priya@ledgerly.example.com",
+        "subject": "Re: Q4 renewal"
+      },
+      "body": "Hi Marcus,\n\nThanks for the call today. Here is what we agreed:\n\n- **Pricing:** unchanged for the next two quarters\n- **Seats:** 40, up from 25\n- **Start date:** Monday, November 16\n\nIf anything looks off, [book a quick call](https://example.com/call) and we can sort it out.\n\nBest,\nPriya"
+    }
+  },
+  {
+    "name": "Launch post",
+    "data": {
+      "kind": "post",
+      "title": "Launch announcement",
+      "meta": {
+        "platform": "LinkedIn",
+        "account": "@inkview"
+      },
+      "limit": 280,
+      "body": "Inkview 1.0 is out today.\n\nYou describe the answer, and it draws a **profile card, timeline or task list** right in the chat. No dashboards to build, no JSON to paste.\n\n[Read the launch note](https://example.com/launch) to see what shipped."
+    }
+  },
+  {
+    "name": "Weekly report",
+    "data": {
+      "kind": "report",
+      "title": "Weekly product report",
+      "meta": {
+        "author": "Product team",
+        "period": "Week of November 2"
+      },
+      "body": "## Highlights\n\nThe onboarding rewrite shipped to **all accounts** on Wednesday.\n\n| Metric | Before | After |\n| --- | ---: | ---: |\n| Activation | 41% | 57% |\n| Time to first card | 6m 12s | 2m 48s |\n| Support tickets | 34 | 19 |\n\n## Risks\n\n> The import queue is still single-threaded. A backlog above 20 minutes would delay activation reporting.\n\n## Next week\n\n1. Move the import queue to workers\n2. Add a progress indicator to the import screen\n3. Retire the `legacy_import` flag\n\n---\n\nQuestions to `#product-weekly`."
+    }
+  },
+  {
+    "name": "Short message",
+    "data": {
+      "kind": "message",
+      "title": "Running late",
+      "meta": {
+        "channel": "Slack",
+        "to": "Design team"
+      },
+      "body": "Running about 10 minutes late to standup — start without me and I will catch up on the notes."
+    }
+  }
+]

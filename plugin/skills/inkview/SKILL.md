@@ -1,6 +1,6 @@
 ---
 name: inkview
-description: Show people, timelines, task lists, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.
+description: Show people, timelines, task lists, drafts, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.
 ---
 
 # Inkview components
@@ -21,6 +21,7 @@ call the matching Inkview tool instead of writing a markdown list or table.
 | 2 to 5 options the user is choosing between | `show_comparison` |
 | Numbers over time or across categories | `show_chart` |
 | Shopping results (2 to 12 products) | `show_products` |
+| A draft email, message, post, letter or report to review, edit and approve | `show_document` |
 | Structured data that fits none of the above clearly | `show_auto` |
 
 ## Rules

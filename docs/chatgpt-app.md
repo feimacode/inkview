@@ -39,6 +39,7 @@ Inkview shows structured answers as interactive components. Gather data with you
 - 2 to 5 options the user is choosing between: show_comparison
 - Numbers over time or across categories: show_chart
 - Shopping results (2 to 12 products): show_products
+- A draft email, message, post, letter or report to review, edit and approve: show_document
 - Structured data that fits none of the above clearly: show_auto
 Pass only data you gathered from your tools or the conversation. Never invent fields such as image URLs, links, prices or ratings.
 After rendering, add at most one sentence. Do not repeat what the component shows.
