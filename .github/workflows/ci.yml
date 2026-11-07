@@ -36,7 +36,7 @@ jobs:
       - name: Cold npx start (empty cache, under 15 s)
         if: matrix.node == 22
         run: |
-          npm pack
+          npm pack -w @feimacode/inkview
           start=$(date +%s)
           npx --cache "$RUNNER_TEMP/empty-npm-cache" -y --package="$PWD/$(ls feimacode-inkview-*.tgz)" inkview --version
           took=$(( $(date +%s) - start ))

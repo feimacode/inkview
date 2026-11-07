@@ -15,11 +15,19 @@ export const ProductSchema = z.looseObject({
   variants: z.string().max(120).optional().describe('Short summary, e.g. "3 colors, 2 sizes".'),
 });
 
-export const schema = z.looseObject({
-  title: z.string().max(120).optional(),
-  products: z.array(ProductSchema).min(1).max(12).describe("1 to 12 products, best match first."),
-  source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
-});
+export const MAX_PRODUCTS = 12;
+/** Upper bound for servers that raise the product cap through the SDK. */
+export const HARD_MAX_PRODUCTS = 100;
+
+export function productGridSchema(maxProducts = MAX_PRODUCTS) {
+  return z.looseObject({
+    title: z.string().max(120).optional(),
+    products: z.array(ProductSchema).min(1).max(maxProducts).describe(`1 to ${maxProducts} products, best match first.`),
+    source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
+  });
+}
+
+export const schema = productGridSchema();
 
 export type Product = z.infer<typeof ProductSchema>;
 export type ProductGrid = z.infer<typeof schema>;

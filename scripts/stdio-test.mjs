@@ -1,12 +1,12 @@
 // Spawns the server the way an MCP client does (stdio) and calls the tool.
-// Usage: node scripts/stdio-test.mjs [command] [...args]   (default: node dist/inkview.js)
+// Usage: node scripts/stdio-test.mjs [command] [...args]   (default: node packages/inkview/dist/inkview.js)
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import assert from "node:assert/strict";
 
 const [command = process.execPath, ...args] = process.argv.slice(2);
 const client = new Client({ name: "stdio-test", version: "0" });
-await client.connect(new StdioClientTransport({ command, args: args.length ? args : ["dist/inkview.js"] }));
+await client.connect(new StdioClientTransport({ command, args: args.length ? args : ["packages/inkview/dist/inkview.js"] }));
 const { tools } = await client.listTools();
 assert.ok(tools.some((t) => t.name === "show_profile_card"));
 const res = await client.callTool({ name: "show_profile_card", arguments: { name: "Ada Lovelace" } });

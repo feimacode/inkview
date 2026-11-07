@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { serverComponents } from "../../src/components/server-registry.js";
-import { serverInstructions, situations, skillMarkdown } from "../../src/guidance/index.js";
+import { serverInstructions, situations, skillMarkdown } from "../../packages/inkview/src/guidance/index.js";
 
 test("every tool has a situation and appears in the instructions", () => {
   const tools = [...serverComponents.map((c) => c.meta.tool), "show_auto"];

@@ -1,6 +1,6 @@
 # Self-hosting Inkview
 
-The hosted server is one file (`dist/inkview.js`) with no runtime dependencies.
+The hosted server is one file (`packages/inkview/dist/inkview.js`) with no runtime dependencies.
 It is stateless, so any number of instances can run behind a load balancer.
 
 ## Docker

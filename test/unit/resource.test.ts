@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { resourceMeta } from "../../src/resource.js";
+import { resourceMeta } from "../../packages/inkview/src/resource.js";
 import { mapConfig, tileDomains, tileTemplate } from "../../src/components/map/config.js";
 
 test("map tiles come from the environment, off disables them", () => {

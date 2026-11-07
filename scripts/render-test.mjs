@@ -177,6 +177,17 @@ try {
       await frame.getByRole("heading", { name: "Early Bird" }).waitFor({ timeout: 5000 });
       await page.close();
     });
+    await check("runtime · SDK tool renders early from its component metadata", async () => {
+      const page = await ctx("light");
+      const frame = await render(page, {
+        toolName: "weather_forecast",
+        toolMeta: { inkview: { component: "profile_card" } },
+        args: { name: "Meta Bird", headline: "Forecaster" },
+        theme: "light",
+      });
+      await frame.getByRole("heading", { name: "Meta Bird" }).waitFor({ timeout: 5000 });
+      await page.close();
+    });
     await check("runtime · cancelled before data", async () => {
       const page = await ctx("light");
       const frame = await render(page, { toolName: "show_profile_card", args: {}, cancel: true, theme: "light" });

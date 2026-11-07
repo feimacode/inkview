@@ -37,5 +37,5 @@ secret). The report lands in the job summary and the `eval-report` artifact.
 
 On tuned (non-held-out) prompts: choice ≥ 85% and invented-value failures < 5%.
 The runner exits with code 2 when the bar is missed. Tune tool descriptions in
-`src/components/*/meta.ts` and guidance in `src/guidance/` against tuned prompts
+`src/components/*/meta.ts` and guidance in `packages/inkview/src/guidance/` against tuned prompts
 only, then check the held-out scores have not dropped.

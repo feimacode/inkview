@@ -44,11 +44,11 @@ folder in `src/components/<name>/` with:
 Then register it in `src/components/server-registry.ts`,
 `src/components/view-registry.ts` and `src/components/examples.ts`, and add
 interaction checks in `dev/tests/<name>.mjs`, and a situation line in
-`src/guidance/index.ts`. `npm run preview` shows it in light and dark.
+`packages/inkview/src/guidance/index.ts`. `npm run preview` shows it in light and dark.
 
 ## Model guidance
 
-`src/guidance/index.ts` is the one source for the server instructions, the
+`packages/inkview/src/guidance/index.ts` is the one source for the server instructions, the
 Claude plugin Skill (`plugin/skills/inkview/SKILL.md`) and the ChatGPT app
 instructions (`docs/chatgpt-app.md`). Edit it, then run `npm run gen:guidance`;
 `npm test` fails if the generated files are out of date.

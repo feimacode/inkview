@@ -2,7 +2,7 @@
  * Resource metadata shared by the render server and its unit tests. Kept out of
  * server.ts so tests do not need the inlined UI bundle.
  */
-import { tileDomains } from "./components/map/config.js";
+import { tileDomains } from "../../../src/components/map/config.js";
 
 /**
  * Image hosts components may load avatars and logos from. Hosts block any

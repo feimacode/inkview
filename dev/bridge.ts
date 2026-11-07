@@ -6,6 +6,8 @@ import { AppBridge, PostMessageTransport } from "@modelcontextprotocol/ext-apps/
 export interface MountOptions {
   html: string;
   toolName: string;
+  /** Tool metadata sent in the host context, e.g. `_meta.inkview.component`. */
+  toolMeta?: Record<string, unknown>;
   args: Record<string, unknown>;
   /** Tool result to send; omit to leave the view rendering from the input only. */
   result?: unknown;
@@ -30,7 +32,7 @@ export async function mount(iframe: HTMLIFrameElement, o: MountOptions): Promise
       theme: o.theme,
       displayMode: "inline",
       locale: "en-US",
-      toolInfo: { tool: { name: o.toolName, inputSchema: { type: "object" } } },
+      toolInfo: { tool: { name: o.toolName, inputSchema: { type: "object" }, ...(o.toolMeta ? { _meta: o.toolMeta } : {}) } },
       ...(o.styleVariables ? { styles: { variables: o.styleVariables } } : {}),
     },
   } as never);

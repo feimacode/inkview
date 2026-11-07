@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 export const MAX_FIELDS = 12;
+/** Upper bound for servers that raise the field cap through the SDK. */
+export const HARD_MAX_FIELDS = 50;
 export const MAX_OPTIONS = 20;
 export const FIELD_TYPES = ["text", "textarea", "number", "date", "select", "multiselect", "checkbox", "email", "url"] as const;
 
@@ -78,86 +80,90 @@ function defaultIssue(value: z.infer<typeof field>): string | null {
   }
 }
 
-export const schema = z
-  .looseObject({
-    title: z.string().min(1).max(120).optional().describe("Heading above the form."),
-    intro: z.string().min(1).max(400).optional().describe("One short sentence explaining why the form is shown."),
-    submitLabel: z.string().min(1).max(40).optional().describe('Label for the submit button. Defaults to "Submit".'),
-    fields: z
-      .array(field)
-      .min(1)
-      .max(MAX_FIELDS, `Use at most ${MAX_FIELDS} fields.`)
-      .describe("1 to 12 inputs, each with a name, label and type."),
-  })
-  .superRefine((value, ctx) => {
-    const names = new Set<string>();
-    value.fields.forEach((entry, index) => {
-      const at = ["fields", index];
+export function formSchema(maxFields = MAX_FIELDS) {
+  return z
+    .looseObject({
+      title: z.string().min(1).max(120).optional().describe("Heading above the form."),
+      intro: z.string().min(1).max(400).optional().describe("One short sentence explaining why the form is shown."),
+      submitLabel: z.string().min(1).max(40).optional().describe('Label for the submit button. Defaults to "Submit".'),
+      fields: z
+        .array(field)
+        .min(1)
+        .max(maxFields, `Use at most ${maxFields} fields.`)
+        .describe(`1 to ${maxFields} inputs, each with a name, label and type.`),
+    })
+    .superRefine((value, ctx) => {
+      const names = new Set<string>();
+      value.fields.forEach((entry, index) => {
+        const at = ["fields", index];
 
-      if (names.has(entry.name)) {
-        ctx.addIssue({ code: "custom", path: [...at, "name"], message: `Field name "${entry.name}" is used more than once.` });
-      }
-      names.add(entry.name);
+        if (names.has(entry.name)) {
+          ctx.addIssue({ code: "custom", path: [...at, "name"], message: `Field name "${entry.name}" is used more than once.` });
+        }
+        names.add(entry.name);
 
-      if (looksSecret(entry.name) || looksSecret(entry.label)) {
-        ctx.addIssue({
-          code: "custom",
-          path: [...at, "name"],
-          message: `Field "${entry.name}" cannot collect secrets because answers are visible in the chat.`,
-        });
-      }
+        if (looksSecret(entry.name) || looksSecret(entry.label)) {
+          ctx.addIssue({
+            code: "custom",
+            path: [...at, "name"],
+            message: `Field "${entry.name}" cannot collect secrets because answers are visible in the chat.`,
+          });
+        }
 
-      if ((entry.type === "select" || entry.type === "multiselect") && !entry.options?.length) {
-        ctx.addIssue({
-          code: "custom",
-          path: [...at, "options"],
-          message: `Field "${entry.label}" needs options because its type is ${entry.type}.`,
-        });
-      }
+        if ((entry.type === "select" || entry.type === "multiselect") && !entry.options?.length) {
+          ctx.addIssue({
+            code: "custom",
+            path: [...at, "options"],
+            message: `Field "${entry.label}" needs options because its type is ${entry.type}.`,
+          });
+        }
 
-      const hasRange = entry.min != null || entry.max != null;
-      if (hasRange && entry.type !== "number" && entry.type !== "date") {
-        ctx.addIssue({
-          code: "custom",
-          path: [...at, "min"],
-          message: `Only number and date fields can set min or max (field "${entry.label}").`,
-        });
-      }
+        const hasRange = entry.min != null || entry.max != null;
+        if (hasRange && entry.type !== "number" && entry.type !== "date") {
+          ctx.addIssue({
+            code: "custom",
+            path: [...at, "min"],
+            message: `Only number and date fields can set min or max (field "${entry.label}").`,
+          });
+        }
 
-      if (entry.type === "number") {
-        for (const key of ["min", "max"] as const) {
-          const bound = entry[key];
-          if (bound != null && typeof bound !== "number") {
-            ctx.addIssue({ code: "custom", path: [...at, key], message: `Field "${entry.label}" ${key} must be a number.` });
+        if (entry.type === "number") {
+          for (const key of ["min", "max"] as const) {
+            const bound = entry[key];
+            if (bound != null && typeof bound !== "number") {
+              ctx.addIssue({ code: "custom", path: [...at, key], message: `Field "${entry.label}" ${key} must be a number.` });
+            }
           }
         }
-      }
 
-      if (entry.type === "date") {
-        for (const key of ["min", "max"] as const) {
-          const bound = entry[key];
-          if (bound != null && (typeof bound !== "string" || !isIsoDate(bound))) {
-            ctx.addIssue({ code: "custom", path: [...at, key], message: `Field "${entry.label}" ${key} must be a date as YYYY-MM-DD.` });
+        if (entry.type === "date") {
+          for (const key of ["min", "max"] as const) {
+            const bound = entry[key];
+            if (bound != null && (typeof bound !== "string" || !isIsoDate(bound))) {
+              ctx.addIssue({ code: "custom", path: [...at, key], message: `Field "${entry.label}" ${key} must be a date as YYYY-MM-DD.` });
+            }
           }
         }
-      }
 
-      if (entry.min != null && entry.max != null) {
-        const reversed =
-          entry.type === "number"
-            ? Number(entry.min) > Number(entry.max)
-            : entry.type === "date"
-              ? String(entry.min) > String(entry.max)
-              : false;
-        if (reversed) {
-          ctx.addIssue({ code: "custom", path: [...at, "min"], message: `Field "${entry.label}" min must not be greater than max.` });
+        if (entry.min != null && entry.max != null) {
+          const reversed =
+            entry.type === "number"
+              ? Number(entry.min) > Number(entry.max)
+              : entry.type === "date"
+                ? String(entry.min) > String(entry.max)
+                : false;
+          if (reversed) {
+            ctx.addIssue({ code: "custom", path: [...at, "min"], message: `Field "${entry.label}" min must not be greater than max.` });
+          }
         }
-      }
 
-      const issue = defaultIssue(entry);
-      if (issue) ctx.addIssue({ code: "custom", path: [...at, "default"], message: issue });
+        const issue = defaultIssue(entry);
+        if (issue) ctx.addIssue({ code: "custom", path: [...at, "default"], message: issue });
+      });
     });
-  });
+}
+
+export const schema = formSchema();
 
 export type FormData = z.infer<typeof schema>;
 export type FormField = FormData["fields"][number];

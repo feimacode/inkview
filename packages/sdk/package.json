@@ -1,0 +1,46 @@
+{
+  "name": "@feimacode/inkview-sdk",
+  "version": "0.1.0",
+  "description": "Render Inkview components from any MCP server.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "node ../../scripts/build-sdk.mjs",
+    "prepack": "npm --prefix ../.. run build"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  },
+  "peerDependencies": {
+    "@modelcontextprotocol/ext-apps": "^2.0.4",
+    "@modelcontextprotocol/server": "^2.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feimacode/inkview.git"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-apps",
+    "model-context-protocol",
+    "claude",
+    "ui-components"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

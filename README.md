@@ -42,8 +42,8 @@ server does with your data: [docs/privacy.md](docs/privacy.md).
 ### From source
 
 ```bash
-npm install            # also builds
-node dist/inkview.js   # stdio
+npm install                          # also builds
+node packages/inkview/dist/inkview.js   # stdio
 npm run dev            # HTTP on http://localhost:3001/mcp
 npm run preview        # gallery of every component, light and dark, at http://localhost:5174
 ```
@@ -110,13 +110,52 @@ The server is stateless: it stores nothing and never logs tool arguments.
 | Piece | Where |
 | --- | --- |
 | One folder per component: `meta.ts`, `schema.ts`, `markdown.ts`, `View.tsx`, `examples.json` | `src/components/<name>/` |
-| Render tools + the shared `ui://inkview/v1/app.html` resource | `src/server.ts` |
-| HTTP (`/mcp`) and stdio entry point | `src/main.ts` |
+| Render tools + the shared `ui://inkview/v1/app.html` resource | `packages/inkview/src/server.ts` |
+| HTTP (`/mcp`) and stdio entry point | `packages/inkview/src/main.ts` |
+| SDK for other MCP servers | `packages/sdk/src/` |
 | Shared view runtime (MCP Apps bridge, theming, states) | `src/runtime/` |
 | Dev host, preview gallery, render checks | `dev/`, `scripts/` |
 
-The server ships as one dependency-free file (`dist/inkview.js`, view HTML
+The server ships as one dependency-free file (`packages/inkview/dist/inkview.js`, view HTML
 inlined), so a cold `npx` start takes about a second.
+
+## Render from your own server (SDK)
+
+Your own MCP server can render the same components from its tools with
+[`@feimacode/inkview-sdk`](docs/sdk.md). Serve the view once, attach the tool
+metadata, and return a builder's result:
+
+```ts
+import { McpServer } from "@modelcontextprotocol/server";
+import { registerAppTool } from "@modelcontextprotocol/ext-apps/server";
+import { inkview, registerInkview } from "@feimacode/inkview-sdk";
+
+const server = new McpServer({ name: "my-server", version: "1.0.0" });
+const view = registerInkview(server);
+
+registerAppTool(
+  server,
+  "city_temperatures",
+  {
+    title: "City temperatures",
+    description: "July averages rendered as a table.",
+    _meta: view.inkviewToolMeta({ component: "data_table" }),
+  },
+  async () =>
+    inkview.table({
+      columns: [
+        { key: "city", label: "City" },
+        { key: "celsius", label: "Celsius", type: "number" },
+      ],
+      rows: [{ city: "Oslo", celsius: 17 }],
+    }),
+);
+```
+
+The SDK returns the markdown fallback and the structured result together, so
+text-only hosts keep working. Every builder and its limits:
+[docs/sdk.md](docs/sdk.md). A runnable example:
+[`examples/sdk-server`](examples/sdk-server).
 
 ## Test
 

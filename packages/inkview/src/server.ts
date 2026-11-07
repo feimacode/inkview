@@ -6,8 +6,8 @@
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer, type CallToolResult, type ReadResourceResult } from "@modelcontextprotocol/server";
 // Inlined at build time (esbuild text loader), so the package needs no files on disk.
-import appHtml from "../dist/ui/app.html";
-import { serverComponents } from "./components/server-registry.js";
+import appHtml from "../../../dist/ui/app.html";
+import { serverComponents } from "../../../src/components/server-registry.js";
 import { imageDomains, resourceMeta } from "./resource.js";
 import { serverInstructions } from "./guidance/index.js";
 import { autoMeta, autoSchema, runAuto } from "./auto/tool.js";
@@ -62,7 +62,13 @@ export function createServer(): McpServer {
       return {
         content: [{ type: "text", text: r.text }],
         structuredContent: r.component
-          ? { component: r.component, schemaVersion: "1", data: r.data, chosenTool: r.tool }
+          ? {
+              component: r.component,
+              schemaVersion: "1",
+              data: r.data,
+              chosenTool: r.tool,
+              ...(r.config !== undefined ? { config: r.config } : {}),
+            }
           : { component: "text", schemaVersion: "1", data: null },
       };
     },
