@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { SourceSchema, UnverifiedSchema } from "../provenance.js";
+import { httpUrl, phone } from "../fields.js";
 
-const url = z.string().url();
+const url = httpUrl;
 
 export const MAX_FACTS = 8;
 /** Upper bound for servers that raise the fact cap through the SDK. */
@@ -20,7 +22,10 @@ export function entityCardSchema(maxFacts = MAX_FACTS) {
       .describe(`Up to ${maxFacts} label/value pairs, e.g. {"label": "Founded", "value": "2010"}.`),
     links: z.array(z.looseObject({ label: z.string().min(1).max(60), url })).max(6).optional(),
     websiteUrl: url.optional().describe('Opened by the "Open website" button.'),
-    source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
+    phone: phone.optional().describe("Phone number from your source; adds a Call action. Never guess one."),
+    address: z.string().max(200).optional().describe("Street address from your source; adds a Directions action."),
+    source: SourceSchema.optional(),
+    unverified: UnverifiedSchema.optional().describe('Fact labels, "phone" or "address" that you did not fetch from a source.'),
   });
 }
 

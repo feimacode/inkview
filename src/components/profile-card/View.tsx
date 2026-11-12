@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { ProfileCard } from "./schema.js";
-import { Avatar, Button, Chip, HostLink, Source, useBusy } from "../../runtime/primitives.js";
+import { Avatar, Button, Chip, HostLink, Provenance, useBusy } from "../../runtime/primitives.js";
 import "./profile-card.css";
 
 export function accepts(d: unknown): d is ProfileCard {
@@ -110,7 +110,7 @@ export function View({ data: p, actions }: ViewProps<ProfileCard>) {
         )}
       </div>
 
-      <Source source={p.source} open={actions.openLink} />
+      <Provenance source={p.source} open={actions.openLink} locale={actions.locale} />
     </article>
   );
 }

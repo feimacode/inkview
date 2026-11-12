@@ -1,4 +1,5 @@
 /** Text shared by the itinerary view, its markdown fallback and the calendar export. No zod here. */
+import { icsFile } from "../../runtime/ics.js";
 import type { Day, Stop } from "./schema.js";
 
 export const dayName = (day: Day, index: number) => `Day ${index + 1}${day.label ? `: ${day.label}` : ""}`;
@@ -24,28 +25,6 @@ export function totals(stops: Stop[], locale: string): string {
 export const planText = (days: Day[]) =>
   days.map((d, i) => `${dayName(d, i)}${d.date ? ` (${d.date})` : ""}: ${d.stops.map((s, n) => `${n + 1}. ${timeText(s) ? `${timeText(s)} ` : ""}${s.title}`).join("; ") || "no stops"}`).join("\n");
 
-const pad = (n: number) => String(n).padStart(2, "0");
-const escape = (text: string) => text.replace(/\\/g, "\\\\").replace(/([;,])/g, "\\$1").replace(/\r?\n/g, "\\n");
-
-/** Folds a content line at 75 octets (RFC 5545 3.1), never inside a character. */
-function fold(line: string): string {
-  const out: string[] = [];
-  let current = "";
-  let size = 0;
-  for (const ch of line) {
-    const bytes = new TextEncoder().encode(ch).length;
-    if (size + bytes > (out.length ? 74 : 75)) {
-      out.push(current);
-      current = "";
-      size = 0;
-    }
-    current += ch;
-    size += bytes;
-  }
-  out.push(current);
-  return out.join("\r\n ");
-}
-
 /** Stops that can go in a calendar: timed, on a dated day. */
 export const timedStops = (days: Day[]) => days.flatMap((d) => (d.date ? d.stops.filter((s) => s.time).map((s) => ({ date: d.date!, stop: s })) : []));
 
@@ -54,23 +33,16 @@ export const timedStops = (days: Day[]) => days.flatMap((d) => (d.date ? d.stops
  * Z): calendars show them at the same wall-clock time wherever the user is.
  */
 export function toIcs(days: Day[], now = new Date()): string {
-  const stamp = now.toISOString().replace(/[-:]|\.\d+/g, "");
-  const at = (date: string, time: string, plusMinutes = 0) => {
-    const [y, m, d] = date.split("-").map(Number);
-    const [h, min] = time.split(":").map(Number);
-    const t = new Date(Date.UTC(y, m - 1, d, h, min + plusMinutes));
-    return `${t.getUTCFullYear()}${pad(t.getUTCMonth() + 1)}${pad(t.getUTCDate())}T${pad(t.getUTCHours())}${pad(t.getUTCMinutes())}00`;
-  };
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Inkview//Itinerary//EN"];
-  timedStops(days).forEach(({ date, stop: s }, i) => {
-    const end = s.endTime && s.endTime > s.time! ? at(date, s.endTime) : at(date, s.time!, 60);
-    const where = s.address ?? (s.lat !== undefined ? `${s.lat},${s.lng}` : "");
-    const about = [s.note, s.url].filter(Boolean).join("\n");
-    lines.push("BEGIN:VEVENT", `UID:${stamp}-${i}@inkview`, `DTSTAMP:${stamp}`, `DTSTART:${at(date, s.time!)}`, `DTEND:${end}`, `SUMMARY:${escape(s.title)}`);
-    if (where) lines.push(`LOCATION:${escape(where)}`);
-    if (about) lines.push(`DESCRIPTION:${escape(about)}`);
-    lines.push("END:VEVENT");
-  });
-  lines.push("END:VCALENDAR");
-  return lines.map(fold).join("\r\n") + "\r\n";
+  return icsFile(
+    timedStops(days).map(({ date, stop: s }) => ({
+      date,
+      time: s.time!,
+      endTime: s.endTime,
+      title: s.title,
+      location: s.address ?? (s.lat !== undefined ? `${s.lat},${s.lng}` : undefined),
+      description: [s.note, s.url].filter(Boolean).join("\n") || undefined,
+    })),
+    "Itinerary",
+    now,
+  );
 }

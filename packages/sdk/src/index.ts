@@ -298,3 +298,13 @@ export const inkview = {
   itinerary: showItinerary,
 } as const;
 
+
+// Shared pieces for servers that build their own schemas or text around a component.
+/** A URL field that accepts only absolute `https://` and `http://` links. */
+export { httpUrl, phone } from "../../../src/components/fields.js";
+/** The `source` and `unverified` shapes every component accepts. */
+export { SourceSchema, UnverifiedSchema, type Source } from "../../../src/components/provenance.js";
+/** Which hand-off actions an item gets, and the same actions as markdown links. */
+export { deriveActions, mdActions, type Handoff, type HandoffItem, type HandoffOptions } from "../../../src/runtime/handoff.js";
+export { canOpen } from "../../../src/runtime/links.js";
+export { collectSources, isStale, latestCheck, mdProvenance, type SourceLike } from "../../../src/runtime/provenance.js";

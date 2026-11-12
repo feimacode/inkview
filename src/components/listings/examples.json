@@ -290,5 +290,93 @@
         }
       ]
     }
+  },
+  {
+    "name": "Stays from two sites",
+    "data": {
+      "title": "Stays near Circular Quay",
+      "kind": "stay",
+      "listings": [
+        {
+          "title": "Harbour Rocks Inn",
+          "price": {
+            "amount": 289,
+            "currency": "AUD",
+            "from": true
+          },
+          "rating": 4.5,
+          "reviewCount": 1820,
+          "address": "34 Harrington St, The Rocks NSW 2000",
+          "url": "https://example.com/stays/harbour-rocks",
+          "source": {
+            "name": "Booking.com",
+            "url": "https://www.booking.com",
+            "retrievedAt": "2026-11-12T09:30:00+11:00"
+          }
+        },
+        {
+          "title": "Quay Loft",
+          "price": {
+            "amount": 240,
+            "currency": "AUD"
+          },
+          "rating": 4.8,
+          "reviewCount": 96,
+          "address": "8 Loftus St, Sydney NSW 2000",
+          "url": "https://example.com/stays/quay-loft",
+          "source": {
+            "name": "Airbnb",
+            "url": "https://www.airbnb.com",
+            "retrievedAt": "2026-11-12T09:32:00+11:00"
+          }
+        },
+        {
+          "title": "Bridge View Hotel",
+          "price": {
+            "amount": 310,
+            "currency": "AUD"
+          },
+          "rating": 4.2,
+          "address": "1 Lower Fort St, Dawes Point NSW 2000",
+          "url": "https://example.com/stays/bridge-view",
+          "source": {
+            "name": "Booking.com",
+            "url": "https://www.booking.com",
+            "retrievedAt": "2026-11-12T09:30:00+11:00"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Price recalled, not fetched",
+    "data": {
+      "kind": "service",
+      "listings": [
+        {
+          "title": "Harris Park Plumbing",
+          "price": {
+            "amount": 95,
+            "currency": "AUD",
+            "unit": "hour"
+          },
+          "phone": "(02) 9555 0142",
+          "address": "12 Marion St, Harris Park NSW 2150",
+          "url": "https://example.com/harris-park-plumbing",
+          "unverified": [
+            "price"
+          ],
+          "source": {
+            "name": "example.com",
+            "url": "https://example.com/harris-park-plumbing",
+            "retrievedAt": "2026-11-12T09:30:00+11:00"
+          }
+        },
+        {
+          "title": "Westmead Tap & Drain",
+          "phone": "0400 555 019"
+        }
+      ]
+    }
   }
 ]

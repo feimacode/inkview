@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { Column, DataTable } from "./schema.js";
-import { Button, Chip, HostLink, Source, useBusy } from "../../runtime/primitives.js";
+import { Button, Chip, HostLink, Provenance, useBusy } from "../../runtime/primitives.js";
 import { fmtDate, fmtMoney, fmtNumber, toNumber } from "../../runtime/format.js";
 import { isJourney, journeyFacts, journeyText } from "../journey.js";
 import { JourneyCell } from "../JourneyCell.js";
@@ -198,7 +198,7 @@ export function View({ data: t, actions }: ViewProps<DataTable>) {
           </Button>
         )}
       </div>
-      <Source source={t.source} open={actions.openLink} />
+      <Provenance source={t.source} open={actions.openLink} locale={actions.locale} />
     </section>
   );
 }

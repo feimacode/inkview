@@ -28,3 +28,4 @@
   .cmp-wide { display: none; }
   .cmp-narrow { display: block; }
 }
+.cmp-acts { display: flex; flex-wrap: wrap; gap: 8px; }

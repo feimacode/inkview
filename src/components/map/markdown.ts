@@ -1,4 +1,4 @@
-import { mdSource } from "../md.js";
+import { mdChecked, mdProvenance } from "../../runtime/provenance.js";
 import type { MapData } from "./schema.js";
 
 /** Decimal degrees trimmed to 5 places, without trailing zeros. */
@@ -9,12 +9,12 @@ export function toMarkdown(map: MapData): string {
   map.places.forEach((place, index) => {
     const label = place.url ? `[${place.label}](${place.url})` : `**${place.label}**`;
     const parts = [label];
-    if (place.address) parts.push(place.address);
+    if (place.address) parts.push(mdChecked(place, "address", place.address));
     if (place.lat !== undefined && place.lng !== undefined) parts.push(`${coord(place.lat)}, ${coord(place.lng)}`);
     lines.push(`${index + 1}. ${parts.join(" — ")}`);
   });
   if (map.caption) lines.push("", `_${map.caption}_`);
-  const source = mdSource(map.source);
+  const source = mdProvenance({ source: map.source, items: map.places, sensitive: true });
   if (source) lines.push("", source);
   return lines.join("\n");
 }

@@ -9,3 +9,4 @@
 .ec-fact dt { font-size: 12px; color: var(--ink-text-faint); }
 .ec-fact dd { margin: 1px 0 0; font-weight: 600; overflow-wrap: anywhere; }
 .ec-links { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; }
+.ec-contact { margin: 12px 0 0; font-size: 13px; color: var(--ink-text-muted); overflow-wrap: anywhere; }

@@ -1,6 +1,8 @@
 import type { ViewProps } from "../types.js";
 import type { EntityCard } from "./schema.js";
-import { Avatar, Button, HostLink, Source, useBusy } from "../../runtime/primitives.js";
+import { Avatar, Button, HostLink, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
+import { isUnverified } from "../../runtime/provenance.js";
+import { Actions } from "../../runtime/actions.js";
 import "./entity-card.css";
 
 export function accepts(d: unknown): d is EntityCard {
@@ -28,7 +30,10 @@ export function View({ data: e, actions }: ViewProps<EntityCard>) {
           {e.facts.map((f) => (
             <div key={f.label} className="ec-fact">
               <dt>{f.label}</dt>
-              <dd>{f.value}</dd>
+              <dd>
+                {f.value}
+                <Unchecked on={isUnverified(e, f.label)} />
+              </dd>
             </div>
           ))}
         </dl>
@@ -42,12 +47,17 @@ export function View({ data: e, actions }: ViewProps<EntityCard>) {
           ))}
         </nav>
       )}
+      {(e.phone || e.address) && (
+        <p className="ec-contact">
+          {e.phone && <span>{e.phone}</span>}
+          <Unchecked on={isUnverified(e, "phone")} />
+          {e.phone && e.address && " · "}
+          {e.address && <span>{e.address}</span>}
+          <Unchecked on={isUnverified(e, "address")} />
+        </p>
+      )}
       <div className="ink-actions">
-        {e.websiteUrl && (
-          <Button primary onClick={() => actions.openLink(e.websiteUrl!)}>
-            Open website
-          </Button>
-        )}
+        <Actions item={{ title: e.name, url: e.websiteUrl, phone: e.phone, address: e.address }} actions={actions} openLabel="Open website" copy={["phone", "address"]} />
         <Button
           disabled={busy !== null}
           onClick={() =>
@@ -59,7 +69,7 @@ export function View({ data: e, actions }: ViewProps<EntityCard>) {
           {busy === "compare" ? "Asking…" : "Compare"}
         </Button>
       </div>
-      <Source source={e.source} open={actions.openLink} />
+      <Provenance source={e.source} items={[e]} sensitive open={actions.openLink} locale={actions.locale} />
     </article>
   );
 }

@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { itemProvenance, SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 
-const url = z.string().url();
+const url = httpUrl;
 
 export const ProductSchema = z.looseObject({
   title: z.string().min(1).max(200),
@@ -13,6 +15,7 @@ export const ProductSchema = z.looseObject({
   merchant: z.string().max(80).optional(),
   availability: z.enum(["in_stock", "limited", "out_of_stock", "preorder", "unknown"]).optional(),
   variants: z.string().max(120).optional().describe('Short summary, e.g. "3 colors, 2 sizes".'),
+  ...itemProvenance,
 });
 
 export const MAX_PRODUCTS = 12;
@@ -23,7 +26,7 @@ export function productGridSchema(maxProducts = MAX_PRODUCTS) {
   return z.looseObject({
     title: z.string().max(120).optional(),
     products: z.array(ProductSchema).min(1).max(maxProducts).describe(`1 to ${maxProducts} products, best match first.`),
-    source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
+    source: SourceSchema.optional(),
   });
 }
 

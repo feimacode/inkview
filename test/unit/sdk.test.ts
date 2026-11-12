@@ -3,7 +3,17 @@ import assert from "node:assert/strict";
 import { RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import {
   DEFAULT_APP_URI,
+  SourceSchema,
+  UnverifiedSchema,
+  canOpen,
+  collectSources,
+  deriveActions,
+  httpUrl,
   inkviewToolMeta,
+  isStale,
+  latestCheck,
+  mdActions,
+  mdProvenance,
   registerInkview,
   showChart,
   showComparison,
@@ -258,4 +268,25 @@ test("a 300 row table renders when the limit is raised to 500", () => {
   const r = showTable(cases.find((c) => c.component === "data_table")!.sample(300) as never, { limit: 500 });
   assert.equal((r.structuredContent.data as { rows: unknown[] }).rows.length, 300);
   assert.match(textOf(r), /City 299/);
+});
+
+test("the SDK exports the link, action and provenance helpers", () => {
+  assert.equal(httpUrl.safeParse("javascript:alert(1)").success, false);
+  assert.equal(httpUrl.safeParse("https://example.com").success, true);
+  assert.equal(canOpen("data:text/html,x"), false);
+  assert.deepEqual(deriveActions({ title: "Tap Shop", phone: "0400 555 019", address: "1 Dock Rd" }, { canDownload: false }).map((a) => a.kind), ["call", "directions"]);
+  assert.match(mdActions({ title: "Tap Shop", phone: "0400 555 019" }), /^\[0400 555 019\]\(tel:0400555019\)$/);
+  const source = SourceSchema.parse({ name: "Yellow Pages", url: "https://example.com", retrievedAt: "2026-11-12T09:30:00+11:00" });
+  assert.equal(UnverifiedSchema.safeParse(["price"]).success, true);
+  const checked = latestCheck(collectSources(source));
+  assert.equal(checked, Date.parse("2026-11-12T09:30:00+11:00"));
+  assert.equal(isStale(checked, checked! + 25 * 3_600_000), true);
+  assert.match(mdProvenance({ source, sensitive: true }, checked! + 3_600_000), /^_Source: \[Yellow Pages\]\(https:\/\/example\.com\) · checked 2026-11-11 22:30 UTC_$/);
+});
+
+test("a builder rejects a script link and keeps provenance in the result", () => {
+  assert.throws(() => showListings({ listings: [{ title: "x", url: "javascript:alert(1)" }] }), /url/);
+  const r = showListings({ listings: [{ title: "Tap Shop", price: { amount: 80, currency: "AUD" }, unverified: ["price"], source: { name: "Yellow Pages" } }] });
+  assert.match(textOf(r), /A\$80 \(not checked\)/);
+  assert.match(textOf(r), /_Source: Yellow Pages_$/);
 });

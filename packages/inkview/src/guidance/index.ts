@@ -30,6 +30,8 @@ export const situations: Array<{ when: string; tool: string }> = [
 
 export const rules: string[] = [
   "Pass only data you gathered from your tools or the conversation. Never invent fields such as image URLs, links, prices or ratings.",
+  "For data you fetched, pass source with its name, url and retrievedAt (the ISO 8601 time you fetched it). List in unverified the names of fields you did not fetch from a source, and leave out values you cannot back rather than invent them.",
+  "Action buttons (Open at site, Call, Directions, Add to calendar) come only from the fields you pass: url, phone, address or coordinates, start. Inkview never books, reserves or pays, so do not tell the user it can.",
   "After rendering, add at most one sentence. Do not repeat what the component shows.",
   `Prefer the specific tool over ${autoMeta.tool} when the situation is clear.`,
   "Answer in plain text when the answer is a single fact, a short explanation, or code.",

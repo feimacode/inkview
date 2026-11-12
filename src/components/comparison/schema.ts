@@ -1,7 +1,9 @@
 import { z } from "zod";
+import { httpUrl } from "../fields.js";
+import { SourceSchema, UnverifiedSchema } from "../provenance.js";
 import { journeyProblem } from "../journey.js";
 
-const url = z.string().url();
+const url = httpUrl;
 
 export const ValueSchema = z.union([
   z.string().max(200),
@@ -22,7 +24,14 @@ export function comparisonSchema(maxItems = MAX_ITEMS) {
   return z.looseObject({
     title: z.string().max(120).optional(),
     items: z
-      .array(z.looseObject({ name: z.string().min(1).max(80), subtitle: z.string().max(120).optional(), imageUrl: url.optional(), url: url.optional() }))
+      .array(z.looseObject({
+          name: z.string().min(1).max(80),
+          subtitle: z.string().max(120).optional(),
+          imageUrl: url.optional(),
+          url: url.optional().describe("The option's own page, opened by \"Open at site\"."),
+          source: SourceSchema.optional().describe("Where this option's values came from."),
+          unverified: UnverifiedSchema.optional().describe("Names of the criteria whose value for this option you did not fetch from a source."),
+        }))
       .min(2)
       .max(maxItems)
       .describe(`2 to ${maxItems} options.`),
@@ -32,6 +41,7 @@ export function comparisonSchema(maxItems = MAX_ITEMS) {
       .describe("One row per item, in the same order as items; each row has one value per criterion."),
     recommended: z.string().max(80).optional().describe("Name of the recommended item, exactly as in items."),
     reason: z.string().max(300).optional().describe("Why it is recommended, one or two sentences."),
+    source: SourceSchema.optional(),
   }).superRefine((c, ctx) => {
     c.values.forEach((row, i) =>
       row.forEach((v, j) => {

@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 import { journeyProblem } from "../journey.js";
 
 export const MAX_ROWS = 50;
@@ -25,7 +27,7 @@ export function tableSchema(maxRows = MAX_ROWS) {
       .min(1)
       .max(maxRows, `Send at most ${maxRows} rows: pick the most relevant and state the total in caption.`)
       .describe(`1 to ${maxRows} rows, each an object keyed by column key.`),
-    source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+    source: SourceSchema.optional(),
   }).superRefine((t, ctx) => {
     for (const c of t.columns) {
       if (c.type !== "journey") continue;

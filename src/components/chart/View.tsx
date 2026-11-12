@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import type { ViewProps } from "../types.js";
 import type { Chart } from "./schema.js";
-import { Source } from "../../runtime/primitives.js";
+import { Provenance } from "../../runtime/primitives.js";
 import { fmtNumber } from "../../runtime/format.js";
 import { summarize } from "./markdown.js";
 import "./chart.css";
@@ -213,7 +213,7 @@ export function View({ data: c, actions }: ViewProps<Chart>) {
       {(c.xLabel || c.yLabel) && (
         <figcaption className="ch-axes ink-faint">{[c.yLabel && `Y: ${c.yLabel}`, c.xLabel && `X: ${c.xLabel}`].filter(Boolean).join(" · ")}</figcaption>
       )}
-      <Source source={c.source} open={actions.openLink} />
+      <Provenance source={c.source} open={actions.openLink} locale={actions.locale} />
     </figure>
   );
 }

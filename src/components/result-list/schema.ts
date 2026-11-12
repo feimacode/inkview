@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { httpUrl } from "../fields.js";
+import { SourceSchema, UnverifiedSchema } from "../provenance.js";
 
-const url = z.string().url();
+const url = httpUrl;
 
 export const ResultSchema = z.looseObject({
   title: z.string().min(1).max(200),
@@ -10,6 +12,8 @@ export const ResultSchema = z.looseObject({
   faviconUrl: url.optional(),
   date: z.string().max(40).optional().describe("Publication date, ISO 8601 preferred."),
   score: z.number().optional().describe("Relevance score, if your tool gave one."),
+  sourceInfo: SourceSchema.optional().describe("Where this result came from and when you fetched it. `source` stays the publisher name."),
+  unverified: UnverifiedSchema.optional(),
 });
 
 export const MAX_RESULTS = 20;

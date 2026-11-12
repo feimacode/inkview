@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 
 export const MAX_X = 100;
 /** Upper bound for servers that raise the x-axis cap through the SDK. */
@@ -18,7 +20,7 @@ export function chartSchema(maxX = MAX_X) {
       unit: z.string().max(20).optional().describe('Unit shown with values, e.g. "USD", "%", "ms".'),
       xLabel: z.string().max(60).optional(),
       yLabel: z.string().max(60).optional(),
-      source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+      source: SourceSchema.optional(),
     })
     .superRefine((c, ctx) => {
       c.series.forEach((s, i) => {

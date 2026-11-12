@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { MapConfig } from "./config.js";
 import type { MapData, MapPlace } from "./schema.js";
-import { Button, Source, useBusy } from "../../runtime/primitives.js";
-import { mapsUrl } from "./project.js";
+import { Button, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
+import { isUnverified } from "../../runtime/provenance.js";
+import { mapsUrl } from "../../runtime/links.js";
 import { MapSurface, type Pin } from "./Surface.js";
 
 const keyOf = (place: MapPlace, index: number) => place.id ?? `place-${index}`;
@@ -87,7 +88,12 @@ export function View({ data, actions, config }: ViewProps<MapData, MapConfig>) {
                     <span className="mv-item-label">{place.label}</span>
                     {place.category && <span className="ink-chip">{place.category}</span>}
                     {onMap.length > 0 && !pinned(place) && <span className="ink-chip mv-off">Not on map</span>}
-                    {place.address && <span className="mv-item-address">{place.address}</span>}
+                    {place.address && (
+                      <span className="mv-item-address">
+                        {place.address}
+                        <Unchecked on={isUnverified(place, "address")} />
+                      </span>
+                    )}
                   </button>
                 </li>
               );
@@ -102,7 +108,12 @@ export function View({ data, actions, config }: ViewProps<MapData, MapConfig>) {
                   {selectedPlace.lat}, {selectedPlace.lng}
                 </p>
               )}
-              {selectedPlace.address && <p className="mv-address">{selectedPlace.address}</p>}
+              {selectedPlace.address && (
+                <p className="mv-address">
+                  {selectedPlace.address}
+                  <Unchecked on={isUnverified(selectedPlace, "address")} />
+                </p>
+              )}
               {selectedPlace.detail && <p className="mv-detail-text">{selectedPlace.detail}</p>}
               <div className="ink-actions">
                 <Button primary onClick={() => actions.openLink(mapsUrl(selectedPlace))}>
@@ -118,7 +129,7 @@ export function View({ data, actions, config }: ViewProps<MapData, MapConfig>) {
         </div>
       </div>
       {data.caption && <p className="ink-faint mv-caption">{data.caption}</p>}
-      <Source source={data.source} open={actions.openLink} />
+      <Provenance source={data.source} items={data.places} sensitive open={actions.openLink} locale={actions.locale} />
     </article>
   );
 }

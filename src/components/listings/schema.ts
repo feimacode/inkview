@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { itemProvenance, SourceSchema } from "../provenance.js";
+import { httpUrl, phone } from "../fields.js";
 
-const url = z.string().url();
+const url = httpUrl;
 export const KINDS = ["stay", "service", "place", "event", "home"] as const;
 export const UNITS = ["night", "person", "hour", "week", "month", "total"] as const;
 const kind = z.enum(KINDS);
@@ -35,13 +37,9 @@ export const ListingSchema = z
     openNow: z.boolean().optional().describe("Whether it was open when you looked it up; needs asOf."),
     hours: z.string().max(80).optional().describe('Opening hours as short text, e.g. "Mon to Fri 7am to 5pm".'),
     start: z.string().max(40).optional().describe("ISO 8601 date or date-time an event starts."),
-    phone: z
-      .string()
-      .min(3)
-      .max(30)
-      .regex(/^[\d\s+\-()]+$/, "phone may contain only digits, spaces, +, -, ( and ).")
-      .optional(),
+    phone: phone.optional(),
     url: url.optional().describe("The listing's own page: where the user books, contacts or reads more."),
+    ...itemProvenance,
   })
   .superRefine((l, ctx) => {
     if ((l.lat === undefined) !== (l.lng === undefined)) {
@@ -66,7 +64,7 @@ export function listingsSchema(maxListings = MAX_LISTINGS) {
     distanceFrom: z.string().max(80).optional().describe('Where distances are measured from, e.g. "from Parramatta station".'),
     asOf: z.string().max(40).optional().describe("ISO 8601 date-time when prices and opening state were looked up."),
     caption: z.string().max(300).optional(),
-    source: z.looseObject({ name: z.string().max(80), url: url.optional() }).optional(),
+    source: SourceSchema.optional(),
   });
 }
 

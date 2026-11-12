@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { Product, ProductGrid } from "./schema.js";
-import { Button, hostOf, Source, useBusy } from "../../runtime/primitives.js";
+import { Button, hostOf, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
 import { fmtMoney, fmtNumber } from "../../runtime/format.js";
+import { isUnverified } from "../../runtime/provenance.js";
+import { Actions } from "../../runtime/actions.js";
 import "./product-grid.css";
 
 export function accepts(d: unknown): d is ProductGrid {
@@ -76,12 +78,16 @@ export function View({ data: g, actions }: ViewProps<ProductGrid>) {
               <h3 className="pg-name" title={p.title}>
                 {p.title}
               </h3>
-              <p className="pg-price">{p.price != null ? fmtMoney(p.price, p.currency, locale) : <span className="ink-faint">No price</span>}</p>
+              <p className="pg-price">
+                {p.price != null ? fmtMoney(p.price, p.currency, locale) : <span className="ink-faint">No price</span>}
+                <Unchecked on={isUnverified(p, "price")} />
+              </p>
               {p.rating != null && (
                 <p className="pg-rating">
                   <span aria-hidden="true">★</span> {fmtNumber(p.rating, locale, { maximumFractionDigits: 1 })}
                   {p.reviewCount != null && <span className="ink-faint"> ({fmtNumber(p.reviewCount, locale)})</span>}
                   <span className="ink-sr"> out of 5</span>
+                  <Unchecked on={isUnverified(p, "rating")} />
                 </p>
               )}
               <p className="pg-meta ink-muted">
@@ -89,22 +95,22 @@ export function View({ data: g, actions }: ViewProps<ProductGrid>) {
                 {p.availability && AVAIL[p.availability] && (
                   <span className={`pg-avail pg-avail--${p.availability}`}> · {AVAIL[p.availability]}</span>
                 )}
+                <Unchecked on={isUnverified(p, "availability")} />
               </p>
               {p.variants && <p className="pg-meta ink-faint">{p.variants}</p>}
               <div className="pg-actions">
-                <Button primary onClick={() => actions.openLink(p.url)} label={`View ${p.title} at store`}>
-                  View at store
-                </Button>
-                <label className="pg-pick">
-                  <input
-                    type="checkbox"
-                    checked={on}
-                    disabled={!on && picked.length >= 4}
-                    onChange={() => togglePick(i)}
-                    aria-label={`Select ${p.title} to compare`}
-                  />
-                  <span>Compare</span>
-                </label>
+                <Actions item={p} actions={actions} name={p.title} openLabel="View at store" openAria={`View ${p.title} at store`} copy={["link"]}>
+                  <label className="pg-pick">
+                    <input
+                      type="checkbox"
+                      checked={on}
+                      disabled={!on && picked.length >= 4}
+                      onChange={() => togglePick(i)}
+                      aria-label={`Select ${p.title} to compare`}
+                    />
+                    <span>Compare</span>
+                  </label>
+                </Actions>
               </div>
             </li>
           );
@@ -116,7 +122,7 @@ export function View({ data: g, actions }: ViewProps<ProductGrid>) {
         </Button>
         {picked.length === 1 && <span className="ink-faint pg-hint">Pick 2 to 4 products</span>}
       </div>
-      <Source source={g.source} open={actions.openLink} />
+      <Provenance source={g.source} items={g.products} sensitive open={actions.openLink} locale={locale} />
     </section>
   );
 }

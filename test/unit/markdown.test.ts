@@ -22,6 +22,7 @@ for (const dir of dirs) {
   });
 }
 
+const esc = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const get = (id: string) => serverComponents.find((c) => c.meta.component === id)!;
 
 test("profile card markdown: name heading, links, minimal", () => {
@@ -114,7 +115,7 @@ test("product grid markdown has prices and store links; no more than 12", () => 
   const c = get("product_grid");
   assert.equal(
     c.toMarkdown(c.schema.parse({ products: [{ title: "Tee", url: "https://s.io/tee", price: 9.5, currency: "USD", rating: 4.5, reviewCount: 10 }] })),
-    "1. [Tee](https://s.io/tee) — $9.50 · ★ 4.5 (10)",
+    "1. [Tee](https://s.io/tee) — $9.50 · ★ 4.5 (10)\n\n_No source given_",
   );
   assert.equal(c.schema.safeParse({ products: Array.from({ length: 13 }, () => ({ title: "t", url: "https://t.io" })) }).success, false);
 });
@@ -267,8 +268,8 @@ test("map markdown: numbered places with addresses, links, caption and source", 
 
 test("map markdown: minimal payload is one numbered place", () => {
   const c = get("map");
-  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Office", lat: 59.3346, lng: 18.0633 }] })), "1. **Office** — 59.3346, 18.0633");
-  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Null Island", lat: 0, lng: 0 }] })), "1. **Null Island** — 0, 0");
+  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Office", lat: 59.3346, lng: 18.0633 }] })), "1. **Office** — 59.3346, 18.0633\n\n_No source given_");
+  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Null Island", lat: 0, lng: 0 }] })), "1. **Null Island** — 0, 0\n\n_No source given_");
 });
 
 test("map rejects out-of-range coordinates, more than 50 places, a place with no location, half a coordinate and a long pin label", () => {
@@ -310,9 +311,9 @@ test("map markdown: places without coordinates keep their address and drop the c
         ],
       }),
     ),
-    "1. **Harris Park Plumbing** — 12 Marion St — -33.8229, 151.0089\n2. **Parramatta Emergency Plumbers** — 88 Church St, Parramatta",
+    "1. **Harris Park Plumbing** — 12 Marion St — -33.8229, 151.0089\n2. **Parramatta Emergency Plumbers** — 88 Church St, Parramatta\n\n_No source given_",
   );
-  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Depot", address: "1 Dock Rd" }] })), "1. **Depot** — 1 Dock Rd");
+  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Depot", address: "1 Dock Rd" }] })), "1. **Depot** — 1 Dock Rd\n\n_No source given_");
 });
 
 test("form rejects too many fields, missing options, secrets, duplicate names and bad defaults", () => {
@@ -342,7 +343,9 @@ test("form rejects too many fields, missing options, secrets, duplicate names an
 
 test("listings markdown: linked titles, price with unit, rating, distance, address, phone and the as-of line", () => {
   const c = get("listings");
-  assert.equal(
+  // The footer says "may have changed" once the check is a day old, so the
+  // expected text is anchored on a pattern instead of today's date.
+  assert.match(
     c.toMarkdown(
       c.schema.parse({
         title: "Plumbers near Parramatta",
@@ -367,9 +370,15 @@ test("listings markdown: linked titles, price with unit, rating, distance, addre
         source: { name: "Local search" },
       }),
     ),
-    "### Plumbers near Parramatta\n\n1. [Harris Park Plumbing](https://example.com/hpp) — from A$95 per hour · ★ 4.8 (212) · 1.4 km from Parramatta station · 12 Marion St · (02) 9555 0142 · Licensed\n2. **Westmead Tap & Drain** — 0400 555 019\n\n_Checked 2026-11-12T09:30:00+11:00. Check the final price at the site._\n\n_2 of 14_\n\n_Source: Local search_",
+    new RegExp(
+      "^" +
+        esc(
+          "### Plumbers near Parramatta\n\n1. [Harris Park Plumbing](https://example.com/hpp) — from A$95 per hour · ★ 4.8 (212) · 1.4 km from Parramatta station · 12 Marion St · Licensed · [(02) 9555 0142](tel:0295550142) · [Directions](https://www.openstreetmap.org/search?query=12%20Marion%20St)\n2. **Westmead Tap & Drain** — [0400 555 019](tel:0400555019)\n\n_Prices are a snapshot. Check the final price at the site._\n\n_2 of 14_\n\n_Source: Local search · checked 2026-11-11 22:30 UTC",
+        ) +
+        "( · may have changed)?_$",
+    ),
   );
-  assert.equal(c.toMarkdown(c.schema.parse({ listings: [{ title: "Corner Hardware" }] })), "1. **Corner Hardware**");
+  assert.equal(c.toMarkdown(c.schema.parse({ listings: [{ title: "Corner Hardware" }] })), "1. **Corner Hardware**\n\n_No source given_");
   assert.match(c.toMarkdown(c.schema.parse({ kind: "stay", listings: [{ title: "Inn", price: { amount: 210, currency: "AUD", from: true } }] })), /from A\$210 per night/);
 });
 
@@ -409,7 +418,7 @@ test("itinerary markdown: a heading per day, stops in order with time, travel an
     ),
     "### Kyoto\n\n#### Day 1: Gion · 2026-03-12\n\n1. 16:30–17:45 [Nishiki Market](https://example.com/nishiki) — 12 min by subway · ¥3,000\n2. **Gion walk** — A$20\n\nDay total: ¥3,000 + A$20\n\n#### Day 2\n\n_No stops yet._\n\n_Easy pace_\n\n_Source: Guide_",
   );
-  assert.equal(c.toMarkdown(c.schema.parse({ days: [{ stops: [{ title: "Market" }] }] })), "#### Day 1\n\n1. **Market**");
+  assert.equal(c.toMarkdown(c.schema.parse({ days: [{ stops: [{ title: "Market" }] }] })), "#### Day 1\n\n1. **Market**\n\n_No source given_");
 });
 
 test("itinerary rejects 15 days, 13 stops, a bad time and half a coordinate", () => {

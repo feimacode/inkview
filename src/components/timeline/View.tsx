@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { Timeline } from "./schema.js";
 import { formatTimelineDate, parseTimelineDate, sortByDate } from "./date.js";
-import { Button, Source, useBusy } from "../../runtime/primitives.js";
+import { Button, Provenance, useBusy } from "../../runtime/primitives.js";
 import "./timeline.css";
 
 export function accepts(d: unknown): d is Timeline {
@@ -114,7 +114,7 @@ export function View({ data, actions }: ViewProps<Timeline>) {
       </ol>
       {events.length === 0 && <p className="tl-empty">No events to show.</p>}
       {data.caption && <p className="ink-faint tl-caption">{data.caption}</p>}
-      <Source source={data.source} open={actions.openLink} />
+      <Provenance source={data.source} open={actions.openLink} locale={actions.locale} />
     </article>
   );
 }

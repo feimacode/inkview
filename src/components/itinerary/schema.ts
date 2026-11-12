@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { itemProvenance, SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 
 const time = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Times are 24-hour HH:MM, e.g. 09:30.");
 
@@ -14,8 +16,9 @@ export const StopSchema = z
     lat: z.number().min(-90).max(90).optional(),
     lng: z.number().min(-180).max(180).optional(),
     address: z.string().max(200).optional(),
-    url: z.string().url().optional(),
+    url: httpUrl.optional(),
     travel: z.string().max(80).optional().describe('How to get here from the previous stop, e.g. "15 min walk".'),
+    ...itemProvenance,
   })
   .superRefine((s, ctx) => {
     if ((s.lat === undefined) !== (s.lng === undefined)) {
@@ -44,7 +47,7 @@ export function itinerarySchema(maxDays = MAX_DAYS) {
       .max(maxDays, `Send at most ${maxDays} days; split a longer trip into parts.`)
       .describe(`1 to ${maxDays} days in order, each with its stops in visit order.`),
     caption: z.string().max(300).optional(),
-    source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+    source: SourceSchema.optional(),
   });
 }
 
