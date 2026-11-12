@@ -25,6 +25,13 @@ export default defineConfig({
   build: {
     outDir: resolve(import.meta.dirname, "dist/ui"),
     emptyOutDir: true,
-    rollupOptions: { input: resolve(import.meta.dirname, "src/ui/app.html") },
+    // The single inlined script preloads nothing, so the polyfill is dead weight.
+    modulePreload: { polyfill: false },
+    rollupOptions: {
+      input: resolve(import.meta.dirname, "src/ui/app.html"),
+      // The view only uses the App bridge. Without this the MCP client's auth and
+      // transport modules stay in the bundle although nothing imports from them.
+      treeshake: { moduleSideEffects: (id) => !/node_modules[\\/](@modelcontextprotocol[\\/]client|pkce-challenge)[\\/]/.test(id) },
+    },
   },
 });

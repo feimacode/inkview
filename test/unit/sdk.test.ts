@@ -10,6 +10,8 @@ import {
   showDocument,
   showEntityCard,
   showForm,
+  showItinerary,
+  showListings,
   showMap,
   showProducts,
   showProfileCard,
@@ -211,6 +213,22 @@ const cases: Case[] = [
     }),
     defaultCap: 50,
     hardMax: 500,
+  },
+  {
+    name: "listings",
+    component: "listings",
+    build: showListings,
+    sample: (n) => ({ listings: Array.from({ length: n }, (_, i) => ({ title: `Listing ${i}` })) }),
+    defaultCap: 20,
+    hardMax: 100,
+  },
+  {
+    name: "itinerary",
+    component: "itinerary",
+    build: showItinerary,
+    sample: (n) => ({ days: Array.from({ length: n }, (_, i) => ({ stops: [{ title: `Stop ${i}` }] })) }),
+    defaultCap: 14,
+    hardMax: 60,
   },
 ];
 

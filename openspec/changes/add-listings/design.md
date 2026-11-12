@@ -45,3 +45,12 @@ Agents get consumer listing data from web search, brand apps or a places API, so
 ## Open Questions
 
 - Cap of 20 listings: enough for a map of hotels? The SDK can raise caps for self-hosters, as it does for map places.
+
+## Implementation notes
+
+- The open-link button keeps one accessible name ("Open <title> at site") while its visible label follows the kind, as decided above.
+- Map pins show the listing's price rounded to whole units when that fits in 8 characters, otherwise a plain dot.
+- The snapshot line reads "Prices and details checked <time>. Check the final price at the site."; the source stays on its own "Source:" line under it, as in other components.
+- Added `showListings` to the server SDK (default cap 20, maximum 100).
+- The 100 KB bundle budget needed room: `vite.config.ts` now marks the MCP client package as free of side effects, which drops its unused auth and transport modules from the view (about 1.8 KB gzipped), and turns off Vite's module-preload polyfill.
+- README and gallery are updated; the Claude Desktop check in task 3.1 waits on Iven.

@@ -11,15 +11,18 @@ import { autoMeta } from "../auto/tool.js";
 export const situations: Array<{ when: string; tool: string }> = [
   { when: "One person (candidate, speaker, founder, contact)", tool: "show_profile_card" },
   { when: "Several people (candidates, speakers, attendees, contacts)", tool: "show_profiles" },
+  { when: "A trip or outing planned day by day, with stops in visit order", tool: "show_itinerary" },
   { when: "Dated events in a history, project milestones, a career or unfolding story", tool: "show_timeline" },
   { when: "To-dos, action items or issues with a status", tool: "show_tasks" },
   { when: "3 or more records with the same fields", tool: "show_table" },
   { when: "Web, news, paper or document search results", tool: "show_results" },
   { when: "One company, organization, product or place", tool: "show_entity_card" },
-  { when: "Places with coordinates where location or distance matters", tool: "show_map" },
-  { when: "2 to 5 options the user is choosing between", tool: "show_comparison" },
+  { when: "Places where location matters, in no set order (pass coordinates when you have them)", tool: "show_map" },
+  { when: "Flight, train or bus options: a journey column next to a price column (pass durationMinutes when the source states it)", tool: "show_table" },
+  { when: "2 to 5 options the user is choosing between (journey values for flight or train finalists)", tool: "show_comparison" },
   { when: "Numbers over time or across categories", tool: "show_chart" },
-  { when: "Shopping results (2 to 12 products)", tool: "show_products" },
+  { when: "Shopping results: goods bought from a store (2 to 12 products)", tool: "show_products" },
+  { when: "Places to go, stay or book, or people to hire: hotels, restaurants, tradespeople, events, rentals", tool: "show_listings" },
   { when: "A draft email, message, post, letter or report to review, edit and approve", tool: "show_document" },
   { when: "3 or more details missing from the user (a short form)", tool: "show_form" },
   { when: "Structured data that fits none of the above clearly", tool: autoMeta.tool },
@@ -49,7 +52,7 @@ function table(): string {
 }
 
 export const skillDescription =
-  "Show people, timelines, task lists, drafts, tables, search results, companies, comparisons, charts and products as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.";
+  "Show people, timelines, task lists, drafts, tables, search results, companies, comparisons, charts, products, listings of places and services, trip itineraries and flight options as interactive UI components in the chat with the Inkview MCP tools. Use whenever an answer presents structured data the user will scan, compare or act on.";
 
 export function skillMarkdown(): string {
   return `---

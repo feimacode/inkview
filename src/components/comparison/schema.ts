@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { journeyProblem } from "../journey.js";
 
 const url = z.string().url();
 
@@ -7,6 +8,9 @@ export const ValueSchema = z.union([
   z.number(),
   z.boolean(),
   z.looseObject({ rating: z.number().min(0).max(5) }),
+  z
+    .looseObject({ type: z.literal("journey"), segments: z.array(z.looseObject({})), durationMinutes: z.number().optional() })
+    .describe("A flight, train or bus trip: 1 to 6 segments of {from, to, depart, arrive, carrier?, number?, mode?} with ISO 8601 local date-times."),
   z.null(),
 ]);
 
@@ -28,6 +32,13 @@ export function comparisonSchema(maxItems = MAX_ITEMS) {
       .describe("One row per item, in the same order as items; each row has one value per criterion."),
     recommended: z.string().max(80).optional().describe("Name of the recommended item, exactly as in items."),
     reason: z.string().max(300).optional().describe("Why it is recommended, one or two sentences."),
+  }).superRefine((c, ctx) => {
+    c.values.forEach((row, i) =>
+      row.forEach((v, j) => {
+        const problem = v && typeof v === "object" && "type" in v ? journeyProblem(v) : null;
+        if (problem) ctx.addIssue({ code: "custom", path: ["values", i, j], message: `${c.items[i]?.name ?? `Item ${i + 1}`}, "${c.criteria[j] ?? `criterion ${j + 1}`}": ${problem}.` });
+      }),
+    );
   });
 }
 

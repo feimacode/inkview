@@ -121,4 +121,56 @@ export default {
     assert.equal(await frame.locator(".mv-attrib").textContent(), "Test tiles");
     assert.ok((await frame.locator(".mv-pin").count()) === examples[0].data.places.length, "pins still show");
   },
+
+  async "lists address-only places as not on the map and fits the pinned ones"({ render, examples, events, assert, page }) {
+    await serveTiles(page);
+    const mixed = examples.find((e) => e.name === "Mixed coordinates").data;
+    const frame = await render(mixed, { config: CONFIG });
+    await frame.locator(".mv-pin").first().waitFor();
+    assert.equal(await frame.locator(".mv-pin").count(), 3);
+    assert.equal(await frame.locator(".mv-item").count(), 5);
+    assert.equal((await frame.locator(".mv-count").textContent()).trim(), "3 of 5 on map");
+    assert.deepEqual(await frame.locator(".mv-item").filter({ hasText: "Not on map" }).locator(".mv-item-label").allTextContents(), [
+      "Parramatta Emergency Plumbers",
+      "Granville Pipe Relining",
+    ]);
+    assert.deepEqual((await frame.locator(".mv-item-label").allTextContents()).slice(3), ["Parramatta Emergency Plumbers", "Granville Pipe Relining"]);
+
+    await frame.locator(".mv-item").filter({ hasText: "Parramatta Emergency" }).click();
+    assert.equal(await frame.locator(".mv-coords").count(), 0, "no coordinates are shown for an address-only place");
+    await frame.getByRole("button", { name: "Open in maps" }).click();
+    await page.waitForTimeout(150);
+    const opened = (await events()).find((e) => e.openLink);
+    assert.equal(opened?.openLink, `https://www.openstreetmap.org/search?query=${encodeURIComponent("88 Church St, Parramatta NSW 2150")}`);
+  },
+
+  async "shows only the list, and requests no tile, when no place has coordinates"({ render, assert, page }) {
+    const requests = [];
+    await serveTiles(page, requests);
+    const frame = await render(
+      { places: [{ label: "Depot", address: "1 Dock Rd" }, { label: "Yard", address: "9 Quay St" }] },
+      { config: CONFIG },
+    );
+    await frame.locator(".mv-note").waitFor();
+    assert.match(await frame.locator(".mv-note").textContent(), /no coordinates/);
+    assert.equal(await frame.locator(".mv-map").count(), 0);
+    assert.equal(await frame.locator(".mv-item").count(), 2);
+    assert.equal(await frame.getByText("Not on map").count(), 0);
+    await page.waitForTimeout(200);
+    assert.equal(requests.length, 0, "no tile is requested");
+  },
+
+  async "draws pin labels and keeps them out of tile requests"({ render, examples, assert, page }) {
+    const requests = [];
+    await serveTiles(page, requests);
+    const frame = await render(examples.find((e) => e.name === "Hotels with price labels").data, { config: CONFIG });
+    await frame.locator(".mv-tile").first().waitFor({ timeout: 5000 });
+    assert.deepEqual(await frame.locator(".mv-pin-tag").allTextContents(), ["$210", "$245", "$168", "$390"]);
+    for (const url of requests) assert.match(url, TILE, `unexpected tile URL ${url}`);
+    const pin = frame.locator(".mv-pin").first();
+    await pin.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await pin.getAttribute("aria-pressed"), "true");
+    assert.equal(await frame.locator(".mv-detail-title").textContent(), "Shibuya Stream Hotel");
+  },
 };

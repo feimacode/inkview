@@ -14,6 +14,8 @@ import * as taskList from "./task-list/server.js";
 import * as documentPreview from "./document-preview/server.js";
 import * as form from "./form/server.js";
 import * as map from "./map/server.js";
+import * as listings from "./listings/server.js";
+import * as itinerary from "./itinerary/server.js";
 
 export interface ServerEntry {
   meta: ComponentMeta;
@@ -24,4 +26,4 @@ export interface ServerEntry {
 }
 
 /** Order matters: it is the order tools are listed to the model. */
-export const serverComponents: ServerEntry[] = [profileCard, profileGrid, dataTable, resultList, entityCard, comparison, chart, productGrid, timeline, taskList, documentPreview, form, map];
+export const serverComponents: ServerEntry[] = [profileCard, profileGrid, dataTable, resultList, entityCard, comparison, chart, productGrid, timeline, taskList, documentPreview, form, map, listings, itinerary];

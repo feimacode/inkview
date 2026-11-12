@@ -3,6 +3,8 @@ import type { ViewProps } from "../types.js";
 import type { Column, DataTable } from "./schema.js";
 import { Button, Chip, HostLink, Source, useBusy } from "../../runtime/primitives.js";
 import { fmtDate, fmtMoney, fmtNumber, toNumber } from "../../runtime/format.js";
+import { isJourney, journeyFacts, journeyText } from "../journey.js";
+import { JourneyCell } from "../JourneyCell.js";
 import "./data-table.css";
 
 export function accepts(d: unknown): d is DataTable {
@@ -33,6 +35,9 @@ export function cellText(v: unknown, c: Column, locale: string): string {
       return fmtDate(v, locale);
     case "link":
       return linkOf(v)?.label ?? String(v);
+    case "journey":
+      if (isJourney(v)) return journeyText(v);
+    // falls through
     default:
       return typeof v === "object" ? JSON.stringify(v) : String(v);
   }
@@ -41,12 +46,16 @@ export function cellText(v: unknown, c: Column, locale: string): string {
 function sortValue(v: unknown, c: Column): number | string | null {
   if (v == null || v === "") return null;
   if (c.type === "number" || c.type === "money") return toNumber(v);
+  if (c.type === "journey") return isJourney(v) ? journeyFacts(v).minutes : null;
   if (c.type === "date") {
     const t = new Date(String(v)).getTime();
     return Number.isNaN(t) ? null : t;
   }
   return (linkOf(v)?.label ?? String(v)).toLowerCase();
 }
+
+/** Flight or train numbers, so the filter finds "QF25" although the cell does not print it. */
+const flightNumbers = (v: unknown) => (isJourney(v) ? ` ${v.segments.map((s) => s.number ?? "").join(" ")}` : "");
 
 const csvEscape = (s: string) => (/[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
 
@@ -60,7 +69,7 @@ export function View({ data: t, actions }: ViewProps<DataTable>) {
   const rows = useMemo(() => {
     let idx = t.rows.map((_, i) => i);
     const q = filter.trim().toLowerCase();
-    if (q) idx = idx.filter((i) => t.columns.some((c) => cellText(t.rows[i][c.key], c, locale).toLowerCase().includes(q)));
+    if (q) idx = idx.filter((i) => t.columns.some((c) => (cellText(t.rows[i][c.key], c, locale) + flightNumbers(t.rows[i][c.key])).toLowerCase().includes(q)));
     if (sort) {
       const c = t.columns.find((x) => x.key === sort.key)!;
       idx.sort((a, b) => {
@@ -115,6 +124,7 @@ export function View({ data: t, actions }: ViewProps<DataTable>) {
       return l ? <HostLink href={l.url} open={actions.openLink}>{l.label}</HostLink> : String(v);
     }
     if (c.type === "badge") return <Chip>{String(v)}</Chip>;
+    if (c.type === "journey" && isJourney(v)) return <JourneyCell journey={v} />;
     return cellText(v, c, locale);
   };
 

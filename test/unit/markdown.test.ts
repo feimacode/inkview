@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { serverComponents } from "../../src/components/server-registry.js";
+import { toIcs } from "../../src/components/itinerary/format.js";
 
 const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
 
@@ -270,7 +271,7 @@ test("map markdown: minimal payload is one numbered place", () => {
   assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Null Island", lat: 0, lng: 0 }] })), "1. **Null Island** — 0, 0");
 });
 
-test("map rejects out-of-range coordinates, more than 50 places and missing coordinates", () => {
+test("map rejects out-of-range coordinates, more than 50 places, a place with no location, half a coordinate and a long pin label", () => {
   const c = get("map");
   const lat = c.schema.safeParse({ places: [{ label: "Noma", lat: 91, lng: 12 }] });
   assert.equal(lat.success, false);
@@ -286,8 +287,32 @@ test("map rejects out-of-range coordinates, more than 50 places and missing coor
 
   const missing = c.schema.safeParse({ places: [{ label: "Somewhere" }] });
   assert.equal(missing.success, false);
-  assert.match(JSON.stringify(missing.error!.issues), /Coordinates are required/);
+  assert.match(JSON.stringify(missing.error!.issues), /needs coordinates \(lat and lng\) or an address/);
   assert.match(JSON.stringify(missing.error!.issues), /does not look up addresses/);
+
+  const half = c.schema.safeParse({ places: [{ label: "Somewhere", lat: 55, address: "Main St 1" }] });
+  assert.equal(half.success, false);
+  assert.match(JSON.stringify(half.error!.issues), /lng is missing/);
+
+  const long = c.schema.safeParse({ places: [{ label: "Hotel", lat: 55, lng: 12, pinLabel: "$1,234 a night" }] });
+  assert.equal(long.success, false);
+  assert.match(JSON.stringify(long.error!.issues), /pinLabel must be at most 8 characters/);
+});
+
+test("map markdown: places without coordinates keep their address and drop the coordinates", () => {
+  const c = get("map");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        places: [
+          { label: "Harris Park Plumbing", lat: -33.8229, lng: 151.0089, address: "12 Marion St" },
+          { label: "Parramatta Emergency Plumbers", address: "88 Church St, Parramatta" },
+        ],
+      }),
+    ),
+    "1. **Harris Park Plumbing** — 12 Marion St — -33.8229, 151.0089\n2. **Parramatta Emergency Plumbers** — 88 Church St, Parramatta",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ places: [{ label: "Depot", address: "1 Dock Rd" }] })), "1. **Depot** — 1 Dock Rd");
 });
 
 test("form rejects too many fields, missing options, secrets, duplicate names and bad defaults", () => {
@@ -313,4 +338,114 @@ test("form rejects too many fields, missing options, secrets, duplicate names an
   const badDefault = c.schema.safeParse({ fields: [{ name: "travel", label: "Travel", type: "select", options: ["Train"], default: "Plane" }] });
   assert.equal(badDefault.success, false);
   assert.match(JSON.stringify(badDefault.error!.issues), /default must be one of its options/);
+});
+
+test("listings markdown: linked titles, price with unit, rating, distance, address, phone and the as-of line", () => {
+  const c = get("listings");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Plumbers near Parramatta",
+        kind: "service",
+        distanceFrom: "from Parramatta station",
+        asOf: "2026-11-12T09:30:00+11:00",
+        caption: "2 of 14",
+        listings: [
+          {
+            title: "Harris Park Plumbing",
+            url: "https://example.com/hpp",
+            price: { amount: 95, currency: "AUD", unit: "hour", from: true },
+            rating: 4.8,
+            reviewCount: 212,
+            distanceKm: 1.4,
+            address: "12 Marion St",
+            phone: "(02) 9555 0142",
+            badges: ["Licensed"],
+          },
+          { title: "Westmead Tap & Drain", phone: "0400 555 019" },
+        ],
+        source: { name: "Local search" },
+      }),
+    ),
+    "### Plumbers near Parramatta\n\n1. [Harris Park Plumbing](https://example.com/hpp) — from A$95 per hour · ★ 4.8 (212) · 1.4 km from Parramatta station · 12 Marion St · (02) 9555 0142 · Licensed\n2. **Westmead Tap & Drain** — 0400 555 019\n\n_Checked 2026-11-12T09:30:00+11:00. Check the final price at the site._\n\n_2 of 14_\n\n_Source: Local search_",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ listings: [{ title: "Corner Hardware" }] })), "1. **Corner Hardware**");
+  assert.match(c.toMarkdown(c.schema.parse({ kind: "stay", listings: [{ title: "Inn", price: { amount: 210, currency: "AUD", from: true } }] })), /from A\$210 per night/);
+});
+
+test("listings reject an unsafe phone, half a coordinate, a fifth badge and a 21st listing", () => {
+  const c = get("listings");
+  const phone = c.schema.safeParse({ listings: [{ title: "Bad", phone: "tel:+61;ext=javascript" }] });
+  assert.equal(phone.success, false);
+  assert.match(JSON.stringify(phone.error!.issues), /phone may contain only digits/);
+  assert.match(JSON.stringify(phone.error!.issues), /"phone"/);
+  assert.equal(c.schema.safeParse({ listings: [{ title: "Half", lat: 1 }] }).success, false);
+  assert.equal(c.schema.safeParse({ listings: [{ title: "Badges", badges: ["a", "b", "c", "d", "e"] }] }).success, false);
+  const many = c.schema.safeParse({ listings: Array.from({ length: 21 }, (_, i) => ({ title: `L${i}` })) });
+  assert.equal(many.success, false);
+  assert.match(JSON.stringify(many.error!.issues), /20 most relevant listings/);
+});
+
+test("itinerary markdown: a heading per day, stops in order with time, travel and cost, and day totals", () => {
+  const c = get("itinerary");
+  assert.equal(
+    c.toMarkdown(
+      c.schema.parse({
+        title: "Kyoto",
+        caption: "Easy pace",
+        days: [
+          {
+            date: "2026-03-12",
+            label: "Gion",
+            stops: [
+              { title: "Nishiki Market", time: "16:30", endTime: "17:45", cost: { amount: 3000, currency: "JPY" }, travel: "12 min by subway", url: "https://example.com/nishiki" },
+              { title: "Gion walk", cost: { amount: 20, currency: "AUD" } },
+            ],
+          },
+          { stops: [] },
+        ],
+        source: { name: "Guide" },
+      }),
+    ),
+    "### Kyoto\n\n#### Day 1: Gion · 2026-03-12\n\n1. 16:30–17:45 [Nishiki Market](https://example.com/nishiki) — 12 min by subway · ¥3,000\n2. **Gion walk** — A$20\n\nDay total: ¥3,000 + A$20\n\n#### Day 2\n\n_No stops yet._\n\n_Easy pace_\n\n_Source: Guide_",
+  );
+  assert.equal(c.toMarkdown(c.schema.parse({ days: [{ stops: [{ title: "Market" }] }] })), "#### Day 1\n\n1. **Market**");
+});
+
+test("itinerary rejects 15 days, 13 stops, a bad time and half a coordinate", () => {
+  const c = get("itinerary");
+  const days = c.schema.safeParse({ days: Array.from({ length: 15 }, () => ({ stops: [] })) });
+  assert.equal(days.success, false);
+  assert.match(JSON.stringify(days.error!.issues), /at most 14 days/);
+  assert.equal(c.schema.safeParse({ days: [{ stops: Array.from({ length: 13 }, (_, i) => ({ title: `S${i}` })) }] }).success, false);
+  assert.equal(c.schema.safeParse({ days: [{ stops: [{ title: "Late", time: "25:00" }] }] }).success, false);
+  assert.equal(c.schema.safeParse({ days: [{ stops: [{ title: "Half", lng: 135 }] }] }).success, false);
+  assert.equal(c.schema.safeParse({ days: [{ date: "12 March", stops: [] }] }).success, false);
+});
+
+test("calendar export: floating local times, 1-hour default, escaping and folding", () => {
+  const ics = toIcs(
+    [
+      {
+        date: "2026-03-12",
+        stops: [
+          { title: "Dinner; sushi, sake", time: "23:30", note: "Line one\nLine two", url: "https://example.com/dinner", address: "1 Gion, Kyoto" },
+          { title: "Museum", time: "10:00", endTime: "12:15", lat: 35.0, lng: 135.7 },
+          { title: "No time" },
+          { title: "É".repeat(60), time: "08:00" },
+        ],
+      },
+      { stops: [{ title: "Undated", time: "09:00" }] },
+    ],
+    new Date("2026-01-02T03:04:05Z"),
+  );
+  assert.ok(ics.startsWith("BEGIN:VCALENDAR\r\nVERSION:2.0\r\n"));
+  assert.ok(ics.endsWith("END:VCALENDAR\r\n"));
+  assert.equal(ics.match(/BEGIN:VEVENT/g)!.length, 3, "only timed stops on dated days");
+  assert.match(ics, /DTSTAMP:20260102T030405Z/);
+  assert.match(ics, /DTSTART:20260312T233000\r\nDTEND:20260313T003000\r\nSUMMARY:Dinner\\; sushi\\, sake\r\nLOCATION:1 Gion\\, Kyoto\r\nDESCRIPTION:Line one\\nLine two\\nhttps:\/\/example.com\/dinner/);
+  assert.match(ics, /DTSTART:20260312T100000\r\nDTEND:20260312T121500\r\nSUMMARY:Museum\r\nLOCATION:35\\,135.7/);
+  assert.doesNotMatch(ics, /TZID|DTSTART:\d+T\d+Z/, "times are floating");
+  for (const line of ics.split("\r\n")) assert.ok(Buffer.byteLength(line) <= 75, `line over 75 octets: ${line}`);
+  assert.ok(ics.replace(/\r\n /g, "").includes(`SUMMARY:${"É".repeat(60)}`), "unfolding restores the long line");
 });

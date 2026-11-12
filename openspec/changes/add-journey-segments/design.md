@@ -43,3 +43,11 @@
 ## Open Questions
 
 - Should a journey cell carry its own `url` for "Open at airline", or is a separate link column enough? This design uses the link column.
+
+## Implementation notes
+
+- The journey cell always uses two lines (times and places, then stops, duration and carriers) in both tools, instead of one line on wide screens. Table cells do not wrap, so one line made the flight table scroll sideways at 720 px.
+- Validation is a small hand-written check (`journeyProblem`) called from each tool's schema, so errors read "Row 2, column "Route": segment 1: arrive is missing." The view imports only the formatter.
+- A change of station or airport reads "1 stop London St Pancras to London Euston".
+- Shared code lives in `src/components/journey.ts`, `JourneyCell.tsx` and `journey.css`.
+- Task 4.2's Claude Desktop check waits on Iven, and 4.3 waits on `add-data-table` and `add-comparison` being archived.

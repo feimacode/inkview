@@ -38,3 +38,10 @@ Decision: 3 for this change. If Iven wants 1 later, it should be its own change:
 ## Open Questions
 
 - Does Iven want the opt-in geocoding change (alternative 1) proposed next?
+
+## Implementation notes
+
+- The tile layer moved to `src/components/map/Surface.tsx` so listings and itineraries reuse it.
+- "Open in maps" for an address-only place searches for the address alone, which geocoders match more reliably than a business name plus address.
+- The view no longer rejects more than 50 places on its own; the server schema enforces the cap, and SDK callers may raise it.
+- README, `docs/sdk.md` and `docs/privacy.md` are updated; the Claude Desktop check in task 3.1 waits on Iven.

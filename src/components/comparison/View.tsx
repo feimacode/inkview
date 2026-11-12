@@ -2,6 +2,8 @@ import type { ViewProps } from "../types.js";
 import type { Comparison, Value } from "./schema.js";
 import { Button, useBusy } from "../../runtime/primitives.js";
 import { fmtNumber } from "../../runtime/format.js";
+import { isJourney } from "../journey.js";
+import { JourneyCell } from "../JourneyCell.js";
 import "./comparison.css";
 
 export function accepts(d: unknown): d is Comparison {
@@ -18,10 +20,12 @@ function Cell({ v, locale }: { v: Value | undefined; locale: string }) {
       <span className="cmp-no">✕ No</span>
     );
   if (typeof v === "number") return <span className="cmp-num">{fmtNumber(v, locale)}</span>;
+  if (isJourney(v)) return <JourneyCell journey={v} />;
   if (typeof v === "object") {
-    const r = Math.round(Math.max(0, Math.min(5, v.rating)));
+    const rating = (v as { rating: number }).rating;
+    const r = Math.round(Math.max(0, Math.min(5, rating)));
     return (
-      <span className="cmp-rating" role="img" aria-label={`${v.rating} out of 5`}>
+      <span className="cmp-rating" role="img" aria-label={`${rating} out of 5`}>
         {"★".repeat(r)}
         <span className="cmp-rating-off">{"★".repeat(5 - r)}</span>
       </span>

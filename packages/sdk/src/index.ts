@@ -51,6 +51,12 @@ import { meta as mapMeta } from "../../../src/components/map/meta.js";
 import { mapSchema, HARD_MAX_PLACES } from "../../../src/components/map/schema.js";
 import { toMarkdown as mapMarkdown } from "../../../src/components/map/markdown.js";
 import { mapConfig } from "../../../src/components/map/config.js";
+import { meta as listingsMeta } from "../../../src/components/listings/meta.js";
+import { listingsSchema, HARD_MAX_LISTINGS } from "../../../src/components/listings/schema.js";
+import { toMarkdown as listingsMarkdown } from "../../../src/components/listings/markdown.js";
+import { meta as itineraryMeta } from "../../../src/components/itinerary/meta.js";
+import { itinerarySchema, HARD_MAX_DAYS } from "../../../src/components/itinerary/schema.js";
+import { toMarkdown as itineraryMarkdown } from "../../../src/components/itinerary/markdown.js";
 
 export const DEFAULT_APP_URI = "ui://inkview/v1/app.html";
 
@@ -67,7 +73,9 @@ export type ComponentId =
   | "task_list"
   | "document_preview"
   | "form"
-  | "map";
+  | "map"
+  | "listings"
+  | "itinerary";
 
 /**
  * Tool metadata that links a tool to the Inkview view. A type alias rather than
@@ -257,6 +265,20 @@ export function showMap(data: MapInput, options: BuildOptions = {}): CallToolRes
   return result(mapMeta, mapMarkdown(parsed), parsed, mapConfig());
 }
 
+export type ListingsInput = z.input<ReturnType<typeof listingsSchema>>;
+/** Places, services, stays, events or homes as cards. `limit` caps listings (default 20, max 100). */
+export function showListings(data: ListingsInput, options: BuildOptions = {}): CallToolResult {
+  const parsed = listingsSchema(cap(options.limit, 20, HARD_MAX_LISTINGS, "listings")).parse(data);
+  return result(listingsMeta, listingsMarkdown(parsed), parsed, mapConfig());
+}
+
+export type ItineraryInput = z.input<ReturnType<typeof itinerarySchema>>;
+/** A day-by-day plan of stops. `limit` caps days (default 14, max 60). */
+export function showItinerary(data: ItineraryInput, options: BuildOptions = {}): CallToolResult {
+  const parsed = itinerarySchema(cap(options.limit, 14, HARD_MAX_DAYS, "days")).parse(data);
+  return result(itineraryMeta, itineraryMarkdown(parsed), parsed, mapConfig());
+}
+
 /** Builders by component, for call sites that prefer `inkview.table(data)`. */
 export const inkview = {
   profileCard: showProfileCard,
@@ -272,5 +294,7 @@ export const inkview = {
   document: showDocument,
   form: showForm,
   map: showMap,
+  listings: showListings,
+  itinerary: showItinerary,
 } as const;
 

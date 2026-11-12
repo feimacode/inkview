@@ -1,0 +1,279 @@
+[
+  {
+    "name": "Kyoto city break",
+    "data": {
+      "title": "Three days in Kyoto with kids",
+      "caption": "Easy pace, under 8,000 steps a day",
+      "days": [
+        {
+          "date": "2026-03-12",
+          "label": "Arrival and Gion",
+          "stops": [
+            {
+              "title": "Check in at Hotel Kanra",
+              "time": "15:00",
+              "kind": "stay",
+              "lat": 34.9921,
+              "lng": 135.7593,
+              "address": "190 Kitamachi, Shimogyo Ward"
+            },
+            {
+              "title": "Nishiki Market",
+              "time": "16:30",
+              "endTime": "17:45",
+              "kind": "eat",
+              "note": "Snack stalls; cash is handy.",
+              "cost": {
+                "amount": 3000,
+                "currency": "JPY"
+              },
+              "lat": 35.005,
+              "lng": 135.7649,
+              "travel": "12 min by subway"
+            },
+            {
+              "title": "Gion evening walk",
+              "time": "18:30",
+              "kind": "see",
+              "lat": 35.0037,
+              "lng": 135.7752,
+              "travel": "15 min walk"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-13",
+          "label": "Arashiyama",
+          "stops": [
+            {
+              "title": "Bamboo Grove",
+              "time": "08:30",
+              "endTime": "09:30",
+              "kind": "see",
+              "note": "Go early to avoid crowds.",
+              "lat": 35.0168,
+              "lng": 135.6713,
+              "travel": "35 min by JR train"
+            },
+            {
+              "title": "Tenryu-ji Temple",
+              "time": "09:45",
+              "endTime": "11:00",
+              "kind": "see",
+              "cost": {
+                "amount": 1500,
+                "currency": "JPY"
+              },
+              "lat": 35.0158,
+              "lng": 135.6738,
+              "url": "https://example.com/tenryuji",
+              "travel": "5 min walk"
+            },
+            {
+              "title": "Lunch at Arashiyama Yoshimura",
+              "time": "11:30",
+              "kind": "eat",
+              "cost": {
+                "amount": 6400,
+                "currency": "JPY"
+              },
+              "lat": 35.0138,
+              "lng": 135.6777,
+              "travel": "8 min walk"
+            },
+            {
+              "title": "Monkey Park Iwatayama",
+              "time": "13:30",
+              "kind": "see",
+              "note": "20 minute uphill walk.",
+              "cost": {
+                "amount": 1700,
+                "currency": "JPY"
+              },
+              "lat": 35.0113,
+              "lng": 135.6762
+            }
+          ]
+        },
+        {
+          "date": "2026-03-14",
+          "label": "Fushimi and home",
+          "stops": [
+            {
+              "title": "Fushimi Inari Shrine",
+              "time": "09:00",
+              "endTime": "11:00",
+              "kind": "see",
+              "lat": 34.9671,
+              "lng": 135.7727,
+              "travel": "10 min by JR train"
+            },
+            {
+              "title": "Kyoto Railway Museum",
+              "time": "12:30",
+              "kind": "see",
+              "cost": {
+                "amount": 3000,
+                "currency": "JPY"
+              },
+              "lat": 34.9872,
+              "lng": 135.7427
+            },
+            {
+              "title": "Shinkansen to Tokyo",
+              "time": "16:05",
+              "kind": "travel",
+              "cost": {
+                "amount": 280,
+                "currency": "AUD"
+              },
+              "note": "Booked through the travel agent."
+            }
+          ]
+        }
+      ],
+      "source": {
+        "name": "Example travel guide",
+        "url": "https://example.com/kyoto"
+      }
+    }
+  },
+  {
+    "name": "Family road trip",
+    "data": {
+      "title": "Great Ocean Road in two days",
+      "days": [
+        {
+          "label": "Melbourne to Apollo Bay",
+          "stops": [
+            {
+              "title": "Bells Beach lookout",
+              "time": "10:00",
+              "kind": "see",
+              "lat": -38.3686,
+              "lng": 144.2811,
+              "travel": "1 h 20 min drive"
+            },
+            {
+              "title": "Lunch in Lorne",
+              "time": "12:15",
+              "kind": "eat",
+              "cost": {
+                "amount": 85,
+                "currency": "AUD"
+              },
+              "lat": -38.5413,
+              "lng": 143.9741,
+              "travel": "45 min drive"
+            },
+            {
+              "title": "Kennett River koala walk",
+              "kind": "see",
+              "lat": -38.6676,
+              "lng": 143.8616
+            },
+            {
+              "title": "Apollo Bay motel",
+              "kind": "stay",
+              "cost": {
+                "amount": 210,
+                "currency": "AUD"
+              },
+              "address": "Great Ocean Rd, Apollo Bay VIC"
+            }
+          ]
+        },
+        {
+          "label": "Apollo Bay to Port Campbell",
+          "stops": [
+            {
+              "title": "Cape Otway Lightstation",
+              "time": "09:30",
+              "kind": "see",
+              "cost": {
+                "amount": 58,
+                "currency": "AUD"
+              },
+              "lat": -38.8565,
+              "lng": 143.5118
+            },
+            {
+              "title": "Twelve Apostles",
+              "time": "13:00",
+              "kind": "see",
+              "lat": -38.6621,
+              "lng": 143.1051,
+              "travel": "1 h 15 min drive"
+            },
+            {
+              "title": "Loch Ard Gorge",
+              "kind": "see",
+              "lat": -38.6468,
+              "lng": 143.0711,
+              "travel": "5 min drive"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Titles-only weekend",
+    "data": {
+      "days": [
+        {
+          "stops": [
+            {
+              "title": "Farmers market"
+            },
+            {
+              "title": "Picnic by the river"
+            },
+            {
+              "title": "Movie night"
+            }
+          ]
+        },
+        {
+          "stops": [
+            {
+              "title": "Sleep in"
+            },
+            {
+              "title": "Brunch with Sam"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Single day",
+    "data": {
+      "title": "Saturday in the city",
+      "days": [
+        {
+          "date": "2026-11-14",
+          "stops": [
+            {
+              "title": "Coffee at Proud Mary",
+              "time": "09:00",
+              "kind": "eat",
+              "cost": {
+                "amount": 18,
+                "currency": "AUD"
+              }
+            },
+            {
+              "title": "NGV International",
+              "time": "10:30",
+              "endTime": "12:30",
+              "kind": "see",
+              "address": "180 St Kilda Rd, Melbourne"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

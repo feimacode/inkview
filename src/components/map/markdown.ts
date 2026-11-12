@@ -10,7 +10,7 @@ export function toMarkdown(map: MapData): string {
     const label = place.url ? `[${place.label}](${place.url})` : `**${place.label}**`;
     const parts = [label];
     if (place.address) parts.push(place.address);
-    parts.push(`${coord(place.lat)}, ${coord(place.lng)}`);
+    if (place.lat !== undefined && place.lng !== undefined) parts.push(`${coord(place.lat)}, ${coord(place.lng)}`);
     lines.push(`${index + 1}. ${parts.join(" — ")}`);
   });
   if (map.caption) lines.push("", `_${map.caption}_`);

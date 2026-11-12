@@ -49,9 +49,8 @@ const TILE_PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
   "base64",
 );
-const configs = {
-  map: { tileTemplate: "https://tiles.test/{z}/{x}/{y}.png", attribution: "Test tiles" },
-};
+const tiles = { tileTemplate: "https://tiles.test/{z}/{x}/{y}.png", attribution: "Test tiles" };
+const configs = { map: tiles, listings: tiles, itinerary: tiles };
 const ctx = async (theme, width = 720) => {
   const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme });
   await page.route("https://tiles.test/**", (route) =>

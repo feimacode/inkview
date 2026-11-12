@@ -1,0 +1,15 @@
+.ls-tools { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.ls-tools .ink-btn { font-size: 12px; padding: 4px 10px; }
+.ls-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.ls-one { grid-template-columns: 1fr; }
+.ls-img { aspect-ratio: 16 / 9; object-fit: cover; }
+.ls-price { font-size: 14px; }
+.ls-wrap { white-space: normal; overflow-wrap: anywhere; }
+.ls-open { color: var(--ink-good); }
+.ls-badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0; }
+.ls-phone { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; font-variant-numeric: tabular-nums; }
+.ls-phone .ink-link { font-size: 12px; }
+.ls-actions { justify-content: flex-start; }
+.ls-note { margin: 10px 0 0; font-size: 12px; }
+.ls-hint { font-size: 13px; }
+@media (max-width: 420px) { .ls-grid { grid-template-columns: 1fr; } }
