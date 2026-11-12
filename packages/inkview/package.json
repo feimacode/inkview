@@ -1,7 +1,7 @@
 {
   "name": "@feimacode/inkview",
   "version": "0.1.0",
-  "description": "Agent-agnostic UI components for MCP Apps. Pilot: profile card.",
+  "description": "See what your AI found as real cards you can trust and act on. MCP Apps components for Claude, ChatGPT and other hosts.",
   "license": "MIT",
   "type": "module",
   "engines": {
