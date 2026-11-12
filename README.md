@@ -1,8 +1,12 @@
 # Inkview
 
-Agent-agnostic UI components for [MCP Apps](https://github.com/modelcontextprotocol/ext-apps).
-Your agent already has the data; Inkview draws it as a native-looking component
-right in the chat, in Claude, ChatGPT and any other host that renders MCP Apps.
+See what your AI found as real cards you can trust and act on.
+
+When Claude, ChatGPT or another [MCP Apps](https://github.com/modelcontextprotocol/ext-apps)
+host finds a plumber, a hotel or a flight, Inkview draws it right in the chat: a
+card that says where the data came from and takes you straight to the business.
+Free hosted server, open source. Why and where it's heading:
+[docs/direction.md](docs/direction.md).
 
 ![Profile card](docs/img/profile-card-light.png)
 
