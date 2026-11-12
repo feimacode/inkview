@@ -61,6 +61,26 @@ and hosted setup steps (`add-hosted-server` 3.2), deploy from `main` after CI
 (`add-hosted-server` 2.3), the CONTRIBUTING dry run (`prepare-public-launch` 2.3),
 and the host checks that need Iven.
 
+## Consumer use cases
+
+Proposed 2026-11-12, not yet approved. These come from the consumer use case
+research of 2026-11-10 (flights, trips, local services, stays, events): Inkview is
+for end users choosing between things, so the next components serve those tasks.
+
+| Milestone | Change | Capability |
+| --- | --- | --- |
+| 7. Consumer | `add-listings` | listings |
+| | `update-map-addresses` | map (modified) |
+| | `add-itinerary` | itinerary |
+| | `add-journey-segments` | data-table, comparison (both modified) |
+
+Suggested order: listings first (it serves six of the twelve researched cases),
+then the map update (small, and listings and itinerary both show maps), then
+itinerary, then journey segments, which needs `add-data-table` and
+`add-comparison` archived first. A `show_auto` update for the new components
+follows once they ship. Geocoding addresses is left out on purpose; see the
+design in `update-map-addresses`.
+
 ## Working with the changes
 
 ```bash
