@@ -10,6 +10,10 @@ context: |
   The hosted build must be stateless: store nothing and never log tool arguments.
   Never fetch or scrape data on the user's behalf; components only render data passed in.
   Cart, checkout and payments are out of scope; product actions only link to the merchant.
+  Direction (docs/direction.md): Inkview is the rendering engine of the agent entrance.
+  Every card does three jobs: render the agent's data, show its provenance (source,
+  check time, unchecked values) and hand off to the business (open, call, directions).
+  No accounts, no stored user data, no paid data APIs, and no hiding results: show risk, let the user decide.
   Every component schema is versioned, accepts unknown fields, and defines a markdown fallback.
   Local builds must run on Linux (including WSL), macOS and Windows with Node 20+.
 
@@ -25,6 +29,7 @@ context: |
 rules:
   proposal:
     - State what is out of scope
+    - In Why, say which job the change serves (render, trust or hand-off), per docs/direction.md
   tasks:
     - Each component change lands its schema, markdown fallback, view, examples and render tests together
 

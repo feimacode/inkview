@@ -6,6 +6,10 @@ deltas (behavior), a design where needed (how) and tasks. Shipped behavior lives
 [`openspec/specs/`](../openspec/specs); the profile card pilot is captured there as
 `render-server` and `profile-card`.
 
+Direction (adopted 2026-11-12): Inkview is the rendering engine of the agent
+entrance; every card renders, shows its provenance and hands off to the business.
+See [direction.md](direction.md) for the three jobs and what Inkview does not do.
+
 Goal: an agent picks the right component unprompted, and it looks native in Claude
 and ChatGPT. Source plan: [Inkview: Product and Architecture Plan](https://claude.ai/artifact/DdR4jV9mm9L35Erh5JW88B).
 
@@ -80,6 +84,19 @@ itinerary, then journey segments, which needs `add-data-table` and
 `add-comparison` archived first. A `show_auto` update for the new components
 follows once they ship. Geocoding addresses is left out on purpose; see the
 design in `update-map-addresses`.
+
+## Agent entrance, phase 1
+
+Proposed 2026-11-12 from [direction.md](direction.md). Planning only so far.
+
+| Milestone | Change | Capability |
+| --- | --- | --- |
+| 8. Trust and hand-off | `add-provenance-strip` | provenance |
+| | `add-handoff-actions` | handoff-actions, component-runtime (modified) |
+
+Order: hand-off first if speed matters, because it carries the URL-scheme
+security fix; provenance can be built in parallel. Outside the repo: redeploy the
+hosted server and submit to the Claude and ChatGPT directories (both need Iven).
 
 ## Working with the changes
 
