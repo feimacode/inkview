@@ -85,7 +85,8 @@ export function tileUrl(template: string, z: number, x: number, y: number): stri
     .replace("{s}", "abc"[(x + y) % 3]);
 }
 
-/** A map search page for one place, opened by the host. */
-export function mapsUrl(label: string, lat: number, lng: number): string {
-  return `https://www.openstreetmap.org/search?query=${encodeURIComponent(`${label} ${lat},${lng}`)}`;
+/** A map search page for one place, opened by the host: by coordinates, or by address without them. */
+export function mapsUrl(place: { label: string; lat?: number; lng?: number; address?: string }): string {
+  const query = place.lat !== undefined && place.lng !== undefined ? `${place.label} ${place.lat},${place.lng}` : (place.address ?? place.label);
+  return `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`;
 }

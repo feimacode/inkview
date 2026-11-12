@@ -63,7 +63,7 @@ and the host checks that need Iven.
 
 ## Consumer use cases
 
-Proposed 2026-11-12, not yet approved. These come from the consumer use case
+Proposed 2026-11-12 and implemented the same day (host checks pending). These come from the consumer use case
 research of 2026-11-10 (flights, trips, local services, stays, events): Inkview is
 for end users choosing between things, so the next components serve those tasks.
 

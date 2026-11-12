@@ -1582,5 +1582,555 @@
   "expect": null,
   "prompt": "Set a reminder to call Sam. Ask me for the date and time.",
   "source": null
+ },
+ {
+  "id": "list-plumbers",
+  "expect": "show_listings",
+  "prompt": "I've got a leaking tap. Show me these plumbers so I can pick one to call.",
+  "source": [
+   {
+    "name": "Harris Park Plumbing",
+    "rating": 4.8,
+    "reviews": 212,
+    "phone": "(02) 9555 0142",
+    "address": "12 Marion St, Harris Park NSW",
+    "licensed": true,
+    "website": "https://plumb.example.com/harris-park"
+   },
+   {
+    "name": "Westmead Tap & Drain",
+    "rating": 4.6,
+    "reviews": 87,
+    "phone": "0400 555 019",
+    "address": "3 Hawkesbury Rd, Westmead NSW"
+   },
+   {
+    "name": "Parramatta Emergency Plumbers",
+    "rating": 4.2,
+    "reviews": 41,
+    "phone": "+61 2 9555 0177",
+    "address": "88 Church St, Parramatta NSW"
+   }
+  ]
+ },
+ {
+  "id": "list-hotels",
+  "expect": "show_listings",
+  "prompt": "Which of these hotels near Shibuya should we stay at for 3 nights?",
+  "source": [
+   {
+    "name": "Shibuya Stream Hotel",
+    "pricePerNight": "AUD 210",
+    "rating": 4.5,
+    "reviews": 1820,
+    "url": "https://stay.example.com/shibuya-stream",
+    "freeCancellation": true
+   },
+   {
+    "name": "Hotel Koe Tokyo",
+    "pricePerNight": "AUD 245",
+    "rating": 4.4,
+    "reviews": 960,
+    "url": "https://stay.example.com/koe"
+   },
+   {
+    "name": "Sakura Fleur Aoyama",
+    "pricePerNight": "AUD 168",
+    "rating": 4.1,
+    "reviews": 2410,
+    "url": "https://stay.example.com/sakura-fleur"
+   }
+  ]
+ },
+ {
+  "id": "list-concert",
+  "expect": "show_listings",
+  "prompt": "What gigs are on this weekend? Show me the options with ticket prices.",
+  "source": [
+   {
+    "title": "Tame Impala",
+    "venue": "Rod Laver Arena",
+    "start": "2026-11-14T19:30",
+    "priceFrom": "AUD 129",
+    "url": "https://tickets.example.com/tame-impala"
+   },
+   {
+    "title": "Julia Jacklin",
+    "venue": "Forum Melbourne",
+    "start": "2026-11-15T20:00",
+    "priceFrom": "AUD 65",
+    "url": "https://tickets.example.com/julia-jacklin"
+   },
+   {
+    "title": "Jazz at the Paris Cat",
+    "venue": "Paris Cat Jazz Club",
+    "start": "2026-11-14T21:00",
+    "priceFrom": "AUD 35",
+    "url": "https://tickets.example.com/paris-cat"
+   }
+  ]
+ },
+ {
+  "id": "list-dinner",
+  "expect": "show_listings",
+  "prompt": "Somewhere quiet for a birthday dinner in Newtown. Here's what I found.",
+  "source": [
+   {
+    "name": "Fig & Fennel",
+    "rating": 4.6,
+    "reviews": 612,
+    "address": "201 King St, Newtown",
+    "phone": "(02) 9555 0123",
+    "url": "https://eat.example.com/fig-and-fennel"
+   },
+   {
+    "name": "Osteria Lina",
+    "rating": 4.4,
+    "reviews": 298,
+    "address": "34 Enmore Rd, Newtown",
+    "url": "https://eat.example.com/osteria-lina"
+   },
+   {
+    "name": "The Corner Table",
+    "rating": 4.3,
+    "reviews": 154,
+    "address": "9 Australia St, Newtown"
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "list-rentals",
+  "expect": "show_listings",
+  "prompt": "Show these 2-bed rentals near the train line.",
+  "source": [
+   {
+    "title": "2 bed apartment, Toowong",
+    "rentPerWeek": "AUD 650",
+    "address": "14 Sherwood Rd, Toowong QLD",
+    "url": "https://rent.example.com/toowong-14"
+   },
+   {
+    "title": "2 bed unit, Indooroopilly",
+    "rentPerWeek": "AUD 690",
+    "address": "7 Station Rd, Indooroopilly QLD",
+    "url": "https://rent.example.com/indro-7"
+   },
+   {
+    "title": "2 bed townhouse, Taringa",
+    "rentPerWeek": "AUD 620",
+    "address": "3 Moorak St, Taringa QLD",
+    "url": "https://rent.example.com/taringa-3"
+   }
+  ]
+ },
+ {
+  "id": "prod-vacuum-not-listing",
+  "expect": "show_products",
+  "prompt": "Best robot vacuum under $600 for pet hair?",
+  "source": [
+   {
+    "title": "Roborock Q8 Max",
+    "price": "$549.00",
+    "rating": 4.5,
+    "reviews": 3120,
+    "merchant": "Example Appliances",
+    "url": "https://shop.example.com/p/roborock-q8"
+   },
+   {
+    "title": "Eufy X8 Pro",
+    "price": "$499.00",
+    "rating": 4.3,
+    "reviews": 2210,
+    "merchant": "Gadget Mart",
+    "url": "https://gadgets.example.net/eufy-x8"
+   },
+   {
+    "title": "iRobot Roomba j7",
+    "price": "$579.00",
+    "rating": 4.2,
+    "reviews": 8800,
+    "merchant": "Example Appliances",
+    "url": "https://shop.example.com/p/roomba-j7"
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "map-addresses-only",
+  "expect": "show_map",
+  "prompt": "Put these locksmiths on a map.",
+  "source": [
+   {
+    "name": "Dee Why Locksmiths",
+    "address": "12 Pittwater Rd, Dee Why NSW"
+   },
+   {
+    "name": "Manly Lock & Key",
+    "address": "45 Sydney Rd, Manly NSW"
+   },
+   {
+    "name": "Brookvale Security",
+    "address": "3 Winbourne Rd, Brookvale NSW"
+   }
+  ]
+ },
+ {
+  "id": "map-places-api",
+  "expect": "show_map",
+  "prompt": "Map the pharmacies that are open late.",
+  "source": [
+   {
+    "name": "Late Night Chemist Newtown",
+    "address": "322 King St, Newtown",
+    "lat": -33.8989,
+    "lng": 151.1775
+   },
+   {
+    "name": "Priceline Broadway",
+    "address": "1 Bay St, Ultimo",
+    "lat": -33.8838,
+    "lng": 151.1946
+   },
+   {
+    "name": "Chemist Works Glebe",
+    "address": "190 Glebe Point Rd, Glebe",
+    "lat": -33.8791,
+    "lng": 151.1853
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "itin-kyoto",
+  "expect": "show_itinerary",
+  "prompt": "Lay out this Kyoto plan day by day.",
+  "source": {
+   "days": [
+    {
+     "date": "2026-03-12",
+     "stops": [
+      {
+       "time": "15:00",
+       "what": "Check in at Hotel Kanra"
+      },
+      {
+       "time": "16:30",
+       "what": "Nishiki Market",
+       "cost": "JPY 3000"
+      },
+      {
+       "time": "18:30",
+       "what": "Gion evening walk"
+      }
+     ]
+    },
+    {
+     "date": "2026-03-13",
+     "stops": [
+      {
+       "time": "08:30",
+       "what": "Bamboo Grove",
+       "lat": 35.0168,
+       "lng": 135.6713
+      },
+      {
+       "time": "09:45",
+       "what": "Tenryu-ji Temple",
+       "cost": "JPY 1500",
+       "lat": 35.0158,
+       "lng": 135.6738
+      }
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "itin-road-trip",
+  "expect": "show_itinerary",
+  "prompt": "Here's our Great Ocean Road trip. Show it as a plan we can tweak.",
+  "source": {
+   "day1": [
+    "Bells Beach lookout",
+    "Lunch in Lorne",
+    "Kennett River koala walk",
+    "Apollo Bay motel"
+   ],
+   "day2": [
+    "Cape Otway Lightstation",
+    "Twelve Apostles",
+    "Loch Ard Gorge"
+   ]
+  }
+ },
+ {
+  "id": "itin-weekend",
+  "expect": "show_itinerary",
+  "prompt": "Plan my weekend from these: Saturday farmers market, picnic by the river, movie night; Sunday sleep in, brunch with Sam.",
+  "source": null
+ },
+ {
+  "id": "itin-conference",
+  "expect": "show_itinerary",
+  "prompt": "Turn my two conference days into an itinerary.",
+  "source": [
+   {
+    "day": "2026-06-09",
+    "time": "09:00",
+    "item": "Keynote, Hall A"
+   },
+   {
+    "day": "2026-06-09",
+    "time": "11:30",
+    "item": "Workshop: design tokens"
+   },
+   {
+    "day": "2026-06-09",
+    "time": "19:00",
+    "item": "Speakers dinner at Kødbyens Fiskebar"
+   },
+   {
+    "day": "2026-06-10",
+    "time": "10:00",
+    "item": "Panel: AI in product"
+   },
+   {
+    "day": "2026-06-10",
+    "time": "15:45",
+    "item": "Train to the airport"
+   }
+  ],
+  "heldOut": true
+ },
+ {
+  "id": "itin-daytrip",
+  "expect": "show_itinerary",
+  "prompt": "Show Saturday in the city as a plan: 9:00 coffee at Proud Mary, 10:30 to 12:30 NGV International, 13:00 lunch at Chin Chin, 15:00 walk the Botanic Gardens.",
+  "source": null
+ },
+ {
+  "id": "journey-flights",
+  "expect": "show_table",
+  "prompt": "Compare these Sydney to Tokyo flights for 12 March.",
+  "source": [
+   {
+    "airline": "Qantas",
+    "price": "AUD 1180",
+    "legs": [
+     {
+      "from": "SYD",
+      "to": "HND",
+      "depart": "2026-03-12T10:20+11:00",
+      "arrive": "2026-03-12T17:55+09:00",
+      "carrier": "Qantas",
+      "number": "QF25"
+     }
+    ]
+   },
+   {
+    "airline": "Singapore Airlines",
+    "price": "AUD 865",
+    "legs": [
+     {
+      "from": "SYD",
+      "to": "SIN",
+      "depart": "2026-03-12T09:15+11:00",
+      "arrive": "2026-03-12T14:25+08:00",
+      "carrier": "Singapore Airlines",
+      "number": "SQ232"
+     },
+     {
+      "from": "SIN",
+      "to": "NRT",
+      "depart": "2026-03-12T23:55+08:00",
+      "arrive": "2026-03-13T07:40+09:00",
+      "carrier": "Singapore Airlines",
+      "number": "SQ638"
+     }
+    ]
+   },
+   {
+    "airline": "Jetstar",
+    "price": "AUD 612",
+    "durationMinutes": 810,
+    "legs": [
+     {
+      "from": "SYD",
+      "to": "CNS",
+      "depart": "2026-03-12T06:05",
+      "arrive": "2026-03-12T08:10",
+      "carrier": "Jetstar",
+      "number": "JQ950"
+     },
+     {
+      "from": "CNS",
+      "to": "NRT",
+      "depart": "2026-03-12T11:30",
+      "arrive": "2026-03-12T17:35",
+      "carrier": "Jetstar",
+      "number": "JQ25"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "journey-trains",
+  "expect": "show_table",
+  "prompt": "What are my options from Paris to Milan on 4 May?",
+  "source": [
+   {
+    "option": "Direct TGV",
+    "fare": "EUR 89",
+    "durationMinutes": 444,
+    "legs": [
+     {
+      "from": "Paris Gare de Lyon",
+      "to": "Milano Centrale",
+      "depart": "2026-05-04T06:26",
+      "arrive": "2026-05-04T13:50",
+      "carrier": "TGV inOui",
+      "number": "9241"
+     }
+    ]
+   },
+   {
+    "option": "Via Zurich",
+    "fare": "EUR 118",
+    "durationMinutes": 508,
+    "legs": [
+     {
+      "from": "Paris Gare de Lyon",
+      "to": "Zürich HB",
+      "depart": "2026-05-04T08:22",
+      "arrive": "2026-05-04T12:26",
+      "carrier": "TGV Lyria",
+      "number": "9211"
+     },
+     {
+      "from": "Zürich HB",
+      "to": "Milano Centrale",
+      "depart": "2026-05-04T13:33",
+      "arrive": "2026-05-04T16:50",
+      "carrier": "SBB EuroCity",
+      "number": "EC 317"
+     }
+    ]
+   },
+   {
+    "option": "Night bus",
+    "fare": "EUR 45",
+    "legs": [
+     {
+      "from": "Paris Bercy",
+      "to": "Milano Lampugnano",
+      "depart": "2026-05-04T21:15",
+      "arrive": "2026-05-05T10:05",
+      "carrier": "FlixBus",
+      "number": "N718"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "journey-finalists",
+  "expect": "show_comparison",
+  "prompt": "I'm down to these two flights. Which should I book?",
+  "source": [
+   {
+    "name": "Qantas direct",
+    "price": "AUD 1180",
+    "checkedBag": true,
+    "legs": [
+     {
+      "from": "SYD",
+      "to": "HND",
+      "depart": "2026-03-12T10:20+11:00",
+      "arrive": "2026-03-12T17:55+09:00",
+      "carrier": "Qantas",
+      "number": "QF25"
+     }
+    ]
+   },
+   {
+    "name": "Jetstar via Cairns",
+    "price": "AUD 612",
+    "checkedBag": false,
+    "durationMinutes": 810,
+    "legs": [
+     {
+      "from": "SYD",
+      "to": "CNS",
+      "depart": "2026-03-12T06:05",
+      "arrive": "2026-03-12T08:10",
+      "carrier": "Jetstar",
+      "number": "JQ950"
+     },
+     {
+      "from": "CNS",
+      "to": "NRT",
+      "depart": "2026-03-12T11:30",
+      "arrive": "2026-03-12T17:35",
+      "carrier": "Jetstar",
+      "number": "JQ25"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "journey-buses",
+  "expect": "show_table",
+  "prompt": "List the buses from Canberra to Sydney tomorrow morning.",
+  "source": [
+   {
+    "operator": "Murrays",
+    "fare": "AUD 45",
+    "durationMinutes": 210,
+    "legs": [
+     {
+      "from": "Canberra Jolimont",
+      "to": "Sydney Central",
+      "depart": "2026-11-13T06:00",
+      "arrive": "2026-11-13T09:30",
+      "carrier": "Murrays",
+      "number": "M601"
+     }
+    ]
+   },
+   {
+    "operator": "Greyhound",
+    "fare": "AUD 39",
+    "durationMinutes": 225,
+    "legs": [
+     {
+      "from": "Canberra Jolimont",
+      "to": "Sydney Central",
+      "depart": "2026-11-13T07:15",
+      "arrive": "2026-11-13T11:00",
+      "carrier": "Greyhound",
+      "number": "GX272"
+     }
+    ]
+   },
+   {
+    "operator": "FlixBus",
+    "fare": "AUD 29",
+    "durationMinutes": 240,
+    "legs": [
+     {
+      "from": "Canberra Jolimont",
+      "to": "Sydney Central",
+      "depart": "2026-11-13T08:30",
+      "arrive": "2026-11-13T12:30",
+      "carrier": "FlixBus",
+      "number": "N402"
+     }
+    ]
+   }
+  ],
+  "heldOut": true
  }
 ]

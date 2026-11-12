@@ -40,3 +40,13 @@ An itinerary is the first component that combines three existing patterns: a dat
 ## Open Questions
 
 - Should the view offer "Open day in maps" as a multi-stop directions link? It depends on a maps site's URL format, so it is left out for now.
+
+## Implementation notes
+
+- In the all-days view pins are labelled "day.stop" (for example 2.3) rather than coloured by day. It carries both facts without a colour legend and costs less of the bundle budget.
+- Kinds show as a small glyph plus the word (See, Eat, Stay, Travel) in a chip.
+- Undo steps back through every edit, not only the last one.
+- A new tool result replaces the plan and clears the edit history.
+- Added `showItinerary` to the server SDK (`limit` caps days: default 14, maximum 60).
+- Five eval prompts were added rather than four, because the eval set requires at least five per tool; the eval set's size limit rose from 95 to 125 prompts.
+- README and gallery are updated; the Claude Desktop and calendar-app check in task 3.1 waits on Iven.

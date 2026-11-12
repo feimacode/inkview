@@ -20,7 +20,7 @@ test("eval set: coverage per component, no-render group, held-out share", () => 
   assert.ok(prompts.filter((p: any) => p.expect === null).length >= 8, "at least 8 no-render prompts");
   const held = prompts.filter((p: any) => p.heldOut).length;
   assert.ok(held / prompts.length >= 0.2, `held-out share ${held}/${prompts.length}`);
-  assert.ok(prompts.length >= 45 && prompts.length <= 95);
+  assert.ok(prompts.length >= 45 && prompts.length <= 125);
 });
 
 const ada = prompts.find((p: any) => p.id === "profile-ada");

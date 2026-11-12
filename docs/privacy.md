@@ -28,14 +28,16 @@ There are no cookies, analytics or third-party trackers in the server or the com
 
 ## Map tiles
 
-Maps load raster tiles directly from the configured tile provider (by default
+Maps, and the map views of listings and itineraries, load raster tiles directly from the configured tile provider (by default
 OpenStreetMap). Each request contains only the tile coordinates for the area on
 screen, but the provider still sees which part of the map you are looking at and
 your IP address, under its own privacy policy. The Inkview server never proxies
 or sees these requests. Tiles can be turned off with `INKVIEW_MAP_TILES=off`,
 which leaves a neutral grid and the place list. On a self-hosted deployment,
 point `INKVIEW_MAP_TILES` at your own tile server to keep map requests on your
-infrastructure.
+infrastructure. Listings request no tiles until you switch to their map view.
+Inkview never turns an address into coordinates: a place without coordinates is
+listed, not looked up.
 
 ## Self-hosting
 

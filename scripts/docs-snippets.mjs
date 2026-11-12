@@ -21,6 +21,8 @@ import {
   showDocument,
   showEntityCard,
   showForm,
+  showItinerary,
+  showListings,
   showMap,
   showProducts,
   showProfileCard,

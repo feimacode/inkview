@@ -20,4 +20,15 @@ export default {
     assert.equal(await frame.locator(".cmp-narrow .cmp-card").count(), 3);
     assert.equal(await frame.locator(".cmp-wide").isVisible(), false);
   },
+  async "draws journey values for three flight finalists"({ render, examples, assert }) {
+    const frame = await render(examples.find((e) => e.name === "Flight finalists").data);
+    const wide = frame.locator(".cmp-wide");
+    assert.equal(await wide.locator(".jr").count(), 3);
+    assert.deepEqual(await wide.locator(".jr .ink-sr").allTextContents(), [
+      "SYD 10:20 → HND 17:55 · Direct · 9h 35m · Qantas",
+      "SYD 09:15 → NRT 07:40 (+1) · 1 stop SIN 9h 30m · 24h 25m · Singapore Airlines",
+      "SYD 06:05 → NRT 17:35 · 1 stop CNS 3h 20m · 13h 30m · Jetstar",
+    ]);
+    assert.equal(await wide.locator(".jr-day").textContent(), "+1");
+  },
 };

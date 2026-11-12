@@ -1,0 +1,294 @@
+[
+  {
+    "name": "Plumbers",
+    "data": {
+      "title": "Plumbers near Parramatta",
+      "kind": "service",
+      "distanceFrom": "from Parramatta station",
+      "asOf": "2026-11-12T09:30:00+11:00",
+      "listings": [
+        {
+          "title": "Harris Park Plumbing",
+          "rating": 4.8,
+          "reviewCount": 212,
+          "badges": [
+            "Licensed",
+            "24-hour call-outs"
+          ],
+          "distanceKm": 1.4,
+          "address": "12 Marion St, Harris Park NSW 2150",
+          "lat": -33.8229,
+          "lng": 151.0089,
+          "phone": "(02) 9555 0142",
+          "hours": "Open 24 hours",
+          "price": {
+            "amount": 95,
+            "currency": "AUD",
+            "unit": "hour",
+            "from": true
+          },
+          "priceNote": "plus $80 call-out fee",
+          "url": "https://example.com/harris-park-plumbing"
+        },
+        {
+          "title": "Westmead Tap & Drain",
+          "rating": 4.6,
+          "reviewCount": 87,
+          "badges": [
+            "Licensed",
+            "Insured"
+          ],
+          "distanceKm": 2.9,
+          "address": "3 Hawkesbury Rd, Westmead NSW 2145",
+          "lat": -33.8075,
+          "lng": 150.9877,
+          "phone": "0400 555 019",
+          "hours": "Mon to Sat 7am to 5pm",
+          "price": {
+            "amount": 110,
+            "currency": "AUD",
+            "unit": "hour"
+          }
+        },
+        {
+          "title": "Parramatta Emergency Plumbers",
+          "rating": 4.2,
+          "reviewCount": 41,
+          "distanceKm": 0.6,
+          "address": "88 Church St, Parramatta NSW 2150",
+          "phone": "+61 2 9555 0177",
+          "url": "https://example.com/parramatta-emergency"
+        },
+        {
+          "title": "North Rocks Gasfitting",
+          "rating": 4.9,
+          "reviewCount": 33,
+          "badges": [
+            "Gasfitter"
+          ],
+          "distanceKm": 6.2,
+          "lat": -33.7711,
+          "lng": 151.0211,
+          "phone": "02 9555 0108",
+          "detail": "Hot water systems and gas leaks."
+        }
+      ],
+      "source": {
+        "name": "Example local search"
+      }
+    }
+  },
+  {
+    "name": "Hotels",
+    "data": {
+      "title": "Hotels near Shibuya, 12 to 15 March",
+      "kind": "stay",
+      "distanceFrom": "from Shibuya station",
+      "asOf": "2026-11-12T10:05:00+11:00",
+      "listings": [
+        {
+          "title": "Shibuya Stream Hotel",
+          "price": {
+            "amount": 210,
+            "currency": "AUD",
+            "from": true
+          },
+          "priceNote": "free cancellation",
+          "rating": 4.5,
+          "reviewCount": 1820,
+          "badges": [
+            "Family room",
+            "Breakfast included"
+          ],
+          "distanceKm": 0.3,
+          "address": "3-21-3 Shibuya, Tokyo",
+          "lat": 35.6572,
+          "lng": 139.7036,
+          "url": "https://example.com/stay/shibuya-stream"
+        },
+        {
+          "title": "Hotel Koe Tokyo",
+          "price": {
+            "amount": 245,
+            "currency": "AUD"
+          },
+          "rating": 4.4,
+          "reviewCount": 960,
+          "distanceKm": 0.5,
+          "address": "3-7 Udagawacho, Shibuya, Tokyo",
+          "lat": 35.6617,
+          "lng": 139.6983,
+          "url": "https://example.com/stay/koe"
+        },
+        {
+          "title": "Sakura Fleur Aoyama",
+          "price": {
+            "amount": 168,
+            "currency": "AUD"
+          },
+          "rating": 4.1,
+          "reviewCount": 2410,
+          "badges": [
+            "Family room"
+          ],
+          "distanceKm": 0.6,
+          "address": "2-14-15 Shibuya, Tokyo",
+          "lat": 35.6607,
+          "lng": 139.7079,
+          "url": "https://example.com/stay/sakura-fleur"
+        },
+        {
+          "title": "Trunk Hotel Cat Street",
+          "price": {
+            "amount": 390,
+            "currency": "AUD"
+          },
+          "rating": 4.7,
+          "reviewCount": 540,
+          "distanceKm": 1.1,
+          "address": "5-31 Jingumae, Shibuya, Tokyo",
+          "lat": 35.6651,
+          "lng": 139.7058,
+          "url": "https://example.com/stay/trunk"
+        },
+        {
+          "title": "Minami-Aoyama Guesthouse",
+          "price": {
+            "amount": 132,
+            "currency": "AUD"
+          },
+          "rating": 4.0,
+          "reviewCount": 118,
+          "distanceKm": 1.8,
+          "address": "4-2 Minami-Aoyama, Minato, Tokyo",
+          "url": "https://example.com/stay/minami-aoyama"
+        }
+      ],
+      "source": {
+        "name": "Example hotel search",
+        "url": "https://example.com/hotels"
+      }
+    }
+  },
+  {
+    "name": "Restaurants",
+    "data": {
+      "title": "Quiet dinner spots in Newtown",
+      "kind": "place",
+      "listings": [
+        {
+          "title": "Fig & Fennel",
+          "rating": 4.6,
+          "reviewCount": 612,
+          "badges": [
+            "Private room",
+            "Vegetarian friendly"
+          ],
+          "address": "201 King St, Newtown NSW 2042",
+          "lat": -33.8963,
+          "lng": 151.1802,
+          "hours": "Tue to Sun 5pm to 10pm",
+          "phone": "(02) 9555 0123",
+          "detail": "Modern Australian. Tables for 6 can be booked online.",
+          "url": "https://example.com/fig-and-fennel"
+        },
+        {
+          "title": "Osteria Lina",
+          "rating": 4.4,
+          "reviewCount": 298,
+          "address": "34 Enmore Rd, Newtown NSW 2042",
+          "lat": -33.8985,
+          "lng": 151.1771,
+          "hours": "Daily 5:30pm to late",
+          "url": "https://example.com/osteria-lina"
+        },
+        {
+          "title": "The Corner Table",
+          "rating": 4.3,
+          "reviewCount": 154,
+          "badges": [
+            "BYO"
+          ],
+          "address": "9 Australia St, Newtown NSW 2042",
+          "phone": "(02) 9555 0166"
+        }
+      ],
+      "source": {
+        "name": "Example dining guide"
+      }
+    }
+  },
+  {
+    "name": "Weekend events",
+    "data": {
+      "title": "On in Melbourne this weekend",
+      "kind": "event",
+      "caption": "4 of 23 events for teens",
+      "listings": [
+        {
+          "title": "Night Market at Queen Vic",
+          "start": "2026-11-14T17:00",
+          "price": {
+            "amount": 0,
+            "currency": "AUD",
+            "unit": "person"
+          },
+          "priceNote": "free entry",
+          "address": "Queen Victoria Market, Melbourne",
+          "url": "https://example.com/events/night-market"
+        },
+        {
+          "title": "Indie Game Showcase",
+          "start": "2026-11-14T10:00",
+          "price": {
+            "amount": 25,
+            "currency": "AUD",
+            "unit": "person",
+            "from": true
+          },
+          "badges": [
+            "Ages 12+"
+          ],
+          "address": "ACMI, Federation Square",
+          "url": "https://example.com/events/indie-games"
+        },
+        {
+          "title": "Skate Jam St Kilda",
+          "start": "2026-11-15",
+          "address": "St Kilda Skate Park",
+          "detail": "Open session, bring your own board."
+        },
+        {
+          "title": "Street Art Walking Tour",
+          "start": "2026-11-15T14:00",
+          "price": {
+            "amount": 39.5,
+            "currency": "AUD",
+            "unit": "person"
+          },
+          "rating": 4.8,
+          "reviewCount": 1204,
+          "address": "Hosier Lane, Melbourne",
+          "url": "https://example.com/events/street-art"
+        }
+      ],
+      "source": {
+        "name": "Example events guide"
+      }
+    }
+  },
+  {
+    "name": "Minimal",
+    "data": {
+      "listings": [
+        {
+          "title": "Corner Hardware"
+        },
+        {
+          "title": "Dee Why Locksmiths",
+          "phone": "0400 555 020"
+        }
+      ]
+    }
+  }
+]

@@ -160,14 +160,85 @@ try {
   assert.equal(map.isError ?? false, false);
   assert.equal(map.structuredContent.component, "map");
   assert.match(map.content[0].text, /1\. \*\*Noma\*\* — Refshalevej 96 — 55\.6833, 12\.6103/);
-  const badMap = await client.callTool({
-    name: "show_map",
-    arguments: { places: [{ label: "Somewhere" }] },
-  });
-  assert.equal(badMap.isError, true, "a place without coordinates is rejected");
-  assert.match(badMap.content[0].text, /coordinates are required/i);
+  const call = (places) => client.callTool({ name: "show_map", arguments: { places } });
+  const addressOnly = await call([{ label: "Depot", address: "1 Dock Rd" }]);
+  assert.equal(addressOnly.isError ?? false, false, "an address-only place is accepted");
+  assert.match(addressOnly.content[0].text, /1\. \*\*Depot\*\* — 1 Dock Rd$/);
+  const badMap = await call([{ label: "Somewhere" }]);
+  assert.equal(badMap.isError, true, "a place with neither coordinates nor an address is rejected");
+  assert.match(badMap.content[0].text, /needs coordinates \(lat and lng\) or an address/i);
   assert.match(badMap.content[0].text, /does not look up addresses/i);
-  console.log("✓ show_map: valid payload and missing coordinates");
+  const half = await call([{ label: "Somewhere", lat: 55.6 }]);
+  assert.equal(half.isError, true, "half a coordinate is rejected");
+  assert.match(half.content[0].text, /lng is missing/);
+  const longLabel = await call([{ label: "Hotel", lat: 55.6, lng: 12.6, pinLabel: "$1,234 a night" }]);
+  assert.equal(longLabel.isError, true, "a long pinLabel is rejected");
+  assert.match(longLabel.content[0].text, /at most 8 characters/);
+  console.log("✓ show_map: valid payload, address only, no location, half a coordinate and long pinLabel");
+
+  const listingsTool = tools.find((t) => t.name === "show_listings");
+  assert.ok(listingsTool, "show_listings is listed");
+  assert.match(listingsTool.description, /Use it when/);
+  assert.match(listingsTool.description, /Pass only what your source gave/);
+  const listings = await client.callTool({
+    name: "show_listings",
+    arguments: {
+      kind: "service",
+      listings: [
+        { title: "Harris Park Plumbing", rating: 4.8, phone: "(02) 9555 0142", price: { amount: 95, currency: "AUD", unit: "hour" }, url: "https://example.com/hpp" },
+        { title: "Westmead Tap & Drain" },
+      ],
+    },
+  });
+  assert.equal(listings.isError ?? false, false);
+  assert.equal(listings.structuredContent.component, "listings");
+  assert.ok(listings.structuredContent.config?.attribution, "listings carry the map tile config");
+  assert.match(listings.content[0].text, /1\. \[Harris Park Plumbing\]\(https:\/\/example\.com\/hpp\) — A\$95 per hour · ★ 4\.8 · \(02\) 9555 0142/);
+  const titleOnly = await client.callTool({ name: "show_listings", arguments: { listings: [{ title: "Corner Hardware" }] } });
+  assert.equal(titleOnly.isError ?? false, false, "a title-only listing is accepted");
+  const badPhone = await client.callTool({ name: "show_listings", arguments: { listings: [{ title: "Bad", phone: "call me maybe" }] } });
+  assert.equal(badPhone.isError, true, "an unsafe phone value is rejected");
+  assert.match(badPhone.content[0].text, /phone/);
+  console.log("✓ show_listings: full payload, title only and unsafe phone");
+
+  const itineraryTool = tools.find((t) => t.name === "show_itinerary");
+  assert.ok(itineraryTool, "show_itinerary is listed");
+  assert.match(itineraryTool.description, /Use it when/);
+  const itinerary = await client.callTool({
+    name: "show_itinerary",
+    arguments: {
+      title: "Kyoto",
+      days: [
+        { date: "2026-03-12", stops: [{ title: "Nishiki Market", time: "16:30", cost: { amount: 3000, currency: "JPY" }, lat: 35.005, lng: 135.7649 }] },
+        { stops: [{ title: "Bamboo Grove" }] },
+      ],
+    },
+  });
+  assert.equal(itinerary.isError ?? false, false);
+  assert.equal(itinerary.structuredContent.component, "itinerary");
+  assert.match(itinerary.content[0].text, /#### Day 1 · 2026-03-12\n\n1\. 16:30 \*\*Nishiki Market\*\* — ¥3,000\n\nDay total: ¥3,000\n\n#### Day 2\n\n1\. \*\*Bamboo Grove\*\*/);
+  const titlesOnly = await client.callTool({ name: "show_itinerary", arguments: { days: [{ stops: [{ title: "Market" }, { title: "Picnic" }] }] } });
+  assert.equal(titlesOnly.isError ?? false, false, "a titles-only plan is accepted");
+  const tooLong = await client.callTool({ name: "show_itinerary", arguments: { days: Array.from({ length: 15 }, () => ({ stops: [{ title: "Stop" }] })) } });
+  assert.equal(tooLong.isError, true, "15 days are rejected");
+  assert.match(tooLong.content[0].text, /at most 14 days/);
+  console.log("✓ show_itinerary: full payload, titles only and 15 days");
+
+  const flight = { from: "SYD", to: "HND", depart: "2026-03-12T10:20+11:00", arrive: "2026-03-12T17:55+09:00", carrier: "Qantas" };
+  const journeyColumns = [{ key: "route", label: "Route", type: "journey" }, { key: "price", label: "Price", type: "money", currency: "AUD" }];
+  const flights = await client.callTool({ name: "show_table", arguments: { columns: journeyColumns, rows: [{ route: { segments: [flight] }, price: 1180 }] } });
+  assert.equal(flights.isError ?? false, false);
+  assert.match(flights.content[0].text, /SYD 10:20 → HND 17:55 · Direct · 9h 35m · Qantas/);
+  const tooMany = await client.callTool({ name: "show_table", arguments: { columns: journeyColumns, rows: [{ route: { segments: Array.from({ length: 7 }, () => flight) } }] } });
+  assert.equal(tooMany.isError, true, "a 7-segment journey is rejected");
+  assert.match(tooMany.content[0].text, /Row 1, column .*Route.*at most 6 segments/);
+  const finalists = await client.callTool({
+    name: "show_comparison",
+    arguments: { items: [{ name: "Qantas" }, { name: "Jetstar" }], criteria: ["Route"], values: [[{ type: "journey", segments: [flight] }], [{ type: "journey", segments: [{ ...flight, depart: undefined }] }]] },
+  });
+  assert.equal(finalists.isError, true, "a journey value without depart is rejected");
+  assert.match(finalists.content[0].text, /Jetstar, .*Route.*segment 1: depart is missing/);
+  console.log("✓ journeys: table column, 7 segments and a comparison value without depart");
 
   // Every component: each example renders, its markdown is non-empty, and an empty payload is rejected.
   const dirs = readdirSync("src/components", { withFileTypes: true }).filter((d) => d.isDirectory());

@@ -1,8 +1,9 @@
 import { mdTable } from "../md.js";
+import { isJourney, journeyText } from "../journey.js";
 import type { Comparison, Value } from "./schema.js";
 
 export const valueText = (v: Value | undefined): string =>
-  v == null ? "–" : typeof v === "boolean" ? (v ? "Yes" : "No") : typeof v === "object" ? `${v.rating}/5` : String(v);
+  v == null ? "–" : typeof v === "boolean" ? (v ? "Yes" : "No") : isJourney(v) ? journeyText(v) : typeof v === "object" ? `${(v as { rating: number }).rating}/5` : String(v);
 
 export function toMarkdown(c: Comparison): string {
   const parts: string[] = [];

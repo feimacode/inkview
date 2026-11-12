@@ -88,9 +88,17 @@ should return.
 | `inkview.document` | `document_preview` | body characters | 20000 | 100000 |
 | `inkview.form` | `form` | fields | 12 | 50 |
 | `inkview.map` | `map` | places | 50 | 500 |
+| `inkview.listings` | `listings` | listings | 20 | 100 |
+| `inkview.itinerary` | `itinerary` | days | 14 | 60 |
 
 The input type of each builder is exported too (`DataTableInput`,
 `ProfileCardInput`, ...), and `ComponentId` is the union of component ids.
+
+`inkview.map` accepts a place with an `address` and no `lat` and `lng` since
+this release: it is listed without a pin, where it used to be rejected. A place
+with neither still throws. `inkview.table` takes `journey` columns and
+`inkview.comparison` takes `{ type: "journey" }` values for flights, trains and
+buses.
 
 ## Raising a cap
 
