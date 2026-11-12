@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { TaskItem, TaskList } from "./schema.js";
 import { formatDueDate, isOverdue, todayIso } from "./date.js";
-import { Button, HostLink, Source, useBusy } from "../../runtime/primitives.js";
+import { Button, HostLink, Provenance, useBusy } from "../../runtime/primitives.js";
 import "./task-list.css";
 
 const DEFAULT_STATUSES = ["To do", "In progress", "Done"];
@@ -191,7 +191,7 @@ export function View({ data, actions }: ViewProps<TaskList>) {
         </Button>
       </div>
 
-      <Source source={data.source} open={actions.openLink} />
+      <Provenance source={data.source} open={actions.openLink} locale={actions.locale} />
     </article>
   );
 }

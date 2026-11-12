@@ -1,5 +1,6 @@
 /** Small building blocks shared by every component view. */
 import { useState, type ReactNode } from "react";
+import { ago, anyUnverified, collectSources, isStale, latestCheck, type ProvenanceInput } from "./provenance.js";
 
 export function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -65,11 +66,36 @@ export function Chip({ children }: { children: ReactNode }) {
   return <span className="ink-chip">{children}</span>;
 }
 
-export function Source({ source, open }: { source?: { name: string; url?: string }; open: (url: string) => void }) {
-  if (!source) return null;
+/** Marks a value the agent stated without fetching it. */
+export function Unchecked({ on }: { on: boolean }) {
+  return on ? (
+    <span className="ink-unchecked" role="img" aria-label="not checked" title="Not checked against a source">
+      {" ◦"}
+    </span>
+  ) : null;
+}
+
+/**
+ * The provenance footer: where the data came from, when it was checked, and
+ * whether some values were not checked. Draws nothing when it has nothing to say.
+ */
+export function Provenance({ source, items, asOf, sensitive, open, locale }: ProvenanceInput & { open: (url: string) => void; locale: string }) {
+  const sources = collectSources(source, items);
+  const checked = latestCheck(sources, asOf);
+  const unchecked = anyUnverified(items ?? []);
+  if (!sources.length && !sensitive && !unchecked) return null;
   return (
     <p className="ink-source">
-      Source: {source.url ? <HostLink href={source.url} open={open}>{source.name}</HostLink> : source.name}
+      {sources.length ? "Source: " : sensitive ? "No source given" : ""}
+      {sources.map((s, i) => (
+        <span key={i}>
+          {i > 0 && ", "}
+          {s.url ? <HostLink href={s.url} open={open}>{s.name}</HostLink> : s.name}
+        </span>
+      ))}
+      {checked !== undefined && ` · checked ${ago(checked, locale)}`}
+      {sensitive && isStale(checked) && " · may have changed"}
+      {unchecked && <span className="ink-source-key"> ◦ = not checked against a source</span>}
     </p>
   );
 }

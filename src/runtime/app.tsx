@@ -10,6 +10,7 @@ import { StrictMode, useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { byComponent, byTool } from "../components/view-registry.js";
 import type { ViewActions, ViewEntry } from "../components/types.js";
+import { openSafely } from "./links.js";
 import "./theme.css";
 
 type Rendered =
@@ -55,9 +56,8 @@ function makeActions(app: App): ViewActions {
   const ctx = app.getHostContext();
   return {
     locale: (ctx?.locale as string | undefined) ?? navigator.language ?? "en-US",
-    openLink: (url) => {
-      app.openLink({ url }).catch(() => window.open(url, "_blank", "noopener"));
-    },
+    // Defence in depth: schemas only accept http(s) URLs, but SDK servers can pass their own data.
+    openLink: (url) => openSafely(url, (u) => app.openLink({ url: u }), (u) => window.open(u, "_blank", "noopener")),
     sendMessage: async (text) => {
       await app.sendMessage({ role: "user", content: [{ type: "text", text }] });
     },

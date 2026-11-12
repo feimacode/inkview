@@ -31,4 +31,22 @@ export default {
     ]);
     assert.equal(await wide.locator(".jr-day").textContent(), "+1");
   },
+  async "opens an option's site and names both option sources in the footer"({ render, events, assert, page }) {
+    const frame = await render({
+      items: [
+        { name: "Harbour Inn", url: "https://example.com/harbour", source: { name: "Booking.com", url: "https://www.booking.com" }, unverified: ["Price"] },
+        { name: "Quay Loft", source: { name: "Airbnb", url: "https://www.airbnb.com" } },
+      ],
+      criteria: ["Price", "Rating"],
+      values: [["A$289", "4.5"], ["A$240", "4.8"]],
+    });
+    const wide = frame.locator(".cmp-wide");
+    assert.equal(await wide.getByRole("button", { name: /at site/ }).count(), 1, "only the option with a url gets the action");
+    await wide.getByRole("button", { name: "Open Harbour Inn at site" }).click();
+    await page.waitForTimeout(150);
+    assert.ok((await events()).some((e) => e.openLink === "https://example.com/harbour"));
+    assert.equal(await wide.getByRole("img", { name: "not checked" }).count(), 1);
+    assert.match(await frame.locator(".ink-source").textContent(), /^Source: Booking\.com, Airbnb/);
+    assert.equal(await frame.getByText(/\bbook\b|reserve|checkout/i).count(), 0);
+  },
 };

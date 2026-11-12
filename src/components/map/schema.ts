@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { itemProvenance, SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 
 export const MAX_PLACES = 50;
 /** Upper bound for servers that raise the place cap through the SDK. */
@@ -30,7 +32,8 @@ const place = z.looseObject({
     .max(MAX_PIN_LABEL, `pinLabel must be at most ${MAX_PIN_LABEL} characters.`)
     .optional()
     .describe('Short text drawn on the pin, such as a price ("$210") or a rating ("4.8").'),
-  url: z.string().url().optional().describe("Page with more about this place."),
+  url: httpUrl.optional().describe("Page with more about this place."),
+  ...itemProvenance,
 }).superRefine((p, ctx) => {
   const hasLat = p.lat !== undefined;
   const hasLng = p.lng !== undefined;
@@ -51,7 +54,7 @@ export function mapSchema(maxPlaces = MAX_PLACES) {
       .min(1)
       .max(maxPlaces, `Send the ${maxPlaces} most relevant places and state the total in caption.`)
       .describe(`1 to ${maxPlaces} places, each with a label and WGS84 coordinates, or an address when you have no coordinates.`),
-    source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+    source: SourceSchema.optional(),
   });
 }
 

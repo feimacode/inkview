@@ -29,4 +29,21 @@ export default {
     await frame.locator(".pg-card").first().waitFor();
     assert.equal(await frame.getByText(/add to cart|checkout|buy now/i).count(), 0);
   },
+  async "copy link sits beside view at store"({ render, examples, assert, page }) {
+    await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+    const frame = await render(examples[0].data);
+    const card = frame.locator(".pg-card").first();
+    assert.equal(await card.getByRole("button", { name: /^View .+ at store$/ }).count(), 1);
+    const copy = card.getByRole("button", { name: /^Copy link of / });
+    await copy.click();
+    await card.getByText("Copied").waitFor();
+  },
+  async "day-old prices are flagged, and an unverified price is marked"({ render, assert }) {
+    const product = { title: "Tee", url: "https://s.io/tee", price: 9.5, currency: "USD" };
+    let frame = await render({ products: [product], source: { name: "Shop", url: "https://s.io", retrievedAt: new Date(Date.now() - 30 * 3_600_000).toISOString() } });
+    assert.equal(await frame.locator(".ink-source").textContent(), "Source: Shop · checked 1 day ago · may have changed");
+    frame = await render({ products: [{ ...product, unverified: ["price"] }, { ...product, title: "Cap" }] });
+    assert.equal(await frame.getByRole("img", { name: "not checked" }).count(), 1);
+    assert.match(await frame.locator(".ink-source").textContent(), /^No source given ◦ = not checked/);
+  },
 };

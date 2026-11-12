@@ -3,7 +3,7 @@ import type { ViewActions, ViewProps } from "../types.js";
 import type { ProfileGrid } from "./schema.js";
 import type { ProfileCard } from "../profile-card/schema.js";
 import { View as ProfileCardView } from "../profile-card/View.js";
-import { Avatar, Button, Source, useBusy } from "../../runtime/primitives.js";
+import { Avatar, Button, Provenance, useBusy } from "../../runtime/primitives.js";
 import "./profile-grid.css";
 
 export function accepts(d: unknown): d is ProfileGrid {
@@ -142,7 +142,7 @@ export function View({ data: g, actions }: ViewProps<ProfileGrid>) {
         </div>
       )}
 
-      <Source source={g.source} open={actions.openLink} />
+      <Provenance source={g.source} open={actions.openLink} locale={actions.locale} />
     </section>
   );
 }

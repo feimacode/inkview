@@ -1,16 +1,16 @@
 /** Person fields shared by the profile card and the profile grid. */
 import { z } from "zod";
+import { SourceSchema } from "./provenance.js";
+import { httpUrl } from "./fields.js";
 
-const url = z.string().url();
+const url = httpUrl;
 
 export const ProfileLinkSchema = z.looseObject({
   label: z.string().min(1).max(60).describe('Link text, e.g. "LinkedIn", "GitHub", "Website".'),
   url: url.describe("Absolute https URL."),
 });
 
-export const SourceSchema = z
-  .looseObject({ name: z.string().max(80), url: url.optional() })
-  .describe("Where the data came from, shown as a small attribution line.");
+export { SourceSchema };
 
 export const MAX_HIGHLIGHTS = 6;
 /** Upper bound for servers that raise the highlight cap through the SDK. */

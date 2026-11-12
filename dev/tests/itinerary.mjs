@@ -143,4 +143,25 @@ export default {
     await undated.locator(".it-stop").first().waitFor();
     assert.equal(await undated.getByRole("button", { name: "Add to calendar" }).count(), 0, "timed stops without dates cannot be exported");
   },
+  async "offers directions for a stop with an address and marks an unverified cost"({ render, events, assert, page }) {
+    const frame = await render(
+      {
+        days: [
+          {
+            stops: [
+              { title: "Nishiki Market", address: "Nakagyo Ward, Kyoto", cost: { amount: 3000, currency: "JPY" }, unverified: ["cost"], source: { name: "Kyoto Guide", url: "https://example.com/kyoto", retrievedAt: new Date(Date.now() - 2 * 3_600_000).toISOString() } },
+              { title: "Free time" },
+            ],
+          },
+        ],
+      },
+      { config: CONFIG },
+    );
+    assert.equal(await frame.getByRole("button", { name: /^Directions to/ }).count(), 1, "no address, no directions");
+    await frame.getByRole("button", { name: "Directions to Nishiki Market" }).click();
+    await page.waitForTimeout(150);
+    assert.ok((await events()).some((e) => e.openLink === "https://www.openstreetmap.org/search?query=Nakagyo%20Ward%2C%20Kyoto"));
+    assert.equal(await frame.getByRole("img", { name: "not checked" }).count(), 1);
+    assert.match(await frame.locator(".ink-source").textContent(), /^Source: Kyoto Guide · checked 2 hours ago/);
+  },
 };

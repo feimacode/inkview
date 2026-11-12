@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { ResultList, Result } from "./schema.js";
-import { Button, hostOf, useBusy } from "../../runtime/primitives.js";
+import { Button, hostOf, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
+import { isUnverified } from "../../runtime/provenance.js";
 import { fmtDate } from "../../runtime/format.js";
+import { Actions } from "../../runtime/actions.js";
 import "./result-list.css";
 
 export function accepts(d: unknown): d is ResultList {
@@ -39,7 +41,12 @@ export function View({ data, actions }: ViewProps<ResultList>) {
                 {r.title}
               </button>
             </h3>
-            {r.snippet && <p className="rl-snippet">{r.snippet}</p>}
+            {r.snippet && (
+              <p className="rl-snippet">
+                {r.snippet}
+                <Unchecked on={isUnverified(r, "snippet")} />
+              </p>
+            )}
             <div className="rl-actions">
               <Button
                 disabled={busy !== null}
@@ -52,10 +59,12 @@ export function View({ data, actions }: ViewProps<ResultList>) {
               >
                 {busy === `dig${i}` ? "Asking…" : "Dig deeper"}
               </Button>
+              <Actions item={r} actions={actions} name={r.title} copy={["link"]} skip={["open"]} />
             </div>
           </li>
         ))}
       </ol>
+      <Provenance items={data.results} open={actions.openLink} locale={actions.locale} />
     </section>
   );
 }

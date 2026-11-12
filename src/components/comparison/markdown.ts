@@ -1,4 +1,5 @@
 import { mdTable } from "../md.js";
+import { mdChecked, mdProvenance } from "../../runtime/provenance.js";
 import { isJourney, journeyText } from "../journey.js";
 import type { Comparison, Value } from "./schema.js";
 
@@ -11,9 +12,12 @@ export function toMarkdown(c: Comparison): string {
   parts.push(
     mdTable(
       ["", ...c.items.map((i) => (i.name === c.recommended ? `${i.name} ★` : i.name))],
-      c.criteria.map((cr, j) => [cr, ...c.items.map((_, i) => valueText(c.values[i]?.[j]))]),
+      c.criteria.map((cr, j) => [cr, ...c.items.map((it, i) => mdChecked(it, cr, valueText(c.values[i]?.[j])))]),
     ),
   );
+  const links = c.items.filter((i) => i.url).map((i) => `[${i.name}](${i.url})`);
+  if (links.length) parts.push(`Open at site: ${links.join(" · ")}`);
   if (c.recommended) parts.push(`**Recommended: ${c.recommended}**${c.reason ? `. ${c.reason}` : ""}`);
+  parts.push(mdProvenance({ source: c.source, items: c.items, sensitive: true }));
   return parts.join("\n\n");
 }

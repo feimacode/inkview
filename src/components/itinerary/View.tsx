@@ -2,9 +2,12 @@ import { useMemo, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { MapConfig } from "../map/config.js";
 import type { Itinerary, Stop } from "./schema.js";
-import { Button, Chip, HostLink, Source, useBusy } from "../../runtime/primitives.js";
+import { Button, Chip, HostLink, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
 import { MapSurface } from "../map/Surface.js";
 import { dayName, money, planText, timedStops, timeText, toIcs, totals } from "./format.js";
+import { isUnverified } from "../../runtime/provenance.js";
+import { fileSlug } from "../../runtime/ics.js";
+import { mapsUrl } from "../../runtime/links.js";
 import "./itinerary.css";
 
 export function accepts(d: unknown): d is Itinerary {
@@ -86,7 +89,7 @@ export function View({ data, actions, config }: ViewProps<Itinerary, MapConfig>)
   const tripTotal = totals(days.flatMap((d) => d.stops), locale);
   const send = () => run("send", () => actions.sendMessage(`I changed the plan:\n${log.map((l) => `- ${l}`).join("\n")}\n\nCurrent order:\n${planText(days)}\n\nPlease update the times to fit.`));
   const calendar = () =>
-    run("ics", () => actions.download!(`${(data.title ?? "itinerary").replace(/[^\w-]+/g, "-").replace(/^-|-$/g, "") || "itinerary"}.ics`, "text/calendar", toIcs(days)));
+    run("ics", () => actions.download!(`${fileSlug(data.title ?? "", "itinerary")}.ics`, "text/calendar", toIcs(days)));
 
   return (
     <article className="ink-card it" aria-label={data.title ?? "Itinerary"}>
@@ -129,10 +132,27 @@ export function View({ data, actions, config }: ViewProps<Itinerary, MapConfig>)
                             {timeText(s) && <span className="it-time">{timeText(s)} </span>}
                             {s.url ? <HostLink href={s.url} open={actions.openLink}>{s.title}</HostLink> : s.title}
                           </p>
-                          {(s.note || s.address) && <p className="it-note ink-muted">{[s.note, s.address].filter(Boolean).join(" · ")}</p>}
+                          {(s.note || s.address) && (
+                            <p className="it-note ink-muted">
+                              {[s.note, s.address].filter(Boolean).join(" · ")}
+                              <Unchecked on={isUnverified(s, "address")} />
+                            </p>
+                          )}
+                          {(s.address || hasPin(s)) && (
+                            <p className="it-note">
+                              <button type="button" className="ink-link" aria-label={`Directions to ${s.title}`} onClick={() => actions.openLink(mapsUrl({ label: s.title, lat: s.lat, lng: s.lng, address: s.address }))}>
+                                Directions
+                              </button>
+                            </p>
+                          )}
                           <p className="it-tags">
                             {s.kind && KIND[s.kind] && <Chip>{KIND[s.kind]}</Chip>}
-                            {s.cost && <Chip>{money(s.cost.amount, s.cost.currency, locale)}</Chip>}
+                            {s.cost && (
+                              <Chip>
+                                {money(s.cost.amount, s.cost.currency, locale)}
+                                <Unchecked on={isUnverified(s, "cost")} />
+                              </Chip>
+                            )}
                             {s.moved && s.time && <Chip>Time may need updating</Chip>}
                           </p>
                         </div>
@@ -186,7 +206,7 @@ export function View({ data, actions, config }: ViewProps<Itinerary, MapConfig>)
       </div>
       {timed > 0 && actions.download && <p className="ink-faint it-foot">Calendar times are local to each place.</p>}
       {data.caption && <p className="ink-faint it-foot">{data.caption}</p>}
-      <Source source={data.source} open={actions.openLink} />
+      <Provenance source={data.source} items={days.flatMap((d) => d.stops)} sensitive open={actions.openLink} locale={locale} />
     </article>
   );
 }

@@ -137,6 +137,34 @@ inkview.profileCard({ name: 42 });
 Fields the component does not know are kept, not dropped, so a component can
 carry data for a later call.
 
+## Links, actions and sources
+
+The pieces the components share are exported for servers that build their own
+schemas or text around a component:
+
+```ts
+import { z } from "zod";
+import { SourceSchema, deriveActions, httpUrl, mdActions, mdProvenance } from "@feimacode/inkview-sdk";
+
+// A URL field that rejects javascript: and data: links.
+const Venue = z.object({ name: z.string(), website: httpUrl.optional(), source: SourceSchema.optional() });
+Venue.parse({ name: "The Basement", website: "https://example.com", source: { name: "Example", retrievedAt: "2026-11-12T09:30:00+11:00" } });
+
+// Which buttons a card gets from the fields it has, and the same as markdown links.
+const item = { title: "The Basement", phone: "(02) 9555 0142", address: "7 Macquarie Pl, Sydney" };
+deriveActions(item, { canDownload: false }).map((a) => a.label); // ["Call", "Directions"]
+mdActions(item); // "[(02) 9555 0142](tel:0295550142) · [Directions](https://…)"
+
+// The source line of a text fallback.
+mdProvenance({ source: { name: "Example", retrievedAt: "2026-11-12T09:30:00+11:00" }, sensitive: true });
+```
+
+Also exported: `phone`, `UnverifiedSchema`, `canOpen`, `collectSources`,
+`latestCheck` and `isStale`. The action buttons themselves are drawn by the
+shared view; there is no component to import. See
+[Actions and sources](../README.md#actions-and-sources) for the fields each
+component takes.
+
 ## Text fallback
 
 Each result contains both forms:

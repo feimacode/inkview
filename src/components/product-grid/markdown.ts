@@ -1,4 +1,4 @@
-import { mdSource } from "../md.js";
+import { mdChecked, mdProvenance } from "../../runtime/provenance.js";
 import type { ProductGrid } from "./schema.js";
 
 const money = (p: number, c?: string) => {
@@ -13,14 +13,14 @@ export function toMarkdown(g: ProductGrid): string {
   const lines = g.title ? [`### ${g.title}`, ""] : [];
   g.products.forEach((p, i) => {
     const bits = [
-      p.price != null ? money(p.price, p.currency) : "",
-      p.rating != null ? `★ ${p.rating}${p.reviewCount != null ? ` (${p.reviewCount})` : ""}` : "",
+      mdChecked(p, "price", p.price != null ? money(p.price, p.currency) : ""),
+      mdChecked(p, "rating", p.rating != null ? `★ ${p.rating}${p.reviewCount != null ? ` (${p.reviewCount})` : ""}` : ""),
       p.merchant ?? "",
       p.availability === "out_of_stock" ? "out of stock" : "",
     ].filter(Boolean);
     lines.push(`${i + 1}. [${p.title}](${p.url})${bits.length ? ` — ${bits.join(" · ")}` : ""}`);
   });
-  const src = mdSource(g.source);
+  const src = mdProvenance({ source: g.source, items: g.products, sensitive: true });
   if (src) lines.push("", src);
   return lines.join("\n");
 }

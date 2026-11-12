@@ -1,6 +1,7 @@
 import type { ViewProps } from "../types.js";
 import type { Comparison, Value } from "./schema.js";
-import { Button, useBusy } from "../../runtime/primitives.js";
+import { Button, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
+import { isUnverified } from "../../runtime/provenance.js";
 import { fmtNumber } from "../../runtime/format.js";
 import { isJourney } from "../journey.js";
 import { JourneyCell } from "../JourneyCell.js";
@@ -72,6 +73,7 @@ export function View({ data: c, actions }: ViewProps<Comparison>) {
                 {c.items.map((it, i) => (
                   <td key={it.name} className={i === rec ? "cmp-rec" : undefined}>
                     <Cell v={c.values[i]?.[j]} locale={actions.locale} />
+                    <Unchecked on={isUnverified(it, cr)} />
                   </td>
                 ))}
               </tr>
@@ -82,9 +84,16 @@ export function View({ data: c, actions }: ViewProps<Comparison>) {
               </th>
               {c.items.map((it, i) => (
                 <td key={it.name} className={i === rec ? "cmp-rec" : undefined}>
-                  <Button primary={i === rec} disabled={busy !== null} label={`Choose ${it.name}`} onClick={() => choose(it.name)}>
-                    Choose this
-                  </Button>
+                  <div className="cmp-acts">
+                    <Button primary={i === rec} disabled={busy !== null} label={`Choose ${it.name}`} onClick={() => choose(it.name)}>
+                      Choose this
+                    </Button>
+                    {it.url && (
+                      <Button label={`Open ${it.name} at site`} onClick={() => actions.openLink(it.url!)}>
+                        Open at site
+                      </Button>
+                    )}
+                  </div>
                 </td>
               ))}
             </tr>
@@ -104,16 +113,25 @@ export function View({ data: c, actions }: ViewProps<Comparison>) {
                   <dt>{cr}</dt>
                   <dd>
                     <Cell v={c.values[i]?.[j]} locale={actions.locale} />
+                    <Unchecked on={isUnverified(it, cr)} />
                   </dd>
                 </div>
               ))}
             </dl>
-            <Button primary={i === rec} disabled={busy !== null} label={`Choose ${it.name}`} onClick={() => choose(it.name)}>
-              Choose this
-            </Button>
+            <div className="cmp-acts">
+              <Button primary={i === rec} disabled={busy !== null} label={`Choose ${it.name}`} onClick={() => choose(it.name)}>
+                Choose this
+              </Button>
+              {it.url && (
+                <Button label={`Open ${it.name} at site`} onClick={() => actions.openLink(it.url!)}>
+                  Open at site
+                </Button>
+              )}
+            </div>
           </div>
         ))}
       </div>
+      <Provenance source={c.source} items={c.items} sensitive open={actions.openLink} locale={actions.locale} />
     </section>
   );
 }

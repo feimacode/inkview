@@ -11,7 +11,7 @@ export default {
     const first = frame.locator(".pg-card").first();
     assert.match(await first.locator(".pg-price").textContent(), /^from A\$210 per night$/);
     assert.match(await first.textContent(), /0\.2 mi from Shibuya station/);
-    assert.equal(await first.getByRole("button", { name: "Open Shibuya Stream Hotel at site" }).textContent(), "Book at site");
+    assert.equal(await first.getByRole("button", { name: "Open Shibuya Stream Hotel at site" }).textContent(), "Open at site");
 
     frame = await render(byName(examples, "Plumbers"));
     assert.equal(await frame.getByRole("button", { name: "Open Harris Park Plumbing at site" }).textContent(), "Visit website");
@@ -141,18 +141,99 @@ export default {
     const listing = { title: "Tap Shop", openNow: true, hours: "7am to 5pm", price: { amount: 80, currency: "AUD", unit: "hour" } };
     const now = new Date().toISOString();
     let frame = await render({ asOf: now, listings: [listing], source: { name: "Booking.com" } });
-    assert.match(await frame.locator(".ls-note").textContent(), /^Prices and details checked .+\. Check the final price at the site\.$/);
-    assert.match(await frame.locator(".ink-source").textContent(), /Booking\.com/);
+    assert.equal(await frame.locator(".ls-note").textContent(), "Prices are a snapshot. Check the final price at the site.");
+    assert.match(await frame.locator(".ink-source").textContent(), /^Source: Booking\.com · checked /);
+    assert.doesNotMatch(await frame.locator(".ink-source").textContent(), /may have changed/);
     assert.equal(await frame.getByText("Open now").count(), 1);
 
     frame = await render({ asOf: new Date(Date.now() - 2 * 86400_000).toISOString(), listings: [listing] });
     await frame.locator(".ls-note").waitFor();
     assert.equal(await frame.getByText("Open now").count(), 0, "a 2-day-old opening state is hidden");
+    assert.match(await frame.locator(".ink-source").textContent(), /^No source given · checked .+ · may have changed/);
     assert.match(await frame.locator(".pg-card").textContent(), /7am to 5pm/);
 
     frame = await render({ listings: [{ ...listing, price: undefined }] });
     await frame.locator(".pg-card").waitFor();
     assert.equal(await frame.locator(".ls-note").count(), 0, "no price, no snapshot notice");
     assert.equal(await frame.getByText("Open now").count(), 0, "no asOf, no opening state");
+  },
+  async "adds an event to the calendar through the host, and hides the action without downloads"({ render, events, assert, page }) {
+    const concert = { title: "Jazz at the Basement", start: "2026-12-05T19:30", address: "7 Macquarie Pl, Sydney", url: "https://example.com/jazz" };
+    let frame = await render({ kind: "event", listings: [concert] });
+    await frame.getByRole("button", { name: "Add Jazz at the Basement to calendar" }).click();
+    await page.waitForTimeout(150);
+    const file = (await events()).find((e) => e.download)?.download.contents[0].resource;
+    assert.equal(file.uri, "file:///Jazz-at-the-Basement.ics");
+    assert.equal(file.mimeType, "text/calendar");
+    assert.match(file.text, /DTSTART:20261205T193000\r\nDTEND:20261205T203000\r\nSUMMARY:Jazz at the Basement/);
+
+    frame = await render({ kind: "event", listings: [concert] }, { capabilities: { openLinks: {}, message: { text: {} } } });
+    await frame.locator(".pg-card").waitFor();
+    assert.equal(await frame.getByRole("button", { name: /calendar/ }).count(), 0, "no downloads, no calendar action");
+    assert.equal(await frame.getByRole("button", { name: "Directions to Jazz at the Basement" }).count(), 1);
+  },
+
+  async "keeps three actions as buttons at phone width and puts the rest under More"({ render, events, assert, page }) {
+    await page.setViewportSize({ width: 320, height: 900 });
+    const frame = await render({ kind: "event", listings: [{ title: "Gig", url: "https://example.com/gig", phone: "0400 555 019", address: "1 Dock Rd", start: "2026-12-05T19:30" }] });
+    const card = frame.locator(".pg-card");
+    await card.waitFor();
+    assert.deepEqual(await card.locator(".ink-btn").allInnerTexts(), ["Open at site", "Call", "Directions", "More"]);
+    const more = frame.getByRole("button", { name: "More actions for Gig" });
+    assert.equal(await more.getAttribute("aria-expanded"), "false");
+    await more.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await more.getAttribute("aria-expanded"), "true");
+    assert.deepEqual(await card.locator(".ink-more .ink-btn").allInnerTexts(), ["Add to calendar", "Copy address"]);
+    await frame.getByRole("button", { name: "Call Gig" }).click();
+    await frame.getByRole("button", { name: "Directions to Gig" }).click();
+    await page.waitForTimeout(150);
+    const opened = await links(events);
+    assert.ok(opened.includes("tel:0400555019"));
+    assert.ok(opened.some((u) => u.startsWith("https://www.openstreetmap.org/search?query=1%20Dock%20Rd")));
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, "no sideways scroll");
+    assert.equal(await frame.getByText(/\bbook\b|reserve|checkout|pay now/i).count(), 0, "no transactional wording");
+  },
+
+  async "selects the value when the clipboard is blocked"({ render, assert, page }) {
+    await page.addInitScript(() => Object.defineProperty(Navigator.prototype, "clipboard", { get: () => undefined }));
+    const frame = await render({ listings: [{ title: "Tap Shop", phone: "0400 555 019", address: "1 Dock Rd", url: "https://example.com/tap", start: "2026-12-05" }] });
+    await frame.getByRole("button", { name: "More actions for Tap Shop" }).click();
+    await frame.getByRole("button", { name: "Copy address of Tap Shop" }).click();
+    await frame.locator(".ink-copyline").waitFor();
+    const selected = await frame.locator("body").evaluate(() => window.getSelection().toString());
+    assert.equal(selected, "1 Dock Rd");
+    assert.equal(await frame.getByText("Copied").count(), 0);
+  },
+
+  async "names each site once in the footer and says when nothing has a source"({ render, examples, assert }) {
+    let frame = await render(byName(examples, "Stays from two sites"));
+    const footer = frame.locator(".ink-source");
+    assert.match(await footer.textContent(), /^Source: Booking\.com, Airbnb · checked /);
+    assert.equal(await footer.locator(".ink-link").count(), 2, "each site links out once");
+
+    frame = await render({ kind: "service", listings: Array.from({ length: 5 }, (_, i) => ({ title: `Plumber ${i + 1}`, phone: `0400 555 01${i}` })) });
+    assert.equal(await frame.locator(".pg-card").count(), 5);
+    assert.equal(await frame.locator(".ink-source").textContent(), "No source given");
+  },
+
+  async "marks a price the agent did not fetch, with a spoken label and a key in the footer"({ render, examples, assert }) {
+    const frame = await render(byName(examples, "Price recalled, not fetched"));
+    const first = frame.locator(".pg-card").first();
+    assert.equal(await first.locator(".pg-price").getByRole("img", { name: "not checked" }).count(), 1);
+    assert.equal(await frame.getByRole("img", { name: "not checked" }).count(), 1, "only the named field is marked");
+    assert.match(await frame.locator(".ink-source").textContent(), /◦ = not checked against a source$/);
+
+    const unknown = await render({ listings: [{ title: "Tap Shop", phone: "0400 555 019", unverified: ["warranty"] }] });
+    await unknown.locator(".pg-card").waitFor();
+    assert.equal(await unknown.getByRole("img", { name: "not checked" }).count(), 0, "an unknown field name marks nothing");
+  },
+
+  async "says prices may have changed once the check is over a day old"({ render, assert }) {
+    const listing = { title: "Inn", price: { amount: 210, currency: "AUD" } };
+    let frame = await render({ kind: "stay", listings: [listing], source: { name: "Booking.com", retrievedAt: new Date(Date.now() - 30 * 3_600_000).toISOString() } });
+    assert.equal(await frame.locator(".ink-source").textContent(), "Source: Booking.com · checked 1 day ago · may have changed");
+    frame = await render({ kind: "stay", listings: [listing], source: { name: "Booking.com", retrievedAt: new Date(Date.now() - 2 * 3_600_000).toISOString() } });
+    assert.equal(await frame.locator(".ink-source").textContent(), "Source: Booking.com · checked 2 hours ago");
   },
 };

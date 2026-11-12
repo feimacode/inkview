@@ -2,9 +2,10 @@ import { useMemo, useState } from "react";
 import type { ViewProps } from "../types.js";
 import type { MapConfig } from "../map/config.js";
 import type { Listing, Listings } from "./schema.js";
-import { Button, Chip, Source, useBusy } from "../../runtime/primitives.js";
+import { Button, Chip, Provenance, Unchecked, useBusy } from "../../runtime/primitives.js";
 import { fmtDate, fmtNumber } from "../../runtime/format.js";
-import { mapsUrl } from "../map/project.js";
+import { isUnverified } from "../../runtime/provenance.js";
+import { Actions, copyText } from "../../runtime/actions.js";
 import { MapSurface } from "../map/Surface.js";
 import { distanceText, fresh, kindOf, priceSortable, priceText, shortPrice } from "./format.js";
 import "../product-grid/product-grid.css";
@@ -16,7 +17,8 @@ export function accepts(d: unknown): d is Listings {
 }
 
 type SortKey = "match" | "rating" | "distance" | "price";
-const OPEN: Record<string, string> = { stay: "Book at site", event: "Book at site", service: "Visit website", place: "Visit website", home: "View listing" };
+// Stays and events keep the default "Open at site": Inkview links out, it never books.
+const OPEN: Record<string, string> = { service: "Visit website", place: "Visit website", home: "View listing" };
 const hasPin = (l: Listing): l is Listing & { lat: number; lng: number } => typeof l.lat === "number" && typeof l.lng === "number";
 const where = (l: Listing) => (l.url ? ` (${l.url})` : l.address ? ` (${l.address})` : "");
 
@@ -66,11 +68,7 @@ export function View({ data: g, actions, config }: ViewProps<Listings, MapConfig
   const ask = () => run("ask", () => actions.sendMessage(`Tell me more about these:\n${names()}`));
   const compare = () =>
     run("compare", () => actions.sendMessage(`Compare these and recommend one:\n${names()}\nShow the comparison with show_comparison.`));
-  const copy = (i: number) =>
-    void navigator.clipboard?.writeText(items[i].phone!).then(
-      () => setCopied(i),
-      () => {},
-    );
+  const copy = (i: number, shown: HTMLElement) => void copyText(items[i].phone!, () => shown).then((how) => how === "copied" && setCopied(i));
 
   const card = (i: number) => {
     const l = items[i];
@@ -83,22 +81,39 @@ export function View({ data: g, actions, config }: ViewProps<Listings, MapConfig
         <h3 className="pg-name" title={l.title}>
           {l.title}
         </h3>
-        {price && <p className="pg-price ls-price">{price}</p>}
+        {price && (
+          <p className="pg-price ls-price">
+            {price}
+            <Unchecked on={isUnverified(l, "price")} />
+          </p>
+        )}
         {l.priceNote && <p className="pg-meta ink-muted">{l.priceNote}</p>}
         {l.rating != null && (
           <p className="pg-rating">
             <span aria-hidden="true">★</span> {fmtNumber(l.rating, locale, { maximumFractionDigits: 1 })}
             {l.reviewCount != null && <span className="ink-faint"> ({fmtNumber(l.reviewCount, locale)})</span>}
             <span className="ink-sr"> out of 5</span>
+            <Unchecked on={isUnverified(l, "rating")} />
           </p>
         )}
-        {l.start && <p className="pg-meta ls-start">{fmtDate(l.start, locale)}</p>}
-        {(distance || l.address) && <p className="pg-meta ink-muted ls-wrap">{[distance, l.address].filter(Boolean).join(" · ")}</p>}
+        {l.start && (
+          <p className="pg-meta ls-start">
+            {fmtDate(l.start, locale)}
+            <Unchecked on={isUnverified(l, "start")} />
+          </p>
+        )}
+        {(distance || l.address) && (
+          <p className="pg-meta ink-muted ls-wrap">
+            {[distance, l.address].filter(Boolean).join(" · ")}
+            <Unchecked on={isUnverified(l, "address")} />
+          </p>
+        )}
         {(l.hours || (l.openNow != null && fresh(g.asOf))) && (
           <p className="pg-meta ink-muted ls-wrap">
             {l.openNow != null && fresh(g.asOf) && <b className={l.openNow ? "ls-open" : ""}>{l.openNow ? "Open now" : "Closed now"}</b>}
             {l.openNow != null && fresh(g.asOf) && l.hours ? " · " : ""}
             {l.hours}
+            <Unchecked on={isUnverified(l, "hours") || isUnverified(l, "openNow")} />
           </p>
         )}
         {l.detail && <p className="pg-meta ink-muted ls-wrap">{l.detail}</p>}
@@ -112,33 +127,19 @@ export function View({ data: g, actions, config }: ViewProps<Listings, MapConfig
         {l.phone && (
           <p className="pg-meta ls-phone">
             <span>{l.phone}</span>
-            {typeof navigator.clipboard?.writeText === "function" && (
-              <button type="button" className="ink-link" onClick={() => copy(i)} aria-label={`Copy phone number of ${l.title}`}>
-                {copied === i ? "Copied" : "Copy"}
-              </button>
-            )}
+            <Unchecked on={isUnverified(l, "phone")} />
+            <button type="button" className="ink-link" onClick={(e) => copy(i, e.currentTarget.parentElement!.firstElementChild as HTMLElement)} aria-label={`Copy phone number of ${l.title}`}>
+              {copied === i ? "Copied" : "Copy"}
+            </button>
           </p>
         )}
         <div className="pg-actions ls-actions">
-          {l.url && (
-            <Button primary onClick={() => actions.openLink(l.url!)} label={`Open ${l.title} at site`}>
-              {OPEN[kindOf(l, g) ?? ""] ?? "Open at site"}
-            </Button>
-          )}
-          {l.phone && (
-            <Button onClick={() => actions.openLink(`tel:${l.phone!.replace(/[^\d+]/g, "")}`)} label={`Call ${l.title}`}>
-              Call
-            </Button>
-          )}
-          {(hasPin(l) || l.address) && (
-            <Button onClick={() => actions.openLink(mapsUrl({ label: l.title, lat: l.lat, lng: l.lng, address: l.address }))} label={`Directions to ${l.title}`}>
-              Directions
-            </Button>
-          )}
-          <label className="pg-pick">
-            <input type="checkbox" checked={on} onChange={() => toggle(i)} aria-label={`Shortlist ${l.title}`} />
-            <span>Shortlist</span>
-          </label>
+          <Actions item={l} actions={actions} name={l.title} openLabel={OPEN[kindOf(l, g) ?? ""]} copy={["address"]}>
+            <label className="pg-pick">
+              <input type="checkbox" checked={on} onChange={() => toggle(i)} aria-label={`Shortlist ${l.title}`} />
+              <span>Shortlist</span>
+            </label>
+          </Actions>
         </div>
       </li>
     );
@@ -203,11 +204,11 @@ export function View({ data: g, actions, config }: ViewProps<Listings, MapConfig
       </div>
       {has((l) => l.price) && (
         <p className="ink-faint ls-note">
-          {g.asOf ? `Prices and details checked ${fmtDate(g.asOf, locale)}. ` : "Prices are a snapshot. "}Check the final price at the site.
+          Prices are a snapshot. Check the final price at the site.
         </p>
       )}
       {g.caption && <p className="ink-faint ls-note">{g.caption}</p>}
-      <Source source={g.source} open={actions.openLink} />
+      <Provenance source={g.source} items={items} asOf={g.asOf} sensitive open={actions.openLink} locale={locale} />
     </section>
   );
 }

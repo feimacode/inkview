@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 import { parseTimelineDate } from "./date.js";
 
 export const MAX_EVENTS = 50;
@@ -20,14 +22,14 @@ export function timelineSchema(maxEvents = MAX_EVENTS) {
           date,
           title: z.string().min(1).max(160),
           detail: z.string().max(1200).optional(),
-          url: z.string().url().optional(),
+          url: httpUrl.optional(),
           category: z.string().min(1).max(60).optional(),
         }),
       )
       .min(1)
       .max(maxEvents, `Send the ${maxEvents} most relevant events and state the total in caption.`)
       .describe(`1 to ${maxEvents} dated events, shown oldest first.`),
-    source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+    source: SourceSchema.optional(),
   });
 }
 

@@ -163,7 +163,7 @@ try {
   const call = (places) => client.callTool({ name: "show_map", arguments: { places } });
   const addressOnly = await call([{ label: "Depot", address: "1 Dock Rd" }]);
   assert.equal(addressOnly.isError ?? false, false, "an address-only place is accepted");
-  assert.match(addressOnly.content[0].text, /1\. \*\*Depot\*\* — 1 Dock Rd$/);
+  assert.match(addressOnly.content[0].text, /1\. \*\*Depot\*\* — 1 Dock Rd\n\n_No source given_$/);
   const badMap = await call([{ label: "Somewhere" }]);
   assert.equal(badMap.isError, true, "a place with neither coordinates nor an address is rejected");
   assert.match(badMap.content[0].text, /needs coordinates \(lat and lng\) or an address/i);
@@ -193,7 +193,7 @@ try {
   assert.equal(listings.isError ?? false, false);
   assert.equal(listings.structuredContent.component, "listings");
   assert.ok(listings.structuredContent.config?.attribution, "listings carry the map tile config");
-  assert.match(listings.content[0].text, /1\. \[Harris Park Plumbing\]\(https:\/\/example\.com\/hpp\) — A\$95 per hour · ★ 4\.8 · \(02\) 9555 0142/);
+  assert.match(listings.content[0].text, /1\. \[Harris Park Plumbing\]\(https:\/\/example\.com\/hpp\) — A\$95 per hour · ★ 4\.8 · \[\(02\) 9555 0142\]\(tel:0295550142\)/);
   const titleOnly = await client.callTool({ name: "show_listings", arguments: { listings: [{ title: "Corner Hardware" }] } });
   assert.equal(titleOnly.isError ?? false, false, "a title-only listing is accepted");
   const badPhone = await client.callTool({ name: "show_listings", arguments: { listings: [{ title: "Bad", phone: "call me maybe" }] } });
@@ -216,7 +216,7 @@ try {
   });
   assert.equal(itinerary.isError ?? false, false);
   assert.equal(itinerary.structuredContent.component, "itinerary");
-  assert.match(itinerary.content[0].text, /#### Day 1 · 2026-03-12\n\n1\. 16:30 \*\*Nishiki Market\*\* — ¥3,000\n\nDay total: ¥3,000\n\n#### Day 2\n\n1\. \*\*Bamboo Grove\*\*/);
+  assert.match(itinerary.content[0].text, /#### Day 1 · 2026-03-12\n\n1\. 16:30 \*\*Nishiki Market\*\* — ¥3,000 · \[Directions\]\(https:\/\/www\.openstreetmap\.org\/search\?query=[^)]+\)\n\nDay total: ¥3,000\n\n#### Day 2\n\n1\. \*\*Bamboo Grove\*\*/);
   const titlesOnly = await client.callTool({ name: "show_itinerary", arguments: { days: [{ stops: [{ title: "Market" }, { title: "Picnic" }] }] } });
   assert.equal(titlesOnly.isError ?? false, false, "a titles-only plan is accepted");
   const tooLong = await client.callTool({ name: "show_itinerary", arguments: { days: Array.from({ length: 15 }, () => ({ stops: [{ title: "Stop" }] })) } });

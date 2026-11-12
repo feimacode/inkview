@@ -62,7 +62,7 @@ npm run preview        # gallery of every component, light and dark, at http://l
 | `show_tasks` | Up to 50 tasks with a status, as a grouped checklist or a board. Check items off, move them between statuses, send the changes back. Overdue and priority cues | "Show the website relaunch tasks as a checklist" |
 | `show_table` | Up to 50 typed rows (text, number, money, date, link, badge, journey). Sort, filter, select rows to ask about, CSV download. A journey column draws a flight, train or bus trip with stops, layovers, next-day arrival and duration | "Compare these Sydney to Tokyo flights" or "Show the 10 largest EU cities by population as a table" |
 | `show_results` | Up to 20 search results or sources with snippets. Open, dig deeper | "Search for MCP Apps docs and show the results" |
-| `show_entity_card` | A company, product, place or organization: facts and links. Open website, compare | "Show me a card for Stripe" |
+| `show_entity_card` | A company, product, place or organization: facts and links, with an optional phone and address. Open website, call, directions, compare | "Show me a card for Stripe" |
 | `show_comparison` | 2 to 5 options side by side, with an optional recommendation. Values can be text, numbers, yes/no, ratings or journeys (flight or train finalists). Choose this | "Compare Notion, Obsidian and Apple Notes for a small team" |
 | `show_chart` | Line or bar chart, up to 5 series. Tooltips, legend toggles, text summary for screen readers | "Chart our monthly signups for this year" |
 | `show_products` | Up to 12 products with price, rating and availability. Sort, view at store, compare (no cart) | "Find noise-cancelling headphones under $300" |
@@ -101,6 +101,82 @@ Wrappers like `{results: [...]}`, `{products: [...]}` and `{rows: [...]}` are un
 A `hint` (`"table"`, `"chart"`...) overrides detection when the data fits that
 component. Anything else is shown as formatted text. The text result names the
 explicit tool, so the model can call it directly next time.
+
+## Actions and sources
+
+Every card ends in a step that takes the user to the business itself, and says
+where its data came from. Inkview only links out or dials: it never books,
+reserves or pays.
+
+**Actions come only from the fields you pass.** No field, no button.
+
+| Field passed | Action | What it does |
+| --- | --- | --- |
+| `url` (`websiteUrl` on the entity card) | Open at site (worded per component, such as "View at store") | Opens the page through the host |
+| `phone` | Call | Opens a `tel:` link through the host |
+| `address`, or `lat` and `lng` | Directions | Opens a map search for the place |
+| `start` (an ISO date or date-time) | Add to calendar | Downloads an `.ics` file; only on hosts that support downloads |
+| `phone`, `address` or `url` | Copy | Copies the value, or selects it when the host blocks the clipboard |
+
+At most three actions show as buttons; the rest sit under "More".
+
+| Component | Actions |
+| --- | --- |
+| `show_listings` | Open at site, Call, Directions, Add to calendar, Copy address |
+| `show_entity_card` | Open website, Call, Directions, Copy phone, Copy address |
+| `show_products` | View at store, Copy link |
+| `show_results` | Open, Copy link |
+| `show_comparison` | Open at site, for each option with a `url` |
+| `show_itinerary` | Directions for each stop with an address or coordinates, Add to calendar for the plan |
+| `show_map` | Open in maps |
+
+Link fields accept only `https://` and `http://` URLs. A `javascript:` or
+`data:` URL is rejected with a validation error, and the view refuses to open
+any link that is not web, phone or mail.
+
+**Sources.** Every component with a `source` takes `name`, an optional `url`
+and an optional `retrievedAt` (the ISO 8601 time the agent fetched the data),
+and shows them in one footer: "Source: Booking.com · checked 2 hours ago".
+Listings, products, comparison options, results (as `sourceInfo`), itinerary
+stops and map places can each carry their own `source`; the footer names every
+site once.
+
+**Unverified values.** An item's `unverified` lists the names of its fields the
+agent did not fetch (on a comparison option, the criteria; on an entity card,
+`phone`, `address` or a fact's label). Each one is drawn with a small "◦" mark
+that screen readers announce as "not checked", and the footer explains the
+mark. Names the item does not have are ignored.
+
+Components that show prices, ratings, phone numbers or availability also say
+"No source given" when nothing has a source, and "may have changed" when the
+latest check is more than 24 hours old.
+
+<!-- example: provenance -->
+```json
+{
+  "kind": "stay",
+  "listings": [
+    {
+      "title": "Harbour Rocks Inn",
+      "price": { "amount": 289, "currency": "AUD" },
+      "address": "34 Harrington St, The Rocks NSW 2000",
+      "url": "https://example.com/stays/harbour-rocks",
+      "source": { "name": "Booking.com", "url": "https://www.booking.com", "retrievedAt": "2026-11-12T09:30:00+11:00" }
+    },
+    {
+      "title": "Quay Loft",
+      "price": { "amount": 240, "currency": "AUD" },
+      "phone": "(02) 9555 0142",
+      "unverified": ["price"],
+      "source": { "name": "Airbnb", "url": "https://www.airbnb.com", "retrievedAt": "2026-11-12T09:32:00+11:00" }
+    }
+  ]
+}
+```
+
+In text-only hosts the same call lists the phone as a `tel:` link, a
+"Directions" map link, "(not checked)" after the unverified price, and a source
+line with the check time.
 
 ## How it works
 

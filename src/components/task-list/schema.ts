@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { SourceSchema } from "../provenance.js";
+import { httpUrl } from "../fields.js";
 import { parseIsoDate } from "./date.js";
 
 export const MAX_ITEMS = 50;
@@ -32,14 +34,14 @@ export function taskListSchema(maxItems = MAX_ITEMS) {
             owner: z.string().min(1).max(80).optional(),
             due: due.optional(),
             priority: z.enum(["low", "medium", "high"]).optional(),
-            url: z.string().url().optional(),
+            url: httpUrl.optional(),
             labels: z.array(z.string().min(1).max(40)).max(8).optional(),
           }),
         )
         .min(1)
         .max(maxItems, `Send the ${maxItems} most relevant items.`)
         .describe(`1 to ${maxItems} items, each with a title and a status.`),
-      source: z.looseObject({ name: z.string().max(80), url: z.string().url().optional() }).optional(),
+      source: SourceSchema.optional(),
     })
     .superRefine((value, ctx) => {
       value.items.forEach((item, index) => {

@@ -173,4 +173,21 @@ export default {
     assert.equal(await pin.getAttribute("aria-pressed"), "true");
     assert.equal(await frame.locator(".mv-detail-title").textContent(), "Shibuya Stream Hotel");
   },
+  async "names each pin's source in the footer and marks an unverified address"({ render, assert }) {
+    const frame = await render(
+      {
+        places: [
+          { label: "Depot", address: "1 Dock Rd", unverified: ["address"], source: { name: "Council register", url: "https://example.com/register", retrievedAt: new Date(Date.now() - 2 * 3_600_000).toISOString() } },
+          { label: "Yard", address: "9 Mill Ln", source: { name: "Council register", url: "https://example.com/register" } },
+        ],
+      },
+      { config: CONFIG },
+    );
+    await frame.locator(".mv-item").first().waitFor();
+    assert.match(await frame.locator(".ink-source").textContent(), /^Source: Council register · checked 2 hours ago/);
+    assert.equal(await frame.locator(".ink-source .ink-link").count(), 1);
+    assert.equal(await frame.locator(".mv-item").first().locator(".ink-unchecked").count(), 1);
+    assert.equal(await frame.locator(".mv-item").nth(1).locator(".ink-unchecked").count(), 0);
+    assert.equal(await frame.locator(".mv-item .ink-unchecked").getAttribute("aria-label"), "not checked");
+  },
 };
