@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-You should see `Inkview 0.1.0 listening on http://127.0.0.1:3001/mcp`.
+You should see `Inkview 0.2.0 listening on http://127.0.0.1:3001/mcp`.
 Leave this terminal open.
 
 ## 2. Open a tunnel

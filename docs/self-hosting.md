@@ -21,7 +21,7 @@ The **Image** workflow publishes `ghcr.io/feimacode/inkview:latest` (and
 `:sha-<commit>`) on every push to `main`, and `:<version>` for each release tag (`v*`):
 
 ```bash
-docker run -p 8080:8080 ghcr.io/feimacode/inkview:0.1.0
+docker run -p 8080:8080 ghcr.io/feimacode/inkview:0.2.0
 ```
 
 The feimacode deployment runs this image on the shared Azure VM behind Traefik
