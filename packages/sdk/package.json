@@ -1,6 +1,6 @@
 {
   "name": "@feimacode/inkview-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Render Inkview components from any MCP server.",
   "license": "MIT",
   "type": "module",

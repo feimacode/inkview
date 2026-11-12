@@ -12,7 +12,7 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
 import { inkview, registerInkview } from "@feimacode/inkview-sdk";
 
-const server = new McpServer({ name: "inkview-sdk-example", version: "0.1.0" });
+const server = new McpServer({ name: "inkview-sdk-example", version: "0.2.0" });
 const view = registerInkview(server);
 
 registerAppTool(

@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "inkview",
   "display_name": "Inkview",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "UI components for agents: profile cards, tables, results, comparisons, charts and product grids, drawn inline in Claude.",
   "long_description": "Inkview is a set of render tools. Claude gathers data with its other tools, then calls an Inkview tool to show it as an interactive component in the chat. Everything runs locally; Inkview stores nothing and makes no network requests.",
   "author": { "name": "Feima Code", "url": "https://github.com/feimacode" },

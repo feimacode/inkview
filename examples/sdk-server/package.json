@@ -1,7 +1,7 @@
 {
   "name": "@feimacode/inkview-sdk-example",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sample MCP server that renders Inkview components through the SDK.",
   "license": "MIT",
   "type": "module",
